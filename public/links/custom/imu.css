@@ -1,0 +1,89 @@
+/**
+ * Project: Shop Hunters
+ * Author: Md. Imrul Hasan;
+ */
+.body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    color: black;
+}
+
+/* Start Footer Section */
+.ifootbackground {
+    background-color: #000000;
+}
+.ifooter1 {
+    color: white;
+    background-color: #212225;
+}
+.ifooter2 {
+    color: white;
+}
+.ifooter2 p a {
+    color: white;
+    text-decoration: none;
+}
+.ifooter2 hr {
+    color: #0547fc;
+}
+.ifooter3 {
+    color: #6c8fa0;
+}
+.ifooter3 a {
+    color: white;
+    text-decoration: none;
+}
+.isocial a {
+    color: white;
+}
+.isocial a:hover {
+    color: #0547fc;
+}
+
+/* End Footer Section */
+
+/* Start Top Bar */
+.itopbar {
+    background-color: black;
+    color: white;
+}
+.itopbar a {
+    color: white;
+}
+.itopright {
+    float: right;
+    padding-right: 5%;
+}
+.ileftSide {
+    padding-left: 2%;
+}
+.ioffer:hover {
+    text-decoration: none;
+}
+.icenterSide {
+    float: center;
+    padding-left: 20%;
+}
+/* End Top Bar */
+
+/* Nav bar  Start*/
+.isearchnav {
+    width: 300px !important;
+}
+.inavbar {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+/* Nav bar End */
+
+/*  */
+.xxx {
+    float: right;
+}
+
+#isidebar {
+    position: relative;
+  border: 5px solid #f00;
+/*  */
