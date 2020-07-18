@@ -10,7 +10,7 @@
 
 ---
 
-# **Elequent Relationship**
+# **Some Basic Understanding of Elequent Relationship**
 
 -   One To One : hasOne(), belongsTo()
 -   One To Many : hasMany()
@@ -312,7 +312,32 @@ public function removeCategory(Product $product)
 ### Creating only migration
 
 ```cmd
-php artisan make:migration create_tableName_table --create=tableName
+php artisan make:migration create_category_product_table --create category_product
 ```
+
+> `create_ + pivotTable + _table`
+
+> here pivot table contains two table and table names should present in `alphabetical order`.
+
+One important thing
+
+```php
+return $this->belongsToMany(Product::class, 'order_items', 'order_id', 'product_id')->withPivot('quantity', 'price');
+```
+
+> Here `order_items` is pivot table. `order_items` is column name of this table. And `product_id` id the column name of foreign table (Product)
+
+---
+
+# **Some relationship in our Database Design**
+
+---
+
+-   `Order` **belongsToMany** `Product`
+-   `Order` **belongsTo** `User`
+-   `Product` **belongsTo** `Shop`
+-   `Shop` **hasMany** `Product`
+-   `Shop` **belongsTo** `User`
+-   `User` **hasOne** `Shop`
 
 ---
