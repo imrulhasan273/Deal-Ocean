@@ -10,6 +10,25 @@
 
 ---
 
+# Model | Migration | Controller | Policy | Observer
+
+| Models     | Migrations       | Controllers | Policies | Observers |
+| ---------- | ---------------- | ----------- | -------- | --------- |
+| -          | -                | Dashboard   | -        | -         |
+| User       | users            |             |          |           |
+| Shop       | shops            |             |          |           |
+| Role       | roles            |             |          |           |
+| Permission | permissions      |             |          |           |
+| -          | permission_role  |             |          |           |
+| Coupon     | coupons          |             |          |           |
+| Category   | categories       |             |          |           |
+| Product    | products         |             |          |           |
+| -          | category_product |             |          |           |
+| Order      | orders           |             |          |           |
+| -          | order_product    |             |          |           |
+
+---
+
 # **Some Basic Understanding of Elequent Relationship**
 
 -   One To One : hasOne(), belongsTo()
