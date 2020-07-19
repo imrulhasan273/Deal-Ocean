@@ -17,6 +17,9 @@
 | -          | -                | Dashboard   | -        | -         |
 | User       | users            |             |          |           |
 | Shop       | shops            |             |          |           |
+| Location   | locations        |             |          |           |
+| Country    | countries        |             |          |           |
+| Region     | regions          |             |          |           |
 | Role       | roles            |             |          |           |
 | Permission | permissions      |             |          |           |
 | -          | permission_role  |             |          |           |
