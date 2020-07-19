@@ -363,3 +363,59 @@ return $this->belongsToMany(Product::class, 'order_items', 'order_id', 'product_
 -   `User` **hasOne** `Shop`
 
 ---
+
+# **Commands | Model | Migrations**
+
+```cmd
+~$ php artisan make:model Model -a
+```
+
+> Creates everything
+
+```cmd
+~$ php artisan make:model Model -a
+```
+
+> Creates Model, Controller and Migration
+
+```cmd
+~$ php artisan make:migration create_permission_role_table
+```
+
+> Creates only migrations
+
+---
+
+# **Created all the Model, Controllers, migration and seeds initially**
+
+---
+
+# **Set remember_token column**
+
+---
+
+`Model.php`
+
+```php
+protected $fillable = [
+    'name', 'email', 'password', 'remember_token'
+];
+```
+
+`Controller.php`
+
+```php
+protected function create(array $data)
+{
+    return User::create([
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'password' => Hash::make($data['password']),
+        'remember_token' => Str::random(60),
+    ]);
+}
+```
+
+---
+
+# **Created all the table columns**
