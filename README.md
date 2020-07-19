@@ -419,3 +419,9 @@ protected function create(array $data)
 ---
 
 # **Created all the table columns**
+
+---
+
+# **Created all the relationship among models**
+
+---

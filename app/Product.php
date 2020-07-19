@@ -6,5 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    //
+    public function order()
+    {
+        return $this->belongsToMany(Order::class, 'order_product', 'product_id', 'order_id');
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class, 'shop_id');
+    }
 }
