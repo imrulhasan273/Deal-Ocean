@@ -12,9 +12,9 @@ class ProductController extends Controller
         return view('product.single_product');
     }
 
-    public function category()
+    public function products()
     {
-        return view('product.category');
+        return view('product.multiple_product');
     }
     /**
      * Display a listing of the resource.

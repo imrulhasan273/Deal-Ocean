@@ -12,23 +12,24 @@
 
 # Model | Migration | Controller | Policy | Observer
 
-| Models     | Migrations       | Controllers | Policies | Observers |
-| ---------- | ---------------- | ----------- | -------- | --------- |
-| -          | -                | Dashboard   | -        | -         |
-| User       | users            |             |          |           |
-| Shop       | shops            |             |          |           |
-| Location   | locations        |             |          |           |
-| Country    | countries        |             |          |           |
-| Region     | regions          |             |          |           |
-| Role       | roles            |             |          |           |
-| Permission | permissions      |             |          |           |
-| -          | permission_role  |             |          |           |
-| Coupon     | coupons          |             |          |           |
-| Category   | categories       |             |          |           |
-| Product    | products         |             |          |           |
-| -          | category_product |             |          |           |
-| Order      | orders           |             |          |           |
-| -          | order_product    |             |          |           |
+| Models     | Migrations       | Controllers          | Policies | Observers |
+| ---------- | ---------------- | -------------------- | -------- | --------- |
+| -          | -                | Dashboard            | -        | -         |
+| User       | users            | UserController       |          |           |
+| Shop       | shops            | ShopController       |          |           |
+| Location   | locations        | LocationController   |          |           |
+| Country    | countries        | CountryController    |          |           |
+| Region     | regions          | RegionController     |          |           |
+| Role       | roles            | RoleController       |          |           |
+| Permission | permissions      | PermissionController |          |           |
+| -          | permission_role  |                      |          |           |
+| Coupon     | coupons          | CouponController     |          |           |
+| Category   | categories       | CategoryController   |          |           |
+| Product    | products         | ProductController    |          |           |
+| -          | category_product |                      |          |           |
+| Order      | orders           | OrderController      |          |           |
+| -          | order_product    |                      |          |           |
+| -          | -                | CartController       |          |           |
 
 ---
 
@@ -423,5 +424,9 @@ protected function create(array $data)
 ---
 
 # **Created all the relationship among models**
+
+---
+
+# **Front End Design Completed**
 
 ---

@@ -5,7 +5,8 @@
     @include('partials_front._slider')
     <!-- End Slider -->
 
-	<!-- Features section -->
+
+      <!-- Features section -->
 	<section class="features-section">
 		<div class="container-fluid">
 			<div class="row">
@@ -74,7 +75,7 @@
                 </div>
                 <div class="product-item">
                     <div class="pi-pic">
-                        <img src="assets_front/img/product/3.jpg" alt="">
+                        <img src="assets_front/img/product/2.jpg" alt="">
                         <div class="pi-links">
                             <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
                             <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>

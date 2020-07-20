@@ -24,7 +24,7 @@ Route::get('admin/tables', 'DashboardController@tables')->name('dashboard.tables
 
 // ------Start Product Controller -----------
 Route::get('/details', 'ProductController@details')->name('product.details');
-Route::get('/category', 'ProductController@category')->name('product.category');
+Route::get('/products', 'ProductController@products')->name('product.products');
 // ------End Product Controller -------------
 
 //------- Start Cart Controller

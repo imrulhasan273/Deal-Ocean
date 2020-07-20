@@ -16,11 +16,8 @@
                     </form>
                 </div>
                 <div class="col-xl-4 col-lg-5">
-                    <div class="user-panel">
-                        <div class="up-item">
-                            <i class="flaticon-profile"></i>
-                            <a href="#">Sign</a> In or <a href="#">Create Account</a>
-                        </div>
+                    <div style="text-align: right" class="user-panel">
+
                         <div class="up-item">
                             <div class="shopping-card">
                                 <i class="flaticon-bag"></i>
@@ -28,6 +25,24 @@
                             </div>
                             <a href="{{ route('cart.index')}}">Shopping Cart</a>
                         </div>
+
+                        @guest
+                        <div class="up-item">
+                            <i class="flaticon-profile"></i>
+                            <a href="{{ route('login') }}">Sign In</a> / <a href="{{ route('register') }}">Create</a>
+                        </div>
+                        @else
+                        <div class="up-item">
+                            <i class="flaticon-profile" href="#"></i>
+                            <a style="color: green" href="#">{{ Auth::user()->name }}</a>
+                            <a href=""> | </a>
+                            <a style="color: red" onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();" href="{{route('logout')}}">Log Out</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </div>
+                        @endguest
                     </div>
                 </div>
             </div>
@@ -56,7 +71,7 @@
                 <li><a href="#">Pages</a>
                     <ul class="sub-menu">
                         <li><a href="{{ route('product.details') }}">Product Page</a></li>
-                        <li><a href="{{ route('product.category') }}">Category Page</a></li>
+                        <li><a href="{{ route('product.products') }}">Category Page</a></li>
                         <li><a href="{{ route('cart.index')}}">Cart Page</a></li>
                         <li><a href="{{ route('cart.checkout')}}">Checkout Page</a></li>
                         <li><a href="{{route('contact')}}">Contact Page</a></li>
