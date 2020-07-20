@@ -7,6 +7,15 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    public function details()
+    {
+        return view('product.single_product');
+    }
+
+    public function category()
+    {
+        return view('product.category');
+    }
     /**
      * Display a listing of the resource.
      *

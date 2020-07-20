@@ -22,13 +22,13 @@
 <body class="dark-edition">
     <div class="wrapper ">
         <!-- Start Sadebar Section -->
-        @include('partials._sidebar')
+        @include('partials_back._sidebar')
         <!-- End Sidebar Section -->
 
         <div class="main-panel">
 
             <!-- Start mavbar Section -->
-            @include('partials._navbar')
+            @include('partials_back._navbar')
             <!-- End navbar Section -->
 
             <!-- Start Main Section -->
@@ -40,7 +40,7 @@
             <!-- End Main Section -->
 
             <!-- Start footer Section -->
-            @include('partials._footer')
+            @include('partials_back._footer')
             <!-- End footer Section -->
 
             <!-- Start Script files -->

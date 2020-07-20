@@ -3,13 +3,12 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//------------------ Start Home Controller
+Route::get('/', 'HomeController@index')->name('home');
+Route::get('/contact', 'HomeController@contact')->name('contact');
+//------------------ End Home Controller
 
 
 //----Start Admin Routes | Dashboard ------- //
@@ -21,3 +20,14 @@ Route::get('admin/profile', 'DashboardController@profile')->name('dashboard.prof
 Route::get('admin/typography', 'DashboardController@typography')->name('dashboard.typography');
 Route::get('admin/tables', 'DashboardController@tables')->name('dashboard.tables');
 //----End Admin Routes | Dashboard ------- //
+
+
+// ------Start Product Controller -----------
+Route::get('/details', 'ProductController@details')->name('product.details');
+Route::get('/category', 'ProductController@category')->name('product.category');
+// ------End Product Controller -------------
+
+//------- Start Cart Controller
+Route::get('/cart', 'CartController@index')->name('cart.index')->middleware('auth');
+Route::get('/cart/checkout', 'CartController@checkout')->name('cart.checkout')->middleware('auth');
+//---------- End Cart Controller
