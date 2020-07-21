@@ -12,24 +12,26 @@
 
 # Model | Migration | Controller | Policy | Observer
 
-| Models     | Migrations       | Controllers          | Policies | Observers |
-| ---------- | ---------------- | -------------------- | -------- | --------- |
-| -          | -                | Dashboard            | -        | -         |
-| User       | users            | UserController       |          |           |
-| Shop       | shops            | ShopController       |          |           |
-| Location   | locations        | LocationController   |          |           |
-| Country    | countries        | CountryController    |          |           |
-| Region     | regions          | RegionController     |          |           |
-| Role       | roles            | RoleController       |          |           |
-| Permission | permissions      | PermissionController |          |           |
-| -          | permission_role  |                      |          |           |
-| Coupon     | coupons          | CouponController     |          |           |
-| Category   | categories       | CategoryController   |          |           |
-| Product    | products         | ProductController    |          |           |
-| -          | category_product |                      |          |           |
-| Order      | orders           | OrderController      |          |           |
-| -          | order_product    |                      |          |           |
-| -          | -                | CartController       |          |           |
+| Models     | Migrations       | Controllers          | Policies | Observers | Seed             |
+| ---------- | ---------------- | -------------------- | -------- | --------- | ---------------- |
+| -          | -                | Dashboard            | -        | -         | -                |
+| -          | -                | -                    | -        | -         | SuperAdminSeeder |
+| User       | users            | UserController       |          |           |                  |
+| Shop       | shops            | ShopController       |          |           |                  |
+| Location   | locations        | LocationController   |          |           |                  |
+| Country    | countries        | CountryController    |          |           |                  |
+| Region     | regions          | RegionController     |          |           |                  |
+| Role       | roles            | RoleController       |          |           |                  |
+|            | role_user        |                      |          |           |                  |
+| Permission | permissions      | PermissionController |          |           |                  |
+| -          | permission_role  |                      |          |           |                  |
+| Coupon     | coupons          | CouponController     |          |           |                  |
+| Category   | categories       | CategoryController   |          |           |                  |
+| Product    | products         | ProductController    |          |           |                  |
+| -          | category_product |                      |          |           |                  |
+| Order      | orders           | OrderController      |          |           |                  |
+| -          | order_product    |                      |          |           |                  |
+| -          | -                | CartController       |          |           |                  |
 
 ---
 
@@ -428,5 +430,70 @@ protected function create(array $data)
 ---
 
 # **Front End Design Completed**
+
+---
+
+# **Create a Super Admin using Seeder**
+
+---
+
+`SuperAdminSeeder.php`
+
+```php
+<?php
+
+use App\Role;
+use App\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+class SuperAdminSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $user = User::create(['name' => 'Imrul Hasan', 'email' => 'imrulhasan273@gmail.com', 'password' => Hash::make('imrulhasan')]);
+        $role = Role::create(['name' => 'super_admin', 'display_name' => 'Super Admin']);
+        DB::table('role_user')->insert(['user_id' => $user->id, 'role_id' => $role->id]);
+    }
+}
+```
+
+`DatabaseSeeder.php`
+
+```php
+<?php
+
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $this->call(SuperAdminSeeder::class);
+    }
+}
+```
+
+Now run the following commands.
+
+```cmd
+~$ composer dump-autoload
+```
+
+```cmd
+~$ php artisan db:seed
+~$ php artisan migrate:fresh --seed
+```
 
 ---

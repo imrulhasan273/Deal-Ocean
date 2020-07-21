@@ -1,0 +1,22 @@
+<?php
+
+use App\Role;
+use App\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+class SuperAdminSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $user = User::create(['name' => 'Imrul Hasan', 'email' => 'imrulhasan273@gmail.com', 'password' => Hash::make('imrulhasan')]);
+        $role = Role::create(['name' => 'super_admin', 'display_name' => 'Super Admin']);
+        DB::table('role_user')->insert(['user_id' => $user->id, 'role_id' => $role->id]);
+    }
+}
