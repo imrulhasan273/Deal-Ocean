@@ -41,4 +41,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Shop::class, 'user_id');
     }
+
+    public function role()
+    {
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+    }
 }

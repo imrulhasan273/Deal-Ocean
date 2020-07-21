@@ -15,8 +15,8 @@ class SuperAdminSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::create(['name' => 'Imrul Hasan', 'email' => 'imrulhasan273@gmail.com', 'password' => Hash::make('imrulhasan')]);
         $role = Role::create(['name' => 'super_admin', 'display_name' => 'Super Admin']);
+        $user = User::create(['name' => 'Imrul Hasan', 'role_id' => $role->id, 'email' => 'imrulhasan273@gmail.com', 'password' => Hash::make('imrulhasan')]);
         DB::table('role_user')->insert(['user_id' => $user->id, 'role_id' => $role->id]);
     }
 }
