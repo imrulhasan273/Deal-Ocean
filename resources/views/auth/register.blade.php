@@ -11,13 +11,22 @@
 
     <!-- Main css -->
     <link rel="stylesheet" href="assets_reg/css/style.css">
+
+    <link rel="stylesheet" href="assets_reg/loader/loader.css">
+
 </head>
 <body>
+
+    <!-- Start Page Preloder -->
+	<div id="preloder">
+		<div class="loader"></div>
+    </div>
+    <!-- End Page Preloder -->
 
     <div class="main">
 
         <section class="signup">
-            <!-- <img src="images/signup-bg.jpg" alt=""> -->
+            <!-- <img src="assets_reg/images/signup-bg.png" alt=""> -->
             <div class="container">
                 <div class="signup-content">
                     <form method="POST" action="{{ route('register') }}" id="signup-form" class="signup-form">
@@ -58,5 +67,6 @@
     <!-- JS -->
     <script src="assets_reg/vendor/jquery/jquery.min.js"></script>
     <script src="assets_reg/js/main.js"></script>
+    <script src="assets_reg/loader/loader.js"></script>
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>

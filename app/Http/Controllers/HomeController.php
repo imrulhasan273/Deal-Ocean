@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Banner;
+use App\Slider;
+use App\Product;
+use SliderSeeder;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,7 +27,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $sliders = Slider::take(3)->get();
+        $banners = Banner::take(1)->get();
+        // dd($sliders);
+        $products = Product::take(12)->get();
+
+        return view('home', compact('products', 'sliders', 'banners'));
     }
     public function contact()
     {

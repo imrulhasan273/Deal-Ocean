@@ -24,10 +24,17 @@
 	<link rel="stylesheet" type="text/css" href="assets_login/vendor/daterangepicker/daterangepicker.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="assets_login/css/util.css">
-	<link rel="stylesheet" type="text/css" href="assets_login/css/main.css">
+    <link rel="stylesheet" type="text/css" href="assets_login/css/main.css">
+
+    <link rel="stylesheet" type="text/css" href="assets_login/loader/loader.css">
 <!--===============================================================================================-->
 </head>
 <body>
+    <!-- Start Page Preloder -->
+	<div id="preloder">
+		<div class="loader"></div>
+    </div>
+    <!-- End Page Preloder -->
 
 	<div class="limiter">
 		<div class="container-login100">
@@ -112,7 +119,10 @@
 <!--===============================================================================================-->
 	<script src="assets_login/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
-	<script src="assets_login/js/main.js"></script>
+    <script src="assets_login/js/main.js"></script>
+
+    <script src="assets_login/loader/loader.js"></script>
+
 
 </body>
 </html>

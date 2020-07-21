@@ -12,26 +12,28 @@
 
 # Model | Migration | Controller | Policy | Observer
 
-| Models     | Migrations       | Controllers          | Policies | Observers | Seed             |
-| ---------- | ---------------- | -------------------- | -------- | --------- | ---------------- |
-| -          | -                | Dashboard            | -        | -         | -                |
-| -          | -                | -                    | -        | -         | SuperAdminSeeder |
-| User       | users            | UserController       |          |           |                  |
-| Shop       | shops            | ShopController       |          |           |                  |
-| Location   | locations        | LocationController   |          |           |                  |
-| Country    | countries        | CountryController    |          |           |                  |
-| Region     | regions          | RegionController     |          |           |                  |
-| Role       | roles            | RoleController       |          |           |                  |
-|            | role_user        |                      |          |           |                  |
-| Permission | permissions      | PermissionController |          |           |                  |
-| -          | permission_role  |                      |          |           |                  |
-| Coupon     | coupons          | CouponController     |          |           |                  |
-| Category   | categories       | CategoryController   |          |           |                  |
-| Product    | products         | ProductController    |          |           |                  |
-| -          | category_product |                      |          |           |                  |
-| Order      | orders           | OrderController      |          |           |                  |
-| -          | order_product    |                      |          |           |                  |
-| -          | -                | CartController       |          |           |                  |
+| Models     | Migrations       | Controllers          | Policies | Observers | Seed              |
+| ---------- | ---------------- | -------------------- | -------- | --------- | ----------------- |
+| -          | -                | Dashboard            | -        | -         | -                 |
+| -          | -                | -                    | -        | -         | SuperAdminSeeder  |
+| User       | users            | UserController       |          |           |                   |
+| Shop       | shops            | ShopController       |          |           |                   |
+| Location   | locations        | LocationController   |          |           |                   |
+| Country    | countries        | CountryController    |          |           |                   |
+| Region     | regions          | RegionController     |          |           |                   |
+| Role       | roles            | RoleController       |          |           |                   |
+|            | role_user        |                      |          |           |                   |
+| Permission | permissions      | PermissionController |          |           |                   |
+| -          | permission_role  |                      |          |           |                   |
+| Coupon     | coupons          | CouponController     |          |           |                   |
+| Category   | categories       | CategoryController   |          |           |                   |
+| Product    | products         | ProductController    |          |           | ProductSeeder     |
+| -          | category_product |                      |          |           |                   |
+| Order      | orders           | OrderController      |          |           |                   |
+| -          | order_product    |                      |          |           |                   |
+| -          | -                | CartController       |          |           |                   |
+| Slider     | sliders          | SliderController     |          |           | SliderSeeder '\*' |
+| Banner     | banners          | BannerController     |          |           | BannerSeeder '\*' |
 
 ---
 
@@ -497,3 +499,118 @@ Now run the following commands.
 ```
 
 ---
+
+# **Login And Registration Page Done**
+
+# **Loader System**
+
+`x.blade.php`
+
+```php
+<!-- Start Page Preloder -->
+<div id="preloder">
+    <div class="loader">
+    </div>
+</div>
+<!-- End Page Preloder -->
+```
+
+`loader.css`
+
+```css
+/* Preloder */
+#preloder {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 999999;
+    background: #000;
+}
+
+.loader {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -13px;
+    margin-left: -13px;
+    border-radius: 60px;
+    animation: loader 0.8s linear infinite;
+    -webkit-animation: loader 0.8s linear infinite;
+}
+
+@keyframes loader {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+        border: 4px solid #f44336;
+        border-left-color: transparent;
+    }
+    50% {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+        border: 4px solid #673ab7;
+        border-left-color: transparent;
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+        border: 4px solid #f44336;
+        border-left-color: transparent;
+    }
+}
+
+@-webkit-keyframes loader {
+    0% {
+        -webkit-transform: rotate(0deg);
+        border: 4px solid #f44336;
+        border-left-color: transparent;
+    }
+    50% {
+        -webkit-transform: rotate(180deg);
+        border: 4px solid #673ab7;
+        border-left-color: transparent;
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        border: 4px solid #f44336;
+        border-left-color: transparent;
+    }
+}
+```
+
+`loader.js`
+
+```js
+"use strict";
+
+$(window).on("load", function() {
+    /*------------------
+		Preloder
+	--------------------*/
+    $(".loader").fadeOut();
+    $("#preloder")
+        .delay(400)
+        .fadeOut("slow");
+});
+```
+
+---
+
+# **Feature Products**
+
+---
+
+`HomeController.php`
+
+```php
+public function index()
+{
+    $products = Product::take(8)->get();
+
+    return view('home', compact('products'));
+}
+```
