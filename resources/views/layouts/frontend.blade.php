@@ -37,6 +37,10 @@
     </div>
     <!-- End Page Preloder -->
 
+    <div style="text-align: center">
+        <x-alert/>
+    </div>
+
     <!-- Start Header -->
     @include('partials_front._header')
     <!-- End Header -->

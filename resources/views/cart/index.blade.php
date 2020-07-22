@@ -42,7 +42,7 @@
 									<td class="quy-col">
 										<div class="quantity">
 					                        <div class="pro-qty">
-                                                <input type="text" value="1" readonly>
+                                                <input type="text" value="{{ $itemOccurrence[$item->id] }}" readonly>
                                             </div>
                                             <button>save</button>
                                         </div>
@@ -95,7 +95,7 @@
             <div class="product-item">
                 <div class="pi-pic">
                     <div class="tag-new">New</div>
-                    <img src="{{asset('assets_front/img/product/2.jpg')}}" alt="">
+                    <img src="{{asset('assets_front/img/product/1.jpg')}}" alt="">
                     <div class="pi-links">
                         <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
                         <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
@@ -108,7 +108,7 @@
             </div>
             <div class="product-item">
                 <div class="pi-pic">
-                    <img src="{{asset('assets_front/img/product/3.jpg')}}" alt="">
+                    <img src="{{asset('assets_front/img/product/1.jpg')}}" alt="">
                     <div class="pi-links">
                         <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
                         <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
@@ -121,7 +121,7 @@
             </div>
             <div class="product-item">
                     <div class="pi-pic">
-                        <img src="{{asset('assets_front/img/product/4.jpg')}}" alt="">
+                        <img src="{{asset('assets_front/img/product/1.jpg')}}" alt="">
                         <div class="pi-links">
                             <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
                             <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
@@ -134,7 +134,7 @@
                 </div>
             <div class="product-item">
                 <div class="pi-pic">
-                    <img src="{{asset('assets_front/img/product/6.jpg')}}" alt="">
+                    <img src="{{asset('assets_front/img/product/1.jpg')}}" alt="">
                     <div class="pi-links">
                         <a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
                         <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>

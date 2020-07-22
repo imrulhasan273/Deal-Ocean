@@ -23,31 +23,33 @@ class CartController extends Controller
             ->where('id', auth()->id())
             ->update(['cartitems' => $cartItems]);
 
-
-        return Redirect()->back();
+        return Redirect()->back()->with('message', 'Item added to cart');
     }
     public function index()
     {
-
         $cartItemsQuery = DB::table('users')->where('id', auth()->id())->value('cartitems');    //query to take cart item colum
         // $res = preg_split('/\s+/', $cartItemsQuery); //split cart items id in an array (way 1:slower but have multiple lines)
         $cartItemsArray = explode(" ", $cartItemsQuery);     //split cart items id in an array (way 2:faster)
         $itemCount = count($cartItemsArray) - 1;             //count number of cart items
-        //-------------------
 
-        // foreach ($cartItemsArray as $x => $x_value) {
-        //     echo "Key=" . $x . ", Value=" . $x_value;
-        //     echo "<br>";
-        // }
 
+        //-----handle if duplicate items are added to cart. ---- memorize the counter
+        $itemOccurrence = [];
+        foreach ($cartItemsArray as $cart) {
+            if (!isset($itemOccurrence[$cart])) {
+                $itemOccurrence[$cart] = 0;
+            }
+
+            $itemOccurrence[$cart]++;
+        }
+        //-------------------------------------
 
 
         //Fetch products using cart items id
         $cartItems = DB::table('products')->whereIn('id', $cartItemsArray)->get();
         //----------------------------------
 
-
-        return view('cart.index', compact('itemCount', 'cartItems'));
+        return view('cart.index', compact('itemCount', 'cartItems', 'itemOccurrence'));
     }
     public function checkout()
     {
