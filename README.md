@@ -614,3 +614,11 @@ public function index()
     return view('home', compact('products'));
 }
 ```
+
+---
+
+# **Shopping Cart Operation**
+
+---
+
+> Now I am implementing a shopping cart operation in unique way. And much more robust.

@@ -91,7 +91,7 @@
 						<div class="pi-pic">
 							<img src="{{asset('/storage/products/'.$product->cover_img)}}" alt="">
 							<div class="pi-links">
-								<a href="#" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
+                                <a href="{{ route('cart.add', $product->id) }}" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
 								<a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
 							</div>
 						</div>

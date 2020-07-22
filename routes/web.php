@@ -27,7 +27,9 @@ Route::get('/details', 'ProductController@details')->name('product.details');
 Route::get('/products', 'ProductController@products')->name('product.products');
 // ------End Product Controller -------------
 
+
 //------- Start Cart Controller
+Route::get('/add-to-cart/{product}', 'CartController@add')->name('cart.add')->middleware('auth');
 Route::get('/cart', 'CartController@index')->name('cart.index')->middleware('auth');
 Route::get('/cart/checkout', 'CartController@checkout')->name('cart.checkout')->middleware('auth');
 //---------- End Cart Controller

@@ -7,6 +7,7 @@ use App\Slider;
 use App\Product;
 use SliderSeeder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -29,13 +30,33 @@ class HomeController extends Controller
     {
         $sliders = Slider::take(3)->get();
         $banners = Banner::take(1)->get();
-        // dd($sliders);
         $products = Product::take(12)->get();
 
-        return view('home', compact('products', 'sliders', 'banners'));
+        $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');
+
+        $res = preg_split('/\s+/', $cartItems);
+        $itemCount = count($res) - 1;
+
+
+        // dd($res);
+
+
+        // $count = count(explode(" ", $cartItems));
+
+        // dd($count);
+
+        // dd($cartItems);
+
+        return view('home', compact('products', 'sliders', 'banners', 'itemCount'));
     }
     public function contact()
     {
-        return view('contact');
+        //Item Count in Cart
+        $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');
+        $res = preg_split('/\s+/', $cartItems);
+        $itemCount = count($res) - 1;
+        //-------------------
+
+        return view('contact', compact('itemCount'));
     }
 }
