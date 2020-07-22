@@ -1,3 +1,6 @@
+@php
+$totalPrice = 0;
+@endphp
 @extends('layouts.frontend')
 @section('content')
 	<!-- Page info -->
@@ -23,16 +26,21 @@
 							<table>
 							<thead>
 								<tr>
-									<th class="product-th">Product</th>
+                                    <th class="product-th"></th>
+                                    <th class="product-th">Product</th>
 									<th class="quy-th">Quantity</th>
 									<th class="size-th">SizeSize</th>
 									<th class="total-th">Price</th>
-									<th class="remove-th">Remove</th>
                                 </tr>
 							</thead>
 							<tbody>
                                 @foreach ($cartItems as $item)
 								<tr>
+                                    <td class="remove-col">
+                                        <a href="{{ route('cart.destroy', $item->id) }}">
+                                            <i class="fa fa-remove"></i>
+                                        </a>
+                                    </td>
 									<td class="product-col">
 										<img src="{{asset('/storage/products/'.$item->cover_img)}}" alt="">
 										<div class="pc-title">
@@ -42,28 +50,27 @@
 									</td>
 									<td class="quy-col">
 										<div class="quantity">
-                                            <form id="myform" method="POST" action="{{ route('cart.update', [$item->id , $itemOccurrence[$item->id]]) }}">
+                                            <form id="myform">
                                                 <div class="pro-qty">
+                                                    <a href="{{ route('cart.update', [$item->id , 'd']) }}" class="dec qtybtn">-</a>
                                                     <input type="text" value="{{ $itemOccurrence[$item->id] }}" readonly>
+                                                    <a href="{{ route('cart.update', [$item->id , 'i']) }}" class="inc qtybtn">+</a>
                                                 </div>
-
                                             </form>
                                         </div>
 									</td>
 									<td class="size-col"><h4>Size M</h4></td>
-                                    <td class="total-col"><h4>$45.90</h4></td>
-                                    <td class="product-remove">
-                                        <a href="{{ route('cart.destroy', $item->id) }}">
-                                            <i class="pe-7s-close"></i>del
-                                        </a>
-                                    </td>
+                                    <td class="total-col"><h4>${{$item->price * $itemOccurrence[$item->id]}}</h4></td>
+                                    @php
+                                        $totalPrice = $totalPrice + $item->price * $itemOccurrence[$item->id]
+                                    @endphp
                                 </tr>
                                 @endforeach
 							</tbody>
 						</table>
 						</div>
 						<div class="total-cost">
-							<h6>Total <span>$99.90</span></h6>
+                            <h6>Total Price <span>${{$totalPrice}}</span></h6>
 						</div>
 					</div>
 				</div>
@@ -73,7 +80,7 @@
 						<button>Submit</button>
 					</form>
                     <a href="{{route('cart.checkout')}}" class="site-btn">Proceed to checkout</a>
-					<a href="" class="site-btn sb-dark">Continue shopping</a>
+					<a href="{{route('home')}}" class="site-btn sb-dark">Continue shopping</a>
 				</div>
 			</div>
 		</div>

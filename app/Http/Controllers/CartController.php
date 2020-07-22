@@ -54,8 +54,42 @@ class CartController extends Controller
 
     public function update($itemId, $itemOccur)
     {
-        // dd($itemId);
-        dd($itemOccur);
+        if ($itemOccur == 'i') {
+            $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');
+
+            if ($cartItems == NULL) {
+                $cartItems = " " . $itemId;
+            } else {
+                $cartItems = $cartItems . " " . $itemId;
+            }
+
+            $update_cart = DB::table('users')
+                ->where('id', auth()->id())
+                ->update(['cartitems' => $cartItems]);
+
+            return Redirect()->back();
+        } else {
+            $cartItemsQuery = DB::table('users')->where('id', auth()->id())->value('cartitems');
+            $cartItemsArray = explode(" ", $cartItemsQuery);
+
+            $cartItems = NULL;
+            $flag = 0;
+            for ($i = 1; $i < count($cartItemsArray); $i++) {
+                if (($cartItemsArray[$i] != $itemId) || ($flag == 1)) {
+                    $cartItems = $cartItems . " " . $cartItemsArray[$i];
+                }
+                if ($cartItemsArray[$i] == $itemId) {
+                    $flag = 1;
+                }
+            }
+
+            $update_cart = DB::table('users')
+                ->where('id', auth()->id())
+                ->update(['cartitems' => $cartItems]);
+
+
+            return back();
+        }
     }
 
     public function destroy($itemId)
