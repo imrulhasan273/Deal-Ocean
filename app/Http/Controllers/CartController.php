@@ -28,8 +28,8 @@ class CartController extends Controller
     public function index()
     {
         $cartItemsQuery = DB::table('users')->where('id', auth()->id())->value('cartitems');    //query to take cart item colum
-        // $res = preg_split('/\s+/', $cartItemsQuery); //split cart items id in an array (way 1:slower but have multiple lines)
-        $cartItemsArray = explode(" ", $cartItemsQuery);     //split cart items id in an array (way 2:faster)
+        $cartItemsArray = preg_split('/\s+/', $cartItemsQuery); //split cart items id in an array (way 1:slower but have multiple lines)
+        // $cartItemsArray = explode(" ", $cartItemsQuery);     //split cart items id in an array (way 2:faster)
         $itemCount = count($cartItemsArray) - 1;             //count number of cart items
 
 
@@ -51,6 +51,34 @@ class CartController extends Controller
 
         return view('cart.index', compact('itemCount', 'cartItems', 'itemOccurrence'));
     }
+
+    public function update($itemId, $itemOccur)
+    {
+        // dd($itemId);
+        dd($itemOccur);
+    }
+
+    public function destroy($itemId)
+    {
+        $cartItemsQuery = DB::table('users')->where('id', auth()->id())->value('cartitems');    //query to take cart item colum
+        $cartItemsArray = explode(" ", $cartItemsQuery);
+
+        $cartItems = NULL;
+
+        for ($i = 1; $i < count($cartItemsArray); $i++) {
+            if ($cartItemsArray[$i] != $itemId) {
+                $cartItems = $cartItems . " " . $cartItemsArray[$i];
+            }
+        }
+
+        $update_cart = DB::table('users')
+            ->where('id', auth()->id())
+            ->update(['cartitems' => $cartItems]);
+
+
+        return back();
+    }
+
     public function checkout()
     {
         return view('cart.checkout');

@@ -27,7 +27,8 @@
 									<th class="quy-th">Quantity</th>
 									<th class="size-th">SizeSize</th>
 									<th class="total-th">Price</th>
-								</tr>
+									<th class="remove-th">Remove</th>
+                                </tr>
 							</thead>
 							<tbody>
                                 @foreach ($cartItems as $item)
@@ -41,14 +42,21 @@
 									</td>
 									<td class="quy-col">
 										<div class="quantity">
-					                        <div class="pro-qty">
-                                                <input type="text" value="{{ $itemOccurrence[$item->id] }}" readonly>
-                                            </div>
-                                            <button>save</button>
+                                            <form id="myform" method="POST" action="{{ route('cart.update', [$item->id , $itemOccurrence[$item->id]]) }}">
+                                                <div class="pro-qty">
+                                                    <input type="text" value="{{ $itemOccurrence[$item->id] }}" readonly>
+                                                </div>
+
+                                            </form>
                                         </div>
 									</td>
 									<td class="size-col"><h4>Size M</h4></td>
-									<td class="total-col"><h4>$45.90</h4></td>
+                                    <td class="total-col"><h4>$45.90</h4></td>
+                                    <td class="product-remove">
+                                        <a href="{{ route('cart.destroy', $item->id) }}">
+                                            <i class="pe-7s-close"></i>del
+                                        </a>
+                                    </td>
                                 </tr>
                                 @endforeach
 							</tbody>
