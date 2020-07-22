@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-lg-2 text-center text-lg-left">
                     <!-- logo -->
-                    <a href="./index.html" class="site-logo">
+                    <a href="{{ route('home') }}" class="site-logo">
                         <img src="{{asset('assets_front/img/logo.png')}}" alt="">
                     </a>
                 </div>
@@ -53,7 +53,7 @@
         <div class="container">
             <!-- menu -->
             <ul class="main-menu">
-                <li><a href="#">Home</a></li>
+                <li><a href="{{ route('home') }}">Home</a></li>
                 <li><a href="#">Women</a></li>
                 <li><a href="#">Men</a></li>
                 <li><a href="#">Jewelry
@@ -77,7 +77,7 @@
                         <li><a href="{{route('contact')}}">Contact Page</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Blog</a></li>
+                <li><a href="{{ route('product.products') }}">Category</a></li>
             </ul>
         </div>
     </nav>
