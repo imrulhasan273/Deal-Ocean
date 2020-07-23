@@ -53,6 +53,7 @@ class CartController extends Controller
         $couponDiscount = DB::table('users')->where('id', auth()->id())->value('discount');
         //
 
+        // dd($cartItems);
 
         return view('cart.index', compact('itemCount', 'cartItems', 'itemOccurrence', 'couponDiscount'));
     }

@@ -36,3 +36,10 @@ Route::get('/cart/destroy{itemId}', 'CartController@destroy')->name('cart.destro
 Route::get('/cart/coupon', 'CartController@coupon')->name('cart.coupon')->middleware('auth');
 Route::get('/cart/checkout', 'CartController@checkout')->name('cart.checkout')->middleware('auth');
 //---------- End Cart Controller
+
+//Order Controller----
+// Route::resource('orders', 'OrderController')->middleware('auth');
+Route::post('/order/store', 'OrderController@store')->name('orders.store')->middleware('auth');
+
+
+//-----------------

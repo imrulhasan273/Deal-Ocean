@@ -37,16 +37,6 @@ class HomeController extends Controller
         $res = preg_split('/\s+/', $cartItems);
         $itemCount = count($res) - 1;
 
-
-        // dd($res);
-
-
-        // $count = count(explode(" ", $cartItems));
-
-        // dd($count);
-
-        // dd($cartItems);
-
         return view('home', compact('products', 'sliders', 'banners', 'itemCount'));
     }
     public function contact()

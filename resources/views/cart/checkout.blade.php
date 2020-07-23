@@ -12,76 +12,62 @@
 	</div>
 	<!-- Page info end -->
 
-
 	<!-- checkout section  -->
 	<section class="checkout-section spad">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 order-2 order-lg-1">
-					<form class="checkout-form">
+                    <form method="post" action="{{route('orders.store')}}" class="checkout-form" >
+                        @csrf
 						<div class="cf-title">Billing Address</div>
-						<div class="row">
-							<div class="col-md-7">
-								<p>*Billing Information</p>
-							</div>
-							<div class="col-md-5">
-								<div class="cf-radio-btns address-rb">
-									<div class="cfr-item">
-										<input type="radio" name="pm" id="one">
-										<label for="one">Use my regular address</label>
-									</div>
-									<div class="cfr-item">
-										<input type="radio" name="pm" id="two">
-										<label for="two">Use a different address</label>
-									</div>
-								</div>
-							</div>
-						</div>
 						<div class="row address-inputs">
 							<div class="col-md-12">
-								<input type="text" placeholder="Address">
-								<input type="text" placeholder="Address line 2">
-								<input type="text" placeholder="Country">
+                                <input name="billing_state" type="text" placeholder="Country">
+                                <input name="billing_fullname" type="text" placeholder="Full Name">
+                                <input name="billing_address" type="text" placeholder="Address">
+                                <input name="billing_city" type="text" placeholder="City">
 							</div>
 							<div class="col-md-6">
-								<input type="text" placeholder="Zip code">
+								<input name="billing_zipcode" type="text" placeholder="Zip code">
 							</div>
 							<div class="col-md-6">
-								<input type="text" placeholder="Phone no.">
+								<input name="billing_phone" type="text" placeholder="Phone no.">
 							</div>
-						</div>
-						<div class="cf-title">Delievery Info</div>
-						<div class="row shipping-btns">
-							<div class="col-6">
-								<h4>Standard</h4>
+                        </div>
+
+                        <h3>
+                            <label><p>Ship to a different address?</p></label>
+                            <input name="shipping_check" id="ship-box" type="checkbox" />
+                        </h3>
+
+                        <div class="cf-title">Shipping Address</div>
+						<div class="row address-inputs">
+							<div class="col-md-12">
+                                <input name="shipping_state" type="text" placeholder="Country">
+                                <input name="shipping_fullname" type="text" placeholder="Full Name">
+                                <input name="shipping_address" type="text" placeholder="Address">
+                                <input name="shipping_city" type="text" placeholder="City">
 							</div>
-							<div class="col-6">
-								<div class="cf-radio-btns">
-									<div class="cfr-item">
-										<input type="radio" name="shipping" id="ship-1">
-										<label for="ship-1">Free</label>
-									</div>
-								</div>
+							<div class="col-md-6">
+								<input name="shipping_zipcode" type="text" placeholder="Zip code">
 							</div>
-							<div class="col-6">
-								<h4>Next day delievery  </h4>
+							<div class="col-md-6">
+								<input name="shipping_phone" type="text" placeholder="Phone no.">
 							</div>
-							<div class="col-6">
-								<div class="cf-radio-btns">
-									<div class="cfr-item">
-										<input type="radio" name="shipping" id="ship-2">
-										<label for="ship-2">$3.45</label>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="cf-title">Payment</div>
-						<ul class="payment-list">
-							<li>Paypal<a href="#"><img src="{{asset('assets_front/img/paypal.png')}}" alt=""></a></li>
-							<li>Credit / Debit card<a href="#"><img src="{{asset('assets_front/img/mastercart.png')}}" alt=""></a></li>
-							<li>Pay when you get the package</li>
-						</ul>
-						<button class="site-btn submit-order-btn">Place Order</button>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="country-select">
+                                <label>Payment Option<span class="required">*</span></label>
+                                <select name="payment_method">
+                                    <option value="cash_on_delivery">Cash On Delivary</option>
+                                    <option value="online">Online</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <input type="submit" class="site-btn submit-order-btn" value="Place Order"/>
+
 					</form>
 				</div>
 				<div class="col-lg-4 order-1 order-lg-2">

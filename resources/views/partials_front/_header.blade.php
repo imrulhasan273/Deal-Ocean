@@ -73,7 +73,7 @@
                         <li><a href="{{ route('product.details') }}">Product Page</a></li>
                         <li><a href="{{ route('product.products') }}">Category Page</a></li>
                         <li><a href="{{ route('cart.index')}}">Cart Page</a></li>
-                        <li><a href="{{ route('cart.checkout')}}">Checkout Page</a></li>
+                        {{-- <li><a href="{{ route('cart.checkout')}}">Checkout Page</a></li> --}}
                         <li><a href="{{route('contact')}}">Contact Page</a></li>
                     </ul>
                 </li>

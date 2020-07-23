@@ -22,7 +22,8 @@ $totalPrice = 0;
 			<div class="row">
 				<div class="col-lg-8">
 					<div class="cart-table">
-						<h3>Your Cart</h3>
+                        <h3>Your Cart</h3>
+                        <br>
 						<div class="cart-table-warp">
 							<table>
 							<thead>
@@ -73,13 +74,17 @@ $totalPrice = 0;
                         </div>
                         @php
                         // calculating discount on coupon
-                            $totalPrice = $subTotalPrice - ( ($couponDiscount*$subTotalPrice)/100 );
+
+                            $discountPrice=( ($couponDiscount*$subTotalPrice)/100 );
+                            $totalPrice = $subTotalPrice - $discountPrice;
                         @endphp
 						<div class="total-cost">
                             <h6>Sub Total <span>${{$subTotalPrice}}</span></h6>
                             <br>
                             <h6>Total <span>${{$totalPrice}}</span></h6>
-						</div>
+                        </div>
+                    <h6 style="text-align: center">You are saving total ${{$discountPrice}}</h6>
+
 					</div>
 				</div>
 				<div class="col-lg-4 card-right">
