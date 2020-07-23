@@ -49,7 +49,12 @@ class CartController extends Controller
         $cartItems = DB::table('products')->whereIn('id', $cartItemsArray)->get();
         //----------------------------------
 
-        return view('cart.index', compact('itemCount', 'cartItems', 'itemOccurrence'));
+        //Fetch coupon discount from user table
+        $couponDiscount = DB::table('users')->where('id', auth()->id())->value('discount');
+        //
+
+
+        return view('cart.index', compact('itemCount', 'cartItems', 'itemOccurrence', 'couponDiscount'));
     }
 
     public function update($itemId, $itemOccur)
@@ -111,6 +116,23 @@ class CartController extends Controller
 
 
         return back();
+    }
+
+    public function coupon(Request $request)
+    {
+        $couponsQuery = DB::table('coupons')->where('code', $request->coupon_code)->value('discount');
+
+        if ($couponsQuery != NULL) {
+            $update_user = DB::table('users')
+                ->where('id', auth()->id())
+                ->update(['discount' => $couponsQuery]);
+            return back()->with('message', 'Promo Code Applied');
+        } else {
+            $update_user = DB::table('users')
+                ->where('id', auth()->id())
+                ->update(['discount' => 0]);
+            return back()->with('message', 'Promo Code Expires');
+        }
     }
 
     public function checkout()

@@ -1,4 +1,5 @@
 @php
+$subTotalPrice = 0;
 $totalPrice = 0;
 @endphp
 @extends('layouts.frontend')
@@ -62,22 +63,29 @@ $totalPrice = 0;
 									<td class="size-col"><h4>Size M</h4></td>
                                     <td class="total-col"><h4>${{$item->price * $itemOccurrence[$item->id]}}</h4></td>
                                     @php
-                                        $totalPrice = $totalPrice + $item->price * $itemOccurrence[$item->id]
+                                        $subTotalPrice = ($subTotalPrice + $item->price * $itemOccurrence[$item->id]);
+                                        $totalPrice = $totalPrice + $item->price * $itemOccurrence[$item->id];
                                     @endphp
                                 </tr>
                                 @endforeach
 							</tbody>
 						</table>
-						</div>
+                        </div>
+                        @php
+                        // calculating discount on coupon
+                            $totalPrice = $subTotalPrice - ( ($couponDiscount*$subTotalPrice)/100 );
+                        @endphp
 						<div class="total-cost">
-                            <h6>Total Price <span>${{$totalPrice}}</span></h6>
+                            <h6>Sub Total <span>${{$subTotalPrice}}</span></h6>
+                            <br>
+                            <h6>Total <span>${{$totalPrice}}</span></h6>
 						</div>
 					</div>
 				</div>
 				<div class="col-lg-4 card-right">
-					<form class="promo-code-form">
-						<input type="text" placeholder="Enter promo code">
-						<button>Submit</button>
+                    <form action="{{ route('cart.coupon') }}" class="promo-code-form">
+						<input name="coupon_code" type="text" placeholder="Enter promo code">
+						<button name="submit" type="submit">Submit</button>
 					</form>
                     <a href="{{route('cart.checkout')}}" class="site-btn">Proceed to checkout</a>
 					<a href="{{route('home')}}" class="site-btn sb-dark">Continue shopping</a>

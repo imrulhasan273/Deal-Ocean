@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->longText('cartitems')->nullable();
             $table->longText('wishlist')->nullable();
+            $table->unsignedBigInteger('discount')->default(0);
             $table->rememberToken();
             $table->timestamps();
 

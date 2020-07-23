@@ -622,3 +622,237 @@ public function index()
 ---
 
 > Now I am implementing a shopping cart operation in unique way. And much more robust.
+
+`cart/index.blade.php`
+
+```php
+<!-- cart section end -->
+<section class="cart-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="cart-table">
+                    <h3>Your Cart</h3>
+                    <div class="cart-table-warp">
+                        <table>
+                        <thead>
+                            <tr>
+                                <th class="product-th"></th>
+                                <th class="product-th">Product</th>
+                                <th class="quy-th">Quantity</th>
+                                <th class="size-th">SizeSize</th>
+                                <th class="total-th">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($cartItems as $item)
+                            <tr>
+                                <td class="remove-col">
+                                    <a href="{{ route('cart.destroy', $item->id) }}">
+                                        <i class="fa fa-remove"></i>
+                                    </a>
+                                </td>
+                                <td class="product-col">
+                                    <img src="{{asset('/storage/products/'.$item->cover_img)}}" alt="">
+                                    <div class="pc-title">
+                                        <h4>{{ $item->name }}</h4>
+                                        <p>${{ $item->price }}</p>
+                                    </div>
+                                </td>
+                                <td class="quy-col">
+                                    <div class="quantity">
+                                        <form id="myform">
+                                            <div class="pro-qty">
+                                                <a href="{{ route('cart.update', [$item->id , 'd']) }}" class="dec qtybtn">-</a>
+                                                <input type="text" value="{{ $itemOccurrence[$item->id] }}" readonly>
+                                                <a href="{{ route('cart.update', [$item->id , 'i']) }}" class="inc qtybtn">+</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td class="size-col"><h4>Size M</h4></td>
+                                <td class="total-col"><h4>${{$item->price * $itemOccurrence[$item->id]}}</h4></td>
+                                @php
+                                    $subTotalPrice = ($subTotalPrice + $item->price * $itemOccurrence[$item->id]);
+                                    $totalPrice = $totalPrice + $item->price * $itemOccurrence[$item->id];
+                                @endphp
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    </div>
+                    @php
+                    // calculating discount on coupon
+                        $totalPrice = $subTotalPrice - ( ($couponDiscount*$subTotalPrice)/100 );
+                    @endphp
+                    <div class="total-cost">
+                        <h6>Sub Total <span>${{$subTotalPrice}}</span></h6>
+                        <br>
+                        <h6>Total <span>${{$totalPrice}}</span></h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 card-right">
+                <form action="{{ route('cart.coupon') }}" class="promo-code-form">
+                    <input name="coupon_code" type="text" placeholder="Enter promo code">
+                    <button name="submit" type="submit">Submit</button>
+                </form>
+                <a href="{{route('cart.checkout')}}" class="site-btn">Proceed to checkout</a>
+                <a href="{{route('home')}}" class="site-btn sb-dark">Continue shopping</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- cart section end -->
+```
+
+`**CartController.php**`
+
+`add to cart` operation
+
+```php
+public function add($product)
+{
+    $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');
+
+    if ($cartItems == NULL) {
+        $cartItems = " " . $product;
+    } else {
+    $cartItems = $cartItems . " " . $product;
+    }
+
+    $update_cart = DB::table('users')
+        ->where('id', auth()->id())
+        ->update(['cartitems' => $cartItems]);
+
+    return Redirect()->back()->with('message', 'Item added to cart');
+}
+```
+
+`index` page of cart
+
+```php
+public function index()
+{
+    $cartItemsQuery = DB::table('users')->where('id', auth()->id())->value('cartitems');    //query to take cart item colum
+    $cartItemsArray = preg_split('/\s+/', $cartItemsQuery); //split cart items id in an array (way 1:slower but have multiple lines)
+        // $cartItemsArray = explode(" ", $cartItemsQuery);     //split cart items id in an array (way 2:faster)
+    $itemCount = count($cartItemsArray) - 1;             //count number of cart items
+
+
+        //-----handle if duplicate items are added to cart. ---- memorize the counter
+    $itemOccurrence = [];
+    foreach ($cartItemsArray as $cart) {
+        if (!isset($itemOccurrence[$cart])) {
+            $itemOccurrence[$cart] = 0;
+        }
+
+        $itemOccurrence[$cart]++;
+    }
+    //Fetch products using cart items id
+    $cartItems = DB::table('products')->whereIn('id', $cartItemsArray)->get();
+    //----------------------------------
+
+    //Fetch coupon discount from user table
+    $couponDiscount = DB::table('users')->where('id', auth()->id())->value('discount');
+    //
+
+    return view('cart.index', compact('itemCount', 'cartItems', 'itemOccurrence', 'couponDiscount'));
+}
+```
+
+`update cart operation`
+
+```php
+public function update($itemId, $itemOccur)
+{
+    if ($itemOccur == 'i') {
+        $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');
+
+        if ($cartItems == NULL) {
+            $cartItems = " " . $itemId;
+        } else {
+            $cartItems = $cartItems . " " . $itemId;
+        }
+
+        $update_cart = DB::table('users')
+            ->where('id', auth()->id())
+            ->update(['cartitems' => $cartItems]);
+
+            return Redirect()->back();
+    }
+    else
+    {
+        $cartItemsQuery = DB::table('users')->where('id', auth()->id())->value('cartitems');
+        $cartItemsArray = explode(" ", $cartItemsQuery);
+
+        $cartItems = NULL;
+        $flag = 0;
+        for ($i = 1; $i < count($cartItemsArray); $i++) {
+            if (($cartItemsArray[$i] != $itemId) || ($flag == 1)) {
+                $cartItems = $cartItems . " " . $cartItemsArray[$i];
+            }
+            if ($cartItemsArray[$i] == $itemId) {
+                $flag = 1;
+            }
+        }
+
+        $update_cart = DB::table('users')
+            ->where('id', auth()->id())
+            ->update(['cartitems' => $cartItems]);
+
+
+        return back();
+    }
+}
+```
+
+`delete an item operation in cart`
+
+```php
+public function destroy($itemId)
+{
+    $cartItemsQuery = DB::table('users')->where('id', auth()->id())->value('cartitems');    //query to take cart item colum
+    $cartItemsArray = explode(" ", $cartItemsQuery);
+
+    $cartItems = NULL;
+
+    for ($i = 1; $i < count($cartItemsArray); $i++) {
+        if ($cartItemsArray[$i] != $itemId) {
+            $cartItems = $cartItems . " " . $cartItemsArray[$i];
+        }
+    }
+
+    $update_cart = DB::table('users')
+        ->where('id', auth()->id())
+        ->update(['cartitems' => $cartItems]);
+
+
+    return back();
+}
+```
+
+`Apply a coupon in cart`
+
+```php
+public function coupon(Request $request)
+{
+    $couponsQuery = DB::table('coupons')->where('code', $request->coupon_code)->value('discount');
+
+    if ($couponsQuery != NULL) {
+        $update_user = DB::table('users')
+            ->where('id', auth()->id())
+            ->update(['discount' => $couponsQuery]);
+        return back()->with('message', 'Promo Code Applied');
+    }
+    else
+    {
+        $update_user = DB::table('users')
+            ->where('id', auth()->id())
+            ->update(['discount' => 0]);
+        return back()->with('message', 'Promo Code Expires');
+    }
+}
+```
+
+---
