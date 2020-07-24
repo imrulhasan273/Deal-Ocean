@@ -42,4 +42,11 @@ Route::get('/cart/checkout', 'CartController@checkout')->name('cart.checkout')->
 Route::post('/order/store', 'OrderController@store')->name('orders.store')->middleware('auth');
 
 
-//-----------------
+
+// SSLCOMMERZ Start
+Route::POST('/pay/{orderId}', 'SSLCommerzPaymentController@index')->name('payments.pay');
+Route::POST('/success', 'SSLCommerzPaymentController@success');
+Route::POST('/fail', 'SSLCommerzPaymentController@fail');
+Route::POST('/cancel', 'SSLCommerzPaymentController@cancel');
+Route::POST('/ipn', 'SSLCommerzPaymentController@ipn');
+// SSLCOMMERZ END

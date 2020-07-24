@@ -59,13 +59,14 @@ class OrderController extends Controller
         //--
 
         //--total price
+        $subTotalPrice = 0;
         $totalPrice = 0;
         foreach ($cartItems  as $item) {
-            $totalPrice += ($item->price * $itemOccurrence[$item->id]);
+            $subTotalPrice += ($item->price * $itemOccurrence[$item->id]);
         }
         $couponDiscount = DB::table('users')->where('id', auth()->id())->value('discount');
-        $discountPrice = (($couponDiscount * $totalPrice) / 100);
-        $totalPrice = $totalPrice - $discountPrice;
+        $discountPrice = (($couponDiscount * $subTotalPrice) / 100);
+        $totalPrice = $subTotalPrice - $discountPrice;
         //---
 
 
@@ -122,6 +123,8 @@ class OrderController extends Controller
             $order->shipping_zipcode = $request->input('billing_zipcode');
         }
 
+        $order->sub_total = $subTotalPrice;
+        $order->discount = $discountPrice;
         $order->grand_total = $totalPrice;
         $order->item_count = $itemCount;
         $order->user_id = auth()->id();
@@ -129,10 +132,20 @@ class OrderController extends Controller
 
         //Add all the products in order_product table which is pivot table
         foreach ($cartItems as $item) {
-            $dPrice = floatval(($couponDiscount * $item->price) / 100);
-            $item->price = $item->price - $dPrice;
+            // $dPrice = floatval(($couponDiscount * $item->price) / 100);
+            // $item->price = $item->price - $dPrice;
             $order->product()->attach($item->id, ['price' => $item->price, 'quantity' => $itemOccurrence[$item->id]]);
         }
+
+        if (request('payment_method') == 'online') {
+            $orderId = $order->id;
+            $grandTotal = $order->grand_total;
+            return view('payments.create', compact('orderId', 'grandTotal'));
+        }
+
+        //Reset cart items, coupons from user table
+
+        //----
 
         return Redirect::route('home');
     }
