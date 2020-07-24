@@ -1466,7 +1466,7 @@ class SSLCommerzPaymentController extends Controller
 }
 ```
 
-### Step 4
+## Step 4
 
 Copy past in `Http/Controllers/Middleware/VerifyCsrfToken.php`
 
@@ -1490,7 +1490,7 @@ class VerifyCsrfToken extends Middleware
 }
 ```
 
-### Step 5
+## Step 5
 
 > Create some routing
 
@@ -1505,5 +1505,176 @@ Route::POST('/cancel', 'SSLCommerzPaymentController@cancel');
 Route::POST('/ipn', 'SSLCommerzPaymentController@ipn');
 // SSLCOMMERZ END
 ```
+
+---
+
+# **Flow of Payment Gateway**
+
+---
+
+## Flow 1
+
+`OrderController.php`
+
+```php
+if (request('payment_method') == 'online') {
+    $orderId = $order->id;
+    $grandTotal = $order->grand_total;
+    return view('payments.create', compact('orderId', 'grandTotal'));
+}
+```
+
+> I send the `orderId` and `grandTotal` to the `view/payment/create.blade.php`
+
+## Flow 2
+
+`create.blade.php`
+
+```php
+<form action="{{ route('payments.pay', [$orderId])}}" method="POST" class="form-horizontal">
+    @csrf
+    <div class="form-group">
+        <label class="control-label">Total Price: </label>
+        <div class="col-sm-6">
+            <input value="{{$grandTotal}}" type="text" class="form-control" name="amount"
+                    readonly/>
+        </div>
+    </div>
+
+    <div class="clearfix form-actions ">
+        <div class="col-md-10">
+            <button class="btn btn-info btn-sm" id="submit" type="submit">
+                <i class="ace-icon fa fa-check bigger-110"></i>Proceed Payment
+            </button>
+        </div>
+    </div>
+</form>
+```
+
+> In this view it is a form. In this form there is one `input` field. And this field contain `grandTotal` value.
+
+> After submitting the form. input value will be sent to `Request` and the `orderId` will be sent to the `route('payment.pay')` which is the `index` method of `SSLCommerzPaymentController` controller.
+
+## Flow 3
+
+`SSLCommerzPaymentController.php`
+
+```php
+    public function index(Request $request, $ordId)
+    {
+        $post_data = array();
+        $post_data['total_amount'] = $request->amount; # You cant not pay less than 10
+        $post_data['currency'] = "BDT";
+        $post_data['tran_id'] = now(); // tran_id must be unique
+
+        //-----Here We take the orderId into $post_data to pass it on success function
+        $post_data['temp'] = $ordId;
+        $_SESSION['payment_values']['temp'] = $post_data['temp'];
+        //----------------------------------------------------------------------------
+
+        #Start to save these value  in session to pick in success page.
+        $_SESSION['payment_values']['tran_id'] = $post_data['tran_id'];
+        #End to save these value  in session to pick in success page.
+
+        $server_name = $request->root() . "/";
+        $post_data['success_url'] = $server_name . "success";
+        $post_data['fail_url'] = $server_name . "fail";
+        $post_data['cancel_url'] = $server_name . "cancel";
+
+        $sslc = new SSLCommerz();
+        // dd($sslc);
+        # initiate(Transaction Data , false: Redirect to SSLCOMMERZ gateway/ true: Show all the Payement gateway here )
+        $payment_options = $sslc->initiate($post_data, false);
+
+        if (!is_array($payment_options)) {
+            print_r($payment_options);
+            $payment_options = array();
+        }
+    }
+```
+
+> In this method we can see the payment gateway. and pay the bills.
+
+## Flow 4
+
+`SSLCommerzPaymentController.php`
+
+```php
+    public function success(Request $request)
+    {
+        // dd($request);
+
+        $payment_method = $request->card_issuer;
+        $transId        = $request->bank_tran_id;
+        $storeId        = $request->store_id;
+
+        echo "Transaction is Successful";
+
+        $update_product = DB::table('orders')
+            ->where('id', $_SESSION['payment_values']['temp'])
+            ->update([
+                'is_paid' => '1',
+                'payment_method' => $payment_method,
+                'transection_id' => $transId,
+                'store_id'       => $storeId,
+                'status'         => 'processing'
+            ]);
+
+        //send email to customer
+        // $order = Order::find($_SESSION['payment_values']['temp']);
+        // Mail::to($order->user->email)->send(new OrderPaid($order));
+        //---
+
+        return redirect(route('home'))->with('message', 'Order with Transaction successful');
+    }
+```
+
+> This method will be executed when the payment will be succesfull.
+
+## Flow 5
+
+`SSLCommerzPaymentController.php`
+
+```php
+    public function fail(Request $request)
+    {
+        // dd($request);
+        $payment_method = $request->card_issuer;
+
+        $update_product = DB::table('orders')
+            ->where('id', $_SESSION['payment_values']['temp'])
+            ->update([
+                'is_paid' => '0',
+                'payment_method' => $payment_method,
+                'status'  => 'failed'
+            ]);
+
+
+
+        return redirect(route('home'))->with('error', 'Transaction Unsuccessful');
+    }
+```
+
+> THis method will be executed when the payment will be unseccessfull.
+
+## Flow 6
+
+`SSLCommerzPaymentController.php`
+
+```php
+    public function cancel(Request $request)
+    {
+        $update_product = DB::table('orders')
+            ->where('id', $_SESSION['payment_values']['temp'])
+            ->update([
+                'is_paid' => '0',
+                'status'  => 'canceled'
+            ]);
+
+        return redirect(route('home'))->with('error', 'Order has been Canceled');
+    }
+```
+
+> This method will be excuted when the payment will be cancelled.
 
 ---
