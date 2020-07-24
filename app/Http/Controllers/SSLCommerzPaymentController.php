@@ -70,6 +70,14 @@ class SSLCommerzPaymentController extends Controller
                 'status'         => 'processing'
             ]);
 
+        //reset cart
+        $update_cart = DB::table('users')
+            ->where('id', auth()->id())
+            ->update([
+                'cartitems' => '',
+                'discount' => 0
+            ]);
+
         //send email to customer
         // $order = Order::find($_SESSION['payment_values']['temp']);
         // Mail::to($order->user->email)->send(new OrderPaid($order));

@@ -144,8 +144,14 @@ class OrderController extends Controller
         }
 
         //Reset cart items, coupons from user table
-
+        $update_cart = DB::table('users')
+            ->where('id', auth()->id())
+            ->update([
+                'cartitems' => '',
+                'discount' => 0
+            ]);
         //----
+
 
         return Redirect::route('home');
     }
