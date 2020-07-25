@@ -21,14 +21,16 @@ class SSLCommerzPaymentController extends Controller
     public function index(Request $request, $ordId)
     {
         $post_data = array();
+
         $post_data['total_amount'] = $request->amount; # You cant not pay less than 10
+
         $post_data['currency'] = "BDT";
         $post_data['tran_id'] = now(); // tran_id must be unique
 
-        //-----Here We take the orderId into $post_data to pass it on success function
-        $post_data['temp'] = $ordId;
-        $_SESSION['payment_values']['temp'] = $post_data['temp'];
-        //----------------------------------------------------------------------------
+        #-----Here We take the orderId into $post_data to pass it on success function
+        $post_data['order_id'] = $ordId;
+        $_SESSION['payment_values']['order_id'] = $post_data['order_id'];
+        #----------------------------------------------------------------------------
 
         #Start to save these value  in session to pick in success page.
         $_SESSION['payment_values']['tran_id'] = $post_data['tran_id'];
@@ -38,6 +40,8 @@ class SSLCommerzPaymentController extends Controller
         $post_data['success_url'] = $server_name . "success";
         $post_data['fail_url'] = $server_name . "fail";
         $post_data['cancel_url'] = $server_name . "cancel";
+
+        // dd($post_data);
 
         $sslc = new SSLCommerz();
         // dd($sslc);
@@ -52,16 +56,14 @@ class SSLCommerzPaymentController extends Controller
 
     public function success(Request $request)
     {
-        // dd($request);
-
         $payment_method = $request->card_issuer;
         $transId        = $request->bank_tran_id;
         $storeId        = $request->store_id;
 
-        echo "Transaction is Successful";
+        // echo "Transaction is Successful";
 
         $update_product = DB::table('orders')
-            ->where('id', $_SESSION['payment_values']['temp'])
+            ->where('id', $_SESSION['payment_values']['order_id'])
             ->update([
                 'is_paid' => '1',
                 'payment_method' => $payment_method,
@@ -78,17 +80,16 @@ class SSLCommerzPaymentController extends Controller
                 'discount' => 0
             ]);
 
-        //send email to customer
-        // $order = Order::find($_SESSION['payment_values']['temp']);
-        // Mail::to($order->user->email)->send(new OrderPaid($order));
-        //---
+        #send email to customer
+        $order = Order::find($_SESSION['payment_values']['order_id']);
+        Mail::to($order->user->email)->send(new OrderPaid($order));
+        #---
 
         return redirect(route('home'))->with('message', 'Order with Transaction successful');
     }
 
     public function fail(Request $request)
     {
-        // dd($request);
         $payment_method = $request->card_issuer;
 
         $update_product = DB::table('orders')

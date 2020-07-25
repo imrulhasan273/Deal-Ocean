@@ -1807,3 +1807,205 @@ if (request('payment_method') == 'online') {
 > This method will be excuted when the payment will be cancelled.
 
 ---
+
+---
+
+# **Send Email To User | Payment Confirmation**
+
+--
+
+## Step 1
+
+Run below command to set some default folder and files,
+
+```cmd
+~$ php artisan make:mail OrderPaid --markdown=mail.order.paid
+```
+
+## **New Directory:**
+
+-   M-Laravel-Ecommerce\resources\views\mail
+-   M-Laravel-Ecommerce\app\Mail\
+
+## Step 2
+
+before returning from `success` function in `PublicSslCommerzPaymentController.php`
+
+```php
+$order = Order::find($_SESSION['payment_values']['temp']);
+Mail::to($order->user->email)->send(new OrderPaid($order));
+```
+
+> We find the order using order id which is inside the \$\_SESSION['payment_values']['temp'] variable.
+
+> Then we send a mail to email of user of order sending the information to the OrderPaid class.
+
+## Step 3
+
+`apps/Mail/Orderpaid.php`
+
+```php
+public $order;
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+public function __construct(Order $order)
+{
+    $this->order = $order;
+}
+```
+
+> Here we take the order as argument from default constructor and set this order value to public order variable.
+
+## Step 4
+
+`mail/order/paid.blade.php`
+
+```php
+@extends('mail.template')
+@section('invoice')
+@component('mail::button', ['url' => ''])
+Print
+@endcomponent
+
+@component('mail::layout')
+
+{{-- Start Header --}}
+@slot('header')
+@component('mail::header', ['url' => config('app.url')])
+    Invoice Page
+@endcomponent
+@endslot
+{{-- End Header --}}
+
+
+# Invoice Status: Paid
+<hr>
+Shipping Information
+<hr>
+<h6> Name: {{$order->shipping_fullname}} <br>
+     City: {{$order->shipping_city }}<br>
+     Address: {{ $order->shipping_address }}<br>
+     Country: {{ $order->shipping_state }}<br>
+     Cell: {{$order->shipping_phone }}<br>
+</h6>
+<hr>
+Invoice Information
+<hr>
+<h6> Order No: {{$order->order_number }}<br>
+     Payment Method: {{$order->payment_method }}<br>
+     Transection ID: {{$order->transection_id }}<br>
+</h6>
+<hr>
+
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Product name</th>
+            <th>quantity</th>
+            <th>price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($order->items as $item)
+        <tr>
+            <td scope="row">{{ $item->name }}</td>
+            <td>{{ $item->pivot->quantity }}</td>
+            <td>{{ $item->pivot->price }}</td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+<hr>
+Total : {{$order->grand_total}}
+
+<hr>
+Date: {{ $order->updated_at }}
+<br>
+Thanks for your purchase, {{ config('app.name') }}
+
+{{-- Start Footer --}}
+@slot('footer')
+@component('mail::footer')
+© 2020 M Laravel E-Commerce. All rights reserved.
+@endcomponent
+@endslot
+{{-- End Footer --}}
+
+@endcomponent
+@endsection
+```
+
+`mail/template.blade.php`
+
+```php
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    {{-- <link href="{{ asset('css/mail.css') }}" rel="stylesheet"/> --}}
+    <link href="{{ asset('links/custom/mail/mail.css') }}" rel="stylesheet"/>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title></title>
+</head>
+<body>
+    <main class="py-4 container">
+        @yield('invoice')
+    </main>
+</body>
+</html>
+```
+
+Here is the form interface we send to user.
+
+## Step 5
+
+`Order.php`
+
+```php
+public function product()
+{
+    return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id')->withPivot('quantity', 'price')->withTimestamps();
+}
+
+public function user()
+{
+    return $this->belongsTo(User::class);
+}
+```
+
+> Here we need to add user() function for foreign key constraint.
+
+> In the `mail/order/paid.blade.php` form we use `pivot` for quantity and price. To access these we need to use `withPivot('quantity', 'price');` in the items function.
+
+## Step 6
+
+`.env`
+
+```php
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=52cf0d921a8067
+MAIL_PASSWORD=a25e11ca412af2
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=imrulhasan273@gmail.com
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+### `Reference Mail Server`
+
+### Steps:
+
+-   registration for a new account
+-   go to demo message
+-   inside integration fird laravel option.
+-   And copy the below code segment and past it to .env file like above mentioned note.
