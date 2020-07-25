@@ -14,8 +14,11 @@ Print
 @endslot
 {{-- End Header --}}
 
-
+@if ($order->payment_method == 'cash_on_delivery')
+# Invoice Status: Un Paid
+@else
 # Invoice Status: Paid
+@endif
 <hr>
 Shipping Information
 <hr>

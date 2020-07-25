@@ -980,8 +980,13 @@ public function coupon(Request $request)
             ]);
         //----
 
+        #send email to customer
+        $order = Order::find($order->id);
+        Mail::to($order->user->email)->send(new OrderPaid($order));
+        #---
 
-        return Redirect::route('home');
+
+        return Redirect::route('home')->with('message', 'Order has been placed');
     }
 ```
 

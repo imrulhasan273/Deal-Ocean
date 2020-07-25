@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Mail\OrderPaid;
 use Carbon\Traits\Timestamp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 
 class OrderController extends Controller
@@ -68,7 +70,6 @@ class OrderController extends Controller
         $discountPrice = (($couponDiscount * $subTotalPrice) / 100);
         $totalPrice = $subTotalPrice - $discountPrice;
         //---
-
 
 
         $request->validate([
@@ -150,8 +151,12 @@ class OrderController extends Controller
             ]);
         //----
 
+        #send email to customer
+        $order = Order::find($order->id);
+        Mail::to($order->user->email)->send(new OrderPaid($order));
+        #---
 
-        return Redirect::route('home');
+        return Redirect::route('home')->with('message', 'Order has been placed');
     }
 
 
