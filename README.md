@@ -1920,7 +1920,13 @@ Invoice Information
     </tbody>
 </table>
 <hr>
-Total : {{$order->grand_total}}
+Total Items: {{ $order->item_count }}
+<br>
+Sub Total : {{ $order->sub_total }}
+<br>
+Discount : {{ $order->discount }}
+<br>
+Grand Total : {{ $order->grand_total }}
 
 <hr>
 Date: {{ $order->updated_at }}
@@ -1930,7 +1936,7 @@ Thanks for your purchase, {{ config('app.name') }}
 {{-- Start Footer --}}
 @slot('footer')
 @component('mail::footer')
-© 2020 M Laravel E-Commerce. All rights reserved.
+© 2020 Deal Ocean. All rights reserved.
 @endcomponent
 @endslot
 {{-- End Footer --}}

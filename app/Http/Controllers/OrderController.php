@@ -132,8 +132,6 @@ class OrderController extends Controller
 
         //Add all the products in order_product table which is pivot table
         foreach ($cartItems as $item) {
-            // $dPrice = floatval(($couponDiscount * $item->price) / 100);
-            // $item->price = $item->price - $dPrice;
             $order->product()->attach($item->id, ['price' => $item->price, 'quantity' => $itemOccurrence[$item->id]]);
         }
 
