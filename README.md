@@ -1832,11 +1832,11 @@ Run below command to set some default folder and files,
 before returning from `success` function in `PublicSslCommerzPaymentController.php`
 
 ```php
-$order = Order::find($_SESSION['payment_values']['temp']);
+$order = Order::find($_SESSION['payment_values']['order_id']);
 Mail::to($order->user->email)->send(new OrderPaid($order));
 ```
 
-> We find the order using order id which is inside the \$\_SESSION['payment_values']['temp'] variable.
+> We find the order using order id which is inside the `$_SESSION['payment_values']['order_id']` variable.
 
 > Then we send a mail to email of user of order sending the information to the OrderPaid class.
 
@@ -1857,7 +1857,7 @@ public function __construct(Order $order)
 }
 ```
 
-> Here we take the order as argument from default constructor and set this order value to public order variable.
+> Here we take the `$order` instance of `Order` model as argument from default constructor and set this order value to public `$order` variable.
 
 ## Step 4
 
@@ -1910,7 +1910,7 @@ Invoice Information
         </tr>
     </thead>
     <tbody>
-        @foreach($order->items as $item)
+        @foreach($order->product as $item)
         <tr>
             <td scope="row">{{ $item->name }}</td>
             <td>{{ $item->pivot->quantity }}</td>
@@ -1982,9 +1982,9 @@ public function user()
 }
 ```
 
-> Here we need to add user() function for foreign key constraint.
+> Here we need to add `user()` function for foreign key constraint.
 
-> In the `mail/order/paid.blade.php` form we use `pivot` for quantity and price. To access these we need to use `withPivot('quantity', 'price');` in the items function.
+> In the `mail/order/paid.blade.php` form we use `pivot` for quantity and price. To access these we need to use `withPivot('quantity', 'price');` in the `product()` function.
 
 ## Step 6
 
@@ -2009,3 +2009,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 -   go to demo message
 -   inside integration fird laravel option.
 -   And copy the below code segment and past it to .env file like above mentioned note.
+
+---
+
+---
