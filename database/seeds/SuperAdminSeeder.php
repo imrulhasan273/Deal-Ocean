@@ -2,6 +2,7 @@
 
 use App\Role;
 use App\User;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -15,8 +16,14 @@ class SuperAdminSeeder extends Seeder
      */
     public function run()
     {
-        $role = Role::create(['name' => 'super_admin', 'display_name' => 'Super Admin']);
-        $user = User::create(['name' => 'Md. Imrul Hasan', 'email' => 'imrulhasan273@gmail.com', 'password' => Hash::make('imrulhasan')]);
-        DB::table('role_user')->insert(['user_id' => $user->id, 'role_id' => $role->id]);
+        #Super Admin Seeder
+        $role = Role::where('name', 'super_admin')->first();
+        $user = User::create([
+            'name' => 'Md. Imrul Hasan',
+            'email' => 'imrulhasan273@gmail.com',
+            'password' => Hash::make('imrulhasan'),
+            'remember_token' => Str::random(60),
+        ]);
+        $user->role()->attach($role->id);
     }
 }

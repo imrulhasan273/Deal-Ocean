@@ -2122,3 +2122,94 @@ public function role()
 ```
 
 > I don't actually have to provide the `user_id` and `role_id` separately, just provide the `role_id` and laravel will take care of the rest. `$user->role()->attach($role->id);`
+
+---
+
+# **Some Basic Seeder Uses for User - Role => role_user**
+
+---
+
+## Step 1
+
+Create some Role Seeder
+
+`RoleSeeder.php`
+
+```php
+    public function run()
+    {
+        Role::create(['name' => 'super_admin', 'display_name' => 'Super Admin']);
+        Role::create(['name' => 'admin', 'display_name' => 'Admin']);
+        Role::create(['name' => 'seller', 'display_name' => 'Seller']);
+        Role::create(['name' => 'customer', 'display_name' => 'Customer']);
+    }
+```
+
+`SuperAdminSeeder.php`
+
+```php
+    public function run()
+    {
+        #Super Admin Seeder
+        $role = Role::where('name', 'super_admin')->first();
+        $user = User::create([
+            'name' => 'Md. Imrul Hasan',
+            'email' => 'imrulhasan273@gmail.com',
+            'password' => Hash::make('imrulhasan'),
+            'remember_token' => Str::random(60),
+        ]);
+        $user->role()->attach($role->id);
+    }
+```
+
+`UserSeeder.php`
+
+```php
+    public function run()
+    {
+        #Admin Seeder
+        $role = Role::where('name', 'admin')->first();
+        $user = User::create([
+            'name' => 'Imrul Hasan',
+            'email' => '16101034@uap-bd.edu',
+            'password' => Hash::make('imrulhasan'),
+            'remember_token' => Str::random(60),
+        ]);
+        $user->role()->attach($role->id);
+
+        #Seller Seeder
+        $role = Role::where('name', 'seller')->first();
+        $user = User::create([
+            'name' => 'Brishty Hoque',
+            'email' => 'brishtyhoque273@gmail.com',
+            'password' => Hash::make('0000000000'),
+            'remember_token' => Str::random(60),
+        ]);
+        $user->role()->attach($role->id);
+
+        #Customer Seeder
+        $role = Role::where('name', 'customer')->first();
+        $user = User::create([
+            'name' => 'Towhidul Islam',
+            'email' => 'towhid@gmail.com',
+            'password' => Hash::make('0000000000'),
+            'remember_token' => Str::random(60),
+        ]);
+        $user->role()->attach($role->id);
+    }
+```
+
+## Step 2
+
+`DatabaseSeeder.php`
+
+```php
+    public function run()
+    {
+        $this->call(RoleSeeder::class);
+        $this->call(SuperAdminSeeder::class);
+        $this->call(UserSeeder::class);
+    }
+```
+
+---

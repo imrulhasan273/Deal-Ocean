@@ -15,19 +15,9 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        //Admin Seeder
-        $role = Role::create(['name' => 'admin', 'display_name' => 'Admin']);
-        $user = User::create(['name' => 'Imrul Hasan', 'email' => '16101034@uap-bd.com', 'password' => Hash::make('imrulhasan')]);
-        DB::table('role_user')->insert(['user_id' => $user->id, 'role_id' => $role->id]);
-
-        //Seller Seeder
-        $role1 = Role::create(['name' => 'seller', 'display_name' => 'Seller']);
-        $user1 = User::create(['name' => 'Brishty Hoque', 'email' => 'brishtyhoque273@gmail.com', 'password' => Hash::make('0000000000')]);
-        DB::table('role_user')->insert(['user_id' => $user1->id, 'role_id' => $role1->id]);
-
-        //Customer Seeder
-        $role2 = Role::create(['name' => 'customer', 'display_name' => 'Customer']);
-        $user2 = User::create(['name' => 'Towhidul Islam', 'email' => 'towhid@gmail.com', 'password' => Hash::make('0000000000')]);
-        DB::table('role_user')->insert(['user_id' => $user2->id, 'role_id' => $role2->id]);
+        Role::create(['name' => 'super_admin', 'display_name' => 'Super Admin']);
+        Role::create(['name' => 'admin', 'display_name' => 'Admin']);
+        Role::create(['name' => 'seller', 'display_name' => 'Seller']);
+        Role::create(['name' => 'customer', 'display_name' => 'Customer']);
     }
 }
