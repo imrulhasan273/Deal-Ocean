@@ -75,7 +75,7 @@ class RegisterController extends Controller
             'remember_token' => Str::random(60),
         ]);
 
-        $user->assignRole($role);
+        $user->role()->attach($role->id);
 
         return $user;
     }

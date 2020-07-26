@@ -1886,7 +1886,12 @@ Print
 {{-- End Header --}}
 
 
+@if ($order->payment_method == 'cash_on_delivery')
+# Invoice Status: Un Paid
+@else
 # Invoice Status: Paid
+@endif
+
 <hr>
 Shipping Information
 <hr>
@@ -2024,3 +2029,96 @@ MAIL_FROM_NAME="${APP_NAME}"
 ---
 
 ---
+
+# **User Registration | Role Assign | role_user pivot table | Many to Many relationship**
+
+--
+
+`users` table
+
+```php
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('photo')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->longText('cartitems')->nullable();
+            $table->longText('wishlist')->nullable();
+            $table->unsignedBigInteger('discount')->default(0);
+            $table->rememberToken();
+            $table->timestamps();
+        });
+```
+
+> First I created a `users` table.
+
+> Notice: there is no foreign key which is `role_id` here. For User have role_id through the roles table.
+
+`roles` table
+
+```php
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('display_name');
+            $table->timestamps();
+        });
+```
+
+> This is the `roles` table
+
+`role_user` table
+
+```php
+        Schema::create('role_user', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->unsignedBigInteger('role_id');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+
+            $table->timestamps();
+        });
+```
+
+> Here I created the intermediate table called `pivot` table.
+
+> This table make relation between `users` and `roles` table. So we dont need to use any foreign key in `users` and `roles` table.
+
+`User` model
+
+```php
+public function role()
+{
+    return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+}
+```
+
+> THis is a relation between `User` and `Role`. User can create role through `role` method.
+
+**Finally**
+
+`Register` Controller
+
+```php
+    protected function create(array $data)
+    {
+        $role = Role::where('name', 'customer')->first();
+
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'remember_token' => Str::random(60),
+        ]);
+
+        $user->role()->attach($role->id);
+
+        return $user;
+    }
+```
+
+> I don't actually have to provide the `user_id` and `role_id` separately, just provide the `role_id` and laravel will take care of the rest. `$user->role()->attach($role->id);`
