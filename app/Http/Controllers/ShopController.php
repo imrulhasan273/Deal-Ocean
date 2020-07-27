@@ -74,8 +74,6 @@ class ShopController extends Controller
      */
     public function update(Request $request, Shop $shop)
     {
-        // dd($request);
-        // dd($shop);
         Shop::where('id', $request->shop_id)
             ->update([
                 'is_active' => $request->is_active,

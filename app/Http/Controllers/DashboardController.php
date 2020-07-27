@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\Admin;
 use App\Shop;
+use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use League\CommonMark\Extension\Table\Table;
 
@@ -10,7 +12,7 @@ class DashboardController extends Controller
 {
     function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['roleChecker:super_admin,admin,seller']);
     }
 
     public function index()

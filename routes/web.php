@@ -11,7 +11,6 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/contact', 'HomeController@contact')->name('contact');
 //------------------ End Home Controller
 
-
 //----Start Admin Routes | Dashboard ------- //
 Route::get('admin', 'DashboardController@index')->name('dashboard.index');
 Route::get('admin/shops', 'DashboardController@shops')->name('dashboard.shops');
@@ -20,7 +19,7 @@ Route::get('admin/map', 'DashboardController@map')->name('dashboard.map');
 Route::get('admin/notification', 'DashboardController@notification')->name('dashboard.notification');
 Route::get('admin/profile', 'DashboardController@profile')->name('dashboard.profile');
 Route::get('admin/typography', 'DashboardController@typography')->name('dashboard.typography');
-//----End Admin Routes | Dashboard ------- //
+// ----End Admin Routes | Dashboard ------- //
 
 
 // ------Start Product Controller -----------
@@ -53,5 +52,6 @@ Route::POST('/ipn', 'SSLCommerzPaymentController@ipn');
 
 
 # Shop Controllers
-Route::resource('shops', 'ShopController')->middleware('auth');
-Route::post('/shops/update', 'ShopController@update')->name('shops.update')->middleware('auth');
+// Route::resource('shops', 'ShopController')->middleware('auth');
+Route::get('/admin/shops/{shop}/edit', 'ShopController@edit')->name('shops.edit')->middleware('auth');
+Route::post('/admin/shops/update', 'ShopController@update')->name('shops.update')->middleware('auth');
