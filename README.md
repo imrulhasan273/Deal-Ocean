@@ -2218,10 +2218,6 @@ Create some Role Seeder
 
 ---
 
-# **Admin Dashboard | Access | Role**
-
----
-
 **Shop Panel In Dashboard**
 
 `views/shops.blade.php`
@@ -2425,6 +2421,12 @@ $active='shops';
         return Redirect::route('dashboard.shops');
     }
 ```
+
+---
+
+---
+
+# **Admin Dashboard | Access | Role**
 
 ---
 
