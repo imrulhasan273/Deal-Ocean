@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Location;
 use App\Shop;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class ShopController extends Controller
 {
@@ -57,8 +59,11 @@ class ShopController extends Controller
      */
     public function edit(Shop $shop)
     {
-        //
+        $locations = Location::all();
+
+        return view('dashboard.shops.edit', compact(['shop', 'locations']));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -69,8 +74,18 @@ class ShopController extends Controller
      */
     public function update(Request $request, Shop $shop)
     {
-        //
+        // dd($request);
+        // dd($shop);
+        Shop::where('id', $request->shop_id)
+            ->update([
+                'is_active' => $request->is_active,
+                'description' => $request->description,
+                'location_id' => $request->location
+            ]);
+
+        return Redirect::route('dashboard.shops');
     }
+
 
     /**
      * Remove the specified resource from storage.

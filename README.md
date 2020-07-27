@@ -2213,3 +2213,7 @@ Create some Role Seeder
 ```
 
 ---
+
+# **Admin Dashboard | Shop Panel**
+
+---

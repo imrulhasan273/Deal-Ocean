@@ -1,5 +1,6 @@
 <?php
 
+use App\Region;
 use Illuminate\Database\Seeder;
 
 class RegionSeeder extends Seeder
@@ -11,6 +12,8 @@ class RegionSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $region = Region::create([
+            'name' => 'Asia',
+        ]);
     }
 }

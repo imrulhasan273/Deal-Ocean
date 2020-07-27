@@ -31,14 +31,14 @@
             <p>User Profile</p>
           </a>
         </li>
-        @if($active=='tables')
+        @if($active=='shops')
         <li class="active ">
         @else
         <li>
         @endif
-          <a class="nav-link" href="{{route('dashboard.tables')}}">
+          <a class="nav-link" href="{{route('dashboard.shops')}}">
             <i class="material-icons">content_paste</i>
-            <p>Table List</p>
+            <p>Shop</p>
           </a>
         </li>
         @if($active=='typography')

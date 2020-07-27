@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Shop;
 use Illuminate\Http\Request;
+use League\CommonMark\Extension\Table\Table;
 
 class DashboardController extends Controller
 {
@@ -15,6 +17,14 @@ class DashboardController extends Controller
     {
         return view('dashboard.index');
         // return view('layouts.backend');
+    }
+
+    public function shops()
+    {
+        // $shops = Shop::all();
+        $shops = Shop::with(['seller', 'location'])->get(); //reduce complexity
+
+        return view('dashboard.shops', compact('shops'));
     }
 
     public function icons()
@@ -39,9 +49,5 @@ class DashboardController extends Controller
     public function typography()
     {
         return view('dashboard.typography');
-    }
-    public function tables()
-    {
-        return view('dashboard.tables');
     }
 }

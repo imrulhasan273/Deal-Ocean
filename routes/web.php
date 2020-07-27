@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use phpDocumentor\Reflection\Types\Resource_;
 
 Auth::routes();
 
@@ -13,12 +14,12 @@ Route::get('/contact', 'HomeController@contact')->name('contact');
 
 //----Start Admin Routes | Dashboard ------- //
 Route::get('admin', 'DashboardController@index')->name('dashboard.index');
+Route::get('admin/shops', 'DashboardController@shops')->name('dashboard.shops');
 Route::get('admin/icons', 'DashboardController@icons')->name('dashboard.icons');
 Route::get('admin/map', 'DashboardController@map')->name('dashboard.map');
 Route::get('admin/notification', 'DashboardController@notification')->name('dashboard.notification');
 Route::get('admin/profile', 'DashboardController@profile')->name('dashboard.profile');
 Route::get('admin/typography', 'DashboardController@typography')->name('dashboard.typography');
-Route::get('admin/tables', 'DashboardController@tables')->name('dashboard.tables');
 //----End Admin Routes | Dashboard ------- //
 
 
@@ -42,7 +43,6 @@ Route::get('/cart/checkout', 'CartController@checkout')->name('cart.checkout')->
 Route::post('/order/store', 'OrderController@store')->name('orders.store')->middleware('auth');
 
 
-
 // SSLCOMMERZ Start
 Route::POST('/pay/{orderId}', 'SSLCommerzPaymentController@index')->name('payments.pay');
 Route::POST('/success', 'SSLCommerzPaymentController@success');
@@ -50,3 +50,8 @@ Route::POST('/fail', 'SSLCommerzPaymentController@fail');
 Route::POST('/cancel', 'SSLCommerzPaymentController@cancel');
 Route::POST('/ipn', 'SSLCommerzPaymentController@ipn');
 // SSLCOMMERZ END
+
+
+# Shop Controllers
+Route::resource('shops', 'ShopController')->middleware('auth');
+Route::post('/shops/update', 'ShopController@update')->name('shops.update')->middleware('auth');
