@@ -2411,12 +2411,14 @@ $active='shops';
 ```php
     public function update(Request $request, Shop $shop)
     {
-        Shop::where('id', $request->shop_id)
-            ->update([
+        $updatingShop = Shop::where('id', $request->shop_id)->first();
+        if ($updatingShop) {
+            $updatingShop->update([
                 'is_active' => $request->is_active,
                 'description' => $request->description,
                 'location_id' => $request->location
             ]);
+        }
 
         return Redirect::route('dashboard.shops');
     }
@@ -2537,7 +2539,7 @@ function __construct()
 `Shop.php` [Model]
 
 ```php
-protected $fillable = ['name', 'description', 'location_id'];
+protected $fillable = ['name', 'is_active', 'description', 'location_id'];
 
 public function owner()
 {
@@ -2707,3 +2709,189 @@ Thanks,<br>
 > `url = /admin/shops`. Currently we dont have the page for shops in admin panel.
 
 ---
+
+# Elequent Model Observer
+
+## Now I need to send message to User who's shop is activated. And Also give them a dashboard to add new products.
+
+> **Motive:** Observer Class is a **Design Pattern** in Software Engineering which task is to observe the model. When any changes then Observer class will send an Event listener to Alert there occurs some chanegs.
+
+> [Documentation](https://laravel.com/docs/7.x/eloquent#events)
+
+> **Goal:** When in `shops` table the value of column `is_active` is made to `active` from `inactive` then I need to fire the email to user.
+
+> I need observer class so I can find all these information on documentation in event section of Elequent.
+
+## Step 1
+
+Run below command to Create observer class for Shop Model
+
+```cmd
+~$ php artisan make:observer ShopObserver --model=Shop
+```
+
+-   Now we have `DealOcean\app\Observers\ShopObserver.php`
+
+`ShopObserver.php`
+
+```php
+<?php
+
+namespace App\Observers;
+
+use App\Shop;
+
+class ShopObserver
+{
+    /**
+     * Handle the shop "created" event.
+     *
+     * @param  \App\Shop  $shop
+     * @return void
+     */
+    public function created(Shop $shop)
+    {
+        //
+    }
+
+    /**
+     * Handle the shop "updated" event.
+     *
+     * @param  \App\Shop  $shop
+     * @return void
+     */
+    public function updated(Shop $shop)
+    {
+        //
+    }
+
+    /**
+     * Handle the shop "deleted" event.
+     *
+     * @param  \App\Shop  $shop
+     * @return void
+     */
+    public function deleted(Shop $shop)
+    {
+        //
+    }
+
+    /**
+     * Handle the shop "restored" event.
+     *
+     * @param  \App\Shop  $shop
+     * @return void
+     */
+    public function restored(Shop $shop)
+    {
+        //
+    }
+
+    /**
+     * Handle the shop "force deleted" event.
+     *
+     * @param  \App\Shop  $shop
+     * @return void
+     */
+    public function forceDeleted(Shop $shop)
+    {
+        //
+    }
+}
+```
+
+## Step 2
+
+Before doing that, we need to tell laravel that you need to use this class whenever model events related to Shop is updated. To register an observer, use the observe method on the model you wish to observe. You may register observers in the boot method of one of your service providers. In this example, we'll register the observer in the AppServiceProvider:
+
+Go to `AppServiceProvider`
+
+`AppServiceProvider.php`
+
+```php
+use App\Shop;
+use App\Observers\ShopObserver;
+```
+
+```php
+public function boot()
+{
+    Shop::observe(ShopObserver::class);
+}
+```
+
+## Step 3
+
+`ShopObserver.php`
+
+```php
+public function updated(Shop $shop)
+{
+    //
+}
+```
+
+## Step 4
+
+Make mail system to Customers
+
+```cmd
+~$ php artisan make:mail ShopActivated --markdown=mail.customer.shop-activated
+```
+
+## Step 5
+
+`Mail/ShopActivated.php`
+
+```php
+public $shop;
+public function __construct(Shop $shop)
+{
+    $this->shop = $shop;
+}
+```
+
+## Step 6
+
+`mail/customer/shop-activated.blade.php`
+
+```php
+@component('mail::message')
+
+# Congratulations
+
+Your shop is now active
+
+@component('mail::button', ['url' => route('shops.show', $shop->id)])
+Visit Your Shop
+@endcomponent
+
+Thanks,<br>
+{{ config('app.name') }}
+@endcomponent
+```
+
+> Now the Customer can visit his activated shop in `shops.show` route. I will create this route.
+
+## Step 7
+
+`web.php`
+
+```php
+Route::post('/admin/shops/show', 'ShopController@show')->name('shops.show')->middleware('auth');         //auth
+```
+
+## Step 8
+
+Now edit show function in ShopController.
+
+`ShopController.php`
+
+```php
+public function show(Shop $shop)
+{
+    dd($shop->seller->name. 'welcome to shop', $shop->name);
+}
+```
+
+> Now we can visit /admin panel as a seller and we have been given limiter controls over admin panel.

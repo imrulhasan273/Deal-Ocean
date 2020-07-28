@@ -72,7 +72,7 @@ class ShopController extends Controller
      */
     public function show(Shop $shop)
     {
-        //
+        dd($shop->seller->name . 'welcome to shop', $shop->name);
     }
 
     /**
@@ -98,12 +98,14 @@ class ShopController extends Controller
      */
     public function update(Request $request, Shop $shop)
     {
-        Shop::where('id', $request->shop_id)
-            ->update([
+        $updatingShop = Shop::where('id', $request->shop_id)->first();
+        if ($updatingShop) {
+            $updatingShop->update([
                 'is_active' => $request->is_active,
                 'description' => $request->description,
                 'location_id' => $request->location
             ]);
+        }
 
         return Redirect::route('dashboard.shops');
     }

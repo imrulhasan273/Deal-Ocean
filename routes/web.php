@@ -56,5 +56,8 @@ Route::POST('/ipn', 'SSLCommerzPaymentController@ipn');
 Route::get('/shops/create', 'ShopController@create')->name('shops.create')->middleware('auth');         //auth
 Route::post('/shops/store', 'ShopController@store')->name('shops.store')->middleware('auth');         //auth
 
+Route::post('/admin/shops/show', 'ShopController@show')->name('shops.show')->middleware('auth');         //auth
+
+
 Route::get('/admin/shops/{shop}/edit', 'ShopController@edit')->name('shops.edit')->middleware('auth');  //admin
 Route::post('/admin/shops/update', 'ShopController@update')->name('shops.update')->middleware('auth');  //admin

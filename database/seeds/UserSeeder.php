@@ -44,5 +44,15 @@ class UserSeeder extends Seeder
             'remember_token' => Str::random(60),
         ]);
         $user->role()->attach($role->id);
+
+        #Customer Seeder
+        $role = Role::where('name', 'customer')->first();
+        $user = User::create([
+            'name' => 'Test User',
+            'email' => 'test@gmail.com',
+            'password' => Hash::make('0000000000'),
+            'remember_token' => Str::random(60),
+        ]);
+        $user->role()->attach($role->id);
     }
 }

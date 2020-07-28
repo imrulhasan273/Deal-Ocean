@@ -22,7 +22,7 @@ class CreateShopsTable extends Migration
 
             $table->boolean('is_active')->default(false);
             $table->text('description')->nullable();
-            $table->float('rating')->nullable();
+            $table->float('rating')->default(0);
             $table->unsignedBigInteger('location_id');
 
             $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
