@@ -2654,7 +2654,9 @@ Route::post('/shops/store', 'ShopController@store')->name('shops.store')->middle
 
 > Mail will be sent to the admins through ShopActivationRequest.php
 
-## Create a mailing sytstem to mail a create shop request to admins
+## Step 7
+
+### Create a mailing sytstem to mail a create shop request to admins
 
 Create a new mail first
 
