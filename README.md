@@ -2510,3 +2510,198 @@ function __construct()
 # **Create a Shop | Request for a Shop**
 
 ---
+
+## Initially
+
+`shops` table
+
+```php
+        Schema::create('shops', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->unsignedBigInteger('user_id');
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->boolean('is_active')->default(false);
+            $table->text('description')->nullable();
+            $table->float('rating')->nullable();
+            $table->unsignedBigInteger('location_id');
+
+            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
+
+            $table->timestamps();
+        });
+```
+
+`Shop.php` [Model]
+
+```php
+protected $fillable = ['name', 'description', 'location_id'];
+
+public function owner()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
+public function location()
+{
+    return $this->belongsTo(Location::class, 'location_id');
+}
+```
+
+## Step 1
+
+Make a button for creating a new shop
+
+```php
+<a href="{{ route('shops.create') }}" class="site-btn">Open Your Shop</a>
+```
+
+## Step 2
+
+```php
+Route::get('/shops/create', 'ShopController@create')->name('shops.create')->middleware('auth');         //auth
+```
+
+## Step 3
+
+`ShopController.php`
+
+```php
+public function create()
+{
+    $locations = Location::all();
+    return view('shops.create', compact('locations'));
+}
+```
+
+## Step 4
+
+`views/shops/create.blade.php`
+
+```php
+@extends('layouts.frontend')
+@section('content')
+<div style="margin-bottom: 30px;margin-top:30px" class="container">
+    <div class="container">
+        <h2>Submit Your Shop</h2>
+
+        <form action="{{route('shops.store')}}" method="post">
+            @csrf
+
+            <div class="form-group">
+                <label for="name">Name of Shop</label>
+                <input type="text" class="form-control" name="name" id="" aria-describedby="helpId" placeholder="">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" name="description" id="" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Location</label>
+                <select name="location" class="form-control">
+                    @foreach ($locations as $location)
+                        <option style="color: rgb(19, 146, 219)" value="{{$location->id}}" >{{$location->address}}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+@endsection
+```
+
+## Step 5
+
+`web.php`
+
+```php
+Route::post('/shops/store', 'ShopController@store')->name('shops.store')->middleware('auth');         //auth
+```
+
+## Step 6 :this steps require `Step 7`
+
+```php
+    public function store(Request $request)
+    {
+        // dd($request);
+
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+        //Save to db
+        $shop = auth()->user()->shop()->create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'location_id' => $request->input('location')
+        ]);
+
+        //send mail to admin
+        $admins = User::whereHas('role', function ($q) {
+            $q->where('name', 'admin');
+        })->get();
+
+        Mail::to($admins)->send(new ShopActivationRequest($shop));
+
+        return redirect()->route('home')->with('message', 'Create shop request sent');
+    }
+```
+
+> Mail will be sent to the admins through ShopActivationRequest.php
+
+## Create a mailing sytstem to mail a create shop request to admins
+
+Create a new mail first
+
+```cmd
+~$ php artisan make:mail ShopActivationRequest --markdown=mail.admin.shop-activation
+```
+
+`Mail/ShopActivationRequest.php`
+
+```php
+    public $shop; //creating public variable
+    use Queueable, SerializesModels;
+
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+    public function __construct(Shop $shop)
+    {
+        $this->shop = $shop; //local_variable <-- parameter
+    }
+```
+
+> Now contructor will take the $shop instance. And now we can access the variable $shop in shop-activation.blade.php views.
+
+`mail/admin/shop-activation.blade.php`
+
+```php
+@component('mail::message')
+# Shop Activation Request
+
+Please activate shop. Here are shop details.
+
+Shop Name : {{$shop->name}}
+Shop Owner : {{$shop->owner->name}}
+
+
+@component('mail::button', ['url' => url('/admin/shops')])
+Manage Shops
+@endcomponent
+
+Thanks,<br>
+{{ config('app.name') }}
+@endcomponent
+```
+
+> `url = /admin/shops`. Currently we dont have the page for shops in admin panel.
+
+---

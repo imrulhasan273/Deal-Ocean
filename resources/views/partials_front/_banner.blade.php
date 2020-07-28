@@ -7,7 +7,7 @@
                 <span>{{$banner->location}}</span>
                 <h2>{{$banner->discount}}</h2>
                 <h2>{{$banner->about}}</h2>
-				<a href="#" class="site-btn">Open Your Shop</a>
+				<a href="{{ route('shops.create') }}" class="site-btn">Open Your Shop</a>
             </div>
             @endforeach
 
