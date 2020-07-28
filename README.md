@@ -2827,7 +2827,25 @@ public function boot()
 ```php
 public function updated(Shop $shop)
 {
-    //
+    if ($shop->getOriginal('is_active') == false && $shop->is_active == true) {
+
+        #send mail to customer.
+        Mail::to($shop->seller->email)->send(new ShopActivated($shop));
+
+        #make change role from customer to seller
+        $prevRole = Role::where('name', 'customer')->first();
+        $nextRole = Role::where('name', 'seller')->first();
+
+        $det = $shop->seller->role()->detach($prevRole);
+
+        if ($det) {
+            $shop->seller->role()->attach($nextRole);
+        }
+
+    }
+    else {
+            dd('shop change to inactive');
+    }
 }
 ```
 
@@ -2862,7 +2880,7 @@ public function __construct(Shop $shop)
 
 Your shop is now active
 
-@component('mail::button', ['url' => route('shops.show', $shop->id)])
+@component('mail::button', ['url' => route('dashboard.shops')])
 Visit Your Shop
 @endcomponent
 
@@ -2871,27 +2889,8 @@ Thanks,<br>
 @endcomponent
 ```
 
-> Now the Customer can visit his activated shop in `shops.show` route. I will create this route.
+> Now the Customer can visit his activated shop in `dashboard.shops` route.
 
-## Step 7
+> Now the `customer` is made to `seller` and can visit **/admin** as a seller.
 
-`web.php`
-
-```php
-Route::post('/admin/shops/show', 'ShopController@show')->name('shops.show')->middleware('auth');         //auth
-```
-
-## Step 8
-
-Now edit show function in ShopController.
-
-`ShopController.php`
-
-```php
-public function show(Shop $shop)
-{
-    dd($shop->seller->name. 'welcome to shop', $shop->name);
-}
-```
-
-> Now we can visit /admin panel as a seller and we have been given limiter controls over admin panel.
+---

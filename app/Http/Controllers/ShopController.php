@@ -72,7 +72,7 @@ class ShopController extends Controller
      */
     public function show(Shop $shop)
     {
-        dd($shop->seller->name . 'welcome to shop', $shop->name);
+        //
     }
 
     /**

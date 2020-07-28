@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Role;
 use App\Shop;
 use App\Mail\ShopActivated;
 use Illuminate\Support\Facades\Mail;
@@ -27,18 +28,23 @@ class ShopObserver
      */
     public function updated(Shop $shop)
     {
-        dd($shop);
+        if ($shop->getOriginal('is_active') == false && $shop->is_active == true) {
 
-        // if ($shop->getOriginal('is_active') == false && $shop->is_active == true) {
-        //     //send mail to customer.
-        //     Mail::to($shop->seller->email)->send(new ShopActivated($shop));
-        //     // Mail::to($shop->owner);
+            #send mail to customer.
+            Mail::to($shop->seller->email)->send(new ShopActivated($shop));
 
-        //     //make change role from customer to seller
-        //     $shop->seller->setRole('seller');
-        // } else {
-        //     // dd('shop change to inactive');
-        // }
+            #make change role from customer to seller
+            $prevRole = Role::where('name', 'customer')->first();
+            $nextRole = Role::where('name', 'seller')->first();
+
+            $det = $shop->seller->role()->detach($prevRole);
+
+            if ($det) {
+                $shop->seller->role()->attach($nextRole);
+            }
+        } else {
+            dd('shop change to inactive');
+        }
     }
 
     /**

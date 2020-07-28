@@ -4,7 +4,7 @@
 
 Your shop is now active
 
-@component('mail::button', ['url' => route('shops.show', $shop->id)])
+@component('mail::button', ['url' => route('dashboard.shops')])
 Visit Your Shop
 @endcomponent
 
