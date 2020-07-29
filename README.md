@@ -2912,3 +2912,207 @@ Thanks,<br>
 > Solution: **Restrict in Shop Panel with role** + **Policty Class**
 
 ---
+
+# Tips
+
+---
+
+```php
+$roles  = $shop->seller->role;
+$subsetRole = $roles->map->only(['id', 'name']);
+$arrRole = $subsetRole->toArray();
+$authName = $arrRole[0]['name'];
+dd($authName);
+```
+
+---
+
+# **Creating Policy Class**
+
+---
+
+## Step 1
+
+Run the below command to make a policy class for Shop
+
+```cmd
+~$ php artisan make:policy ShopPolicy --model=Shop
+```
+
+> here Policy name is `ShopPolicy`. And this policy is for `Shop` model.
+
+-   M-Laravel-Ecommerce\app\Policies\ShopPolicy.php
+
+`ShopPocicy.php`
+
+```php
+<?php
+
+namespace App\Policies;
+
+use App\Shop;
+use App\User;
+use Illuminate\Auth\Access\HandlesAuthorization;
+
+class ShopPolicy
+{
+    use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can view any models.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function viewAny(User $user)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Shop  $shop
+     * @return mixed
+     */
+    public function view(User $user, Shop $shop)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can create models.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function create(User $user)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Shop  $shop
+     * @return mixed
+     */
+    public function update(User $user, Shop $shop)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Shop  $shop
+     * @return mixed
+     */
+    public function delete(User $user, Shop $shop)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Shop  $shop
+     * @return mixed
+     */
+    public function restore(User $user, Shop $shop)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Shop  $shop
+     * @return mixed
+     */
+    public function forceDelete(User $user, Shop $shop)
+    {
+        //
+    }
+}
+```
+
+## Step 2
+
+Register the policy in Providers policy array.
+
+`Providers/AuthServiceProvider.php`
+
+```php
+protected $policies = [
+        App\Shop::class => App\Policies\ShopPolicy::class,
+];
+
+public function boot()
+{
+    $this->registerPolicies();
+}
+```
+
+## Step 3
+
+Set a policy on Edit Operation for a shop
+
+`ShopPolicy.php`
+
+```php
+public function edit(User $user, Shop $shop)
+{
+    return $user->id == $shop->user_id;
+}
+```
+
+> If auth user is the shops user then it will return true. Hence He can edit.
+
+## Step 4
+
+`ShopController.php`
+
+```php
+public function edit(Shop $shop)
+{
+    $this->authorize('edit', $shop);
+
+    $locations = Location::all();
+
+    return view('dashboard.shops.edit', compact(['shop', 'locations']));
+}
+```
+
+> This edit function will need to `authorized` from policy. and the `$shop` object is passed which is from `Shop` model
+
+> Now only owner can edit the shop.
+
+## Step 5
+
+`ShopPolicy.php`
+
+```php
+public function before($user, $ability)
+{
+    $roles = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
+    if (($roles[0] == 'admin') || ($roles[0] == 'super_admin')) {
+        return true;
+    }
+}
+```
+
+> This function should put on Top of all the function of `ShopPolicy` so that every time it will execute first.
+
+> When the Auth user is an `Admin` or `Super Admin` then no matter which shop it is. He can do every task he wants.
+
+> This before method check first if the user has a role of admin or not. If he is admin then the user will have all the controlls in Shop page. Now for admin the policty is disabled. meaning Admin can do all the task in Shop Panel.
+
+Note: Policy defination will be same.
+
+---

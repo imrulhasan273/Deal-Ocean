@@ -7,6 +7,7 @@ use App\User;
 use App\Location;
 use Illuminate\Http\Request;
 use App\Mail\ShopActivationRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 
@@ -83,6 +84,9 @@ class ShopController extends Controller
      */
     public function edit(Shop $shop)
     {
+        $this->authorize('edit', $shop);
+        # ---------------------------
+
         $locations = Location::all();
 
         return view('dashboard.shops.edit', compact(['shop', 'locations']));
