@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Role;
 use App\Shop;
 use App\Mail\ShopActivated;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class ShopObserver
@@ -28,22 +29,26 @@ class ShopObserver
      */
     public function updated(Shop $shop)
     {
-        if ($shop->getOriginal('is_active') == false && $shop->is_active == true) {
+        $roles = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
+        if (in_array('super_admin', $roles) || in_array('admin', $roles)) {
 
-            #send mail to customer.
-            Mail::to($shop->seller->email)->send(new ShopActivated($shop));
+            if ($shop->getOriginal('is_active') == false && $shop->is_active == true) {
 
-            #make change role from customer to seller
-            $prevRole = Role::where('name', 'customer')->first();
-            $nextRole = Role::where('name', 'seller')->first();
+                #send mail to customer.
+                Mail::to($shop->seller->email)->send(new ShopActivated($shop));
 
-            $det = $shop->seller->role()->detach($prevRole);
+                #make change role from customer to seller
+                $prevRole = Role::where('name', 'customer')->first();
+                $nextRole = Role::where('name', 'seller')->first();
 
-            if ($det) {
-                $shop->seller->role()->attach($nextRole);
+                $det = $shop->seller->role()->detach($prevRole);
+
+                if ($det) {
+                    $shop->seller->role()->attach($nextRole);
+                }
+            } else {
+                dd('shop change to inactive');
             }
-        } else {
-            dd('shop change to inactive');
         }
     }
 

@@ -12,18 +12,17 @@ class DashboardController extends Controller
 {
     function __construct()
     {
-        $this->middleware(['roleChecker:super_admin,admin,seller']);
+        # $this->middleware(['roleChecker:super_admin,admin,seller']);
     }
 
     public function index()
     {
         return view('dashboard.index');
-        // return view('layouts.backend');
     }
 
     public function shops()
     {
-        // $shops = Shop::all();
+        # $shops = Shop::all();
         $shops = Shop::with(['seller', 'location'])->get(); //reduce complexity
 
         return view('dashboard.shops', compact('shops'));

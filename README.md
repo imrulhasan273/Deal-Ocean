@@ -2722,6 +2722,10 @@ Thanks,<br>
 
 > I need observer class so I can find all these information on documentation in event section of Elequent.
 
+> Make sure we have `$fillable` in `Shop` model and we already set the `columns` which is in `shops` table.
+
+> Make sure we have a `seller()` function in `Shop` model and this `seller` function is for `User` model.
+
 ## Step 1
 
 Run below command to Create observer class for Shop Model
@@ -2827,24 +2831,26 @@ public function boot()
 ```php
 public function updated(Shop $shop)
 {
-    if ($shop->getOriginal('is_active') == false && $shop->is_active == true) {
+    $roles = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
+    if (in_array('super_admin', $roles) || in_array('admin', $roles)) {
 
-        #send mail to customer.
-        Mail::to($shop->seller->email)->send(new ShopActivated($shop));
+        if ($shop->getOriginal('is_active') == false && $shop->is_active == true) {
 
-        #make change role from customer to seller
-        $prevRole = Role::where('name', 'customer')->first();
-        $nextRole = Role::where('name', 'seller')->first();
+            #send mail to customer.
+            Mail::to($shop->seller->email)->send(new ShopActivated($shop));
 
-        $det = $shop->seller->role()->detach($prevRole);
+            #make change role from customer to seller
+            $prevRole = Role::where('name', 'customer')->first();
+            $nextRole = Role::where('name', 'seller')->first();
 
-        if ($det) {
-            $shop->seller->role()->attach($nextRole);
-        }
+            $det = $shop->seller->role()->detach($prevRole);
 
-    }
-    else {
+            if ($det) {
+                $shop->seller->role()->attach($nextRole);
+            }
+        } else {
             dd('shop change to inactive');
+        }
     }
 }
 ```
@@ -2892,5 +2898,17 @@ Thanks,<br>
 > Now the Customer can visit his activated shop in `dashboard.shops` route.
 
 > Now the `customer` is made to `seller` and can visit **/admin** as a seller.
+
+---
+
+## Now there is a major security issue after giving seller a admin panel.
+
+> Currently a seller can view all the shops even if the shop is not belong to him. Its a security issue. We need to fix the problem by modifyting voyager controller.
+
+> If I just put a logic inside shops panel to restrict other shops to view, it is not good enough. Because although those shops will not appear in shops panel we can manually view and update those shops just changing the `url` after going to seller's shop.
+
+> So we need to use something different approach too...........
+
+> Solution: **Restrict in Shop Panel with role** + **Policty Class**
 
 ---
