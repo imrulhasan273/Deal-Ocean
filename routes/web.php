@@ -61,4 +61,5 @@ Route::post('/shops/store', 'ShopController@store')->name('shops.store')->middle
 // -- -- -- -- -- -- -- -- Below two routes in Dashboard
 Route::get('/admin/shops/{shop}/edit', 'ShopController@edit')->name('shops.edit')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
 Route::post('/admin/shops/update', 'ShopController@update')->name('shops.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
+Route::get('/admin/shops/{shop}/destroy', 'ShopController@destroy')->name('shops.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
 # End Shop Controllers

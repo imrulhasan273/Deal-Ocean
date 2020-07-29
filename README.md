@@ -3107,6 +3107,8 @@ public function before($user, $ability)
 }
 ```
 
+> `$roles` will get the role of `Auth` user
+
 > This function should put on Top of all the function of `ShopPolicy` so that every time it will execute first.
 
 > When the Auth user is an `Admin` or `Super Admin` then no matter which shop it is. He can do every task he wants.
@@ -3114,5 +3116,121 @@ public function before($user, $ability)
 > This before method check first if the user has a role of admin or not. If he is admin then the user will have all the controlls in Shop page. Now for admin the policty is disabled. meaning Admin can do all the task in Shop Panel.
 
 Note: Policy defination will be same.
+
+---
+
+## Now I will give a policy for `view` as well like `edit`
+
+Repeating `Step 3` and `Step 4`
+
+## Step 3
+
+```php
+public function view(User $user, Shop $shop)
+{
+    return $user->id == $shop->user_id;
+}
+```
+
+## Step 4
+
+Shop Panel View in Admin Dashboard
+
+`views/dashboard/shops.blade.php`
+
+```php
+@foreach ($shops as $shop)
+@can('view', $shop)
+<tbody>
+//
+</tbody>
+@endcan
+@endforeach
+```
+
+> here new `syntax` => `@can('view', $shop)`
+
+> `view` is a method inside `ShopPolicy`. And `$shop` is a instance of `Shop` model passed through it.
+
+---
+
+## Now I will give a policy for `delete` as well like `edit` and `view`
+
+## Step 3
+
+```php
+public function delete(User $user, Shop $shop)
+{
+    return false;
+}
+```
+
+> Return false. Because I don't want to give seller to controll delete opreration.
+
+> But admin can view it as for `before` function on top of `ShopPolicy`
+
+## Step 4
+
+`views/dashboard/shops.blade.php`
+
+Custom `php` codes for getting the `role` of `Auth` user.
+
+```php
+@php
+$authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
+@endphp
+```
+
+`thead`
+
+```php
+<th>
+    @if(($authRole[0] == 'admin') || ($authRole[0] == 'super_admin'))
+    Delete
+    @endif
+</th>
+```
+
+`tbody`
+
+```php
+<td>
+    @can('delete', $shop)
+        <a href="{{route('shops.destroy',[$shop->id])}}">Delete</a>
+    @endcan
+</td>
+```
+
+---
+
+Now we need to make `route` and `function` for delete operation.
+
+## Add Route
+
+`web.php`
+
+```php
+Route::get('/admin/shops/{shop}/destroy', 'ShopController@destroy')->name('shops.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
+```
+
+## Add Function in Controller
+
+`ShopController.php`
+
+```php
+public function destroy(Shop $shop)
+{
+    $prevRole = Role::where('name', 'seller')->first();
+    $nextRole = Role::where('name', 'customer')->first();
+    $det = $shop->seller->role()->detach($prevRole);
+    if ($det) {
+        $shop->seller->role()->attach($nextRole);
+    }
+
+    $deleteShop = DB::table('shops')->where('id', $shop->id)->delete();
+
+    return Redirect::route('dashboard.shops');
+}
+```
 
 ---

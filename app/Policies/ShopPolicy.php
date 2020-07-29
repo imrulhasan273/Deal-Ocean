@@ -13,8 +13,8 @@ class ShopPolicy
 
     public function before($user, $ability)
     {
-        $roles = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
-        if (($roles[0] == 'admin') || ($roles[0] == 'super_admin')) {
+        $authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
+        if (($authRole[0] == 'admin') || ($authRole[0] == 'super_admin')) {
             return true;
         }
     }
@@ -39,7 +39,7 @@ class ShopPolicy
      */
     public function view(User $user, Shop $shop)
     {
-        //
+        return $user->id == $shop->user_id;
     }
 
     /**
@@ -79,7 +79,7 @@ class ShopPolicy
      */
     public function delete(User $user, Shop $shop)
     {
-        //
+        return false;
     }
 
     /**

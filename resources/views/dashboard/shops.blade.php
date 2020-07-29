@@ -1,5 +1,6 @@
 @php
 $active='shops';
+$authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
 @endphp
 @extends('layouts.backend')
 
@@ -37,37 +38,53 @@ $active='shops';
                 <th>
                     Edit
                 </th>
+                <th>
+                    @if(($authRole[0] == 'admin') || ($authRole[0] == 'super_admin'))
+                    Delete
+                    @endif
+                </th>
               </thead>
               @foreach ($shops as $shop)
-              <tbody>
-                <tr>
-                  <td>
-                    {{$shop->id}}
-                  </td>
-                  <td>
-                    {{$shop->name}}
-                  </td>
-                  <td>
-                    {{$shop->seller->name}}
-                  </td>
-                  <td>
-                    @if($shop->is_active)
-                    Yes
-                    @else
-                    No
-                    @endif
-                  </td>
-                  <td>
-                    {{$shop->rating}}
-                  </td>
-                  <td>
-                    {{$shop->location->address}}
-                  </td>
-                  <td>
-                    <a href="{{route('shops.edit',[$shop->id])}}">Edit</a>
-                  </td>
-                </tr>
-              </tbody>
+
+                @can('view', $shop)
+
+                <tbody>
+                    <tr>
+                    <td>
+                        {{$shop->id}}
+                    </td>
+                    <td>
+                        {{$shop->name}}
+                    </td>
+                    <td>
+                        {{$shop->seller->name}}
+                    </td>
+                    <td>
+                        @if($shop->is_active)
+                        Yes
+                        @else
+                        No
+                        @endif
+                    </td>
+                    <td>
+                        {{$shop->rating}}
+                    </td>
+                    <td>
+                        {{$shop->location->address}}
+                    </td>
+                    <td>
+                        <a href="{{route('shops.edit',[$shop->id])}}">Edit</a>
+                    </td>
+                    <td>
+                        @can('delete', $shop)
+                        <a href="{{route('shops.destroy',[$shop->id])}}">Delete</a>
+                        @endcan
+                    </td>
+                    </tr>
+                </tbody>
+
+                @endcan
+
               @endforeach
             </table>
           </div>
@@ -76,3 +93,4 @@ $active='shops';
     </div>
 </div>
 @endsection
+

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Role;
 use App\Shop;
 use App\User;
 use App\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Mail\ShopActivationRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -123,6 +125,15 @@ class ShopController extends Controller
      */
     public function destroy(Shop $shop)
     {
-        //
+        $prevRole = Role::where('name', 'seller')->first();
+        $nextRole = Role::where('name', 'customer')->first();
+        $det = $shop->seller->role()->detach($prevRole);
+        if ($det) {
+            $shop->seller->role()->attach($nextRole);
+        }
+
+        $deleteShop = DB::table('shops')->where('id', $shop->id)->delete();
+
+        return Redirect::route('dashboard.shops');
     }
 }
