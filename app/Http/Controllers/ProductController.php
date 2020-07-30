@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class ProductController extends Controller
 {
@@ -66,7 +68,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        // dd('edit');
+        return view('dashboard.products.edit', compact(['product']));
     }
 
     /**
@@ -78,7 +81,19 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        dd($request->hasFile('product_img'));
+
+        $updatingProduct = Product::where('id', $request->product_id)->first();
+        if ($updatingProduct) {
+            $updatingProduct->update([
+                'name' => $request->product_name,
+                'price' => $request->product_price,
+                'description' => $request->description,
+                'cover_img' => $request->product_img,
+            ]);
+        }
+
+        return Redirect::route('dashboard.products');
     }
 
     /**
@@ -89,6 +104,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        DB::table('products')->where('id', $product->id)->delete();
+
+        return Redirect::route('dashboard.products');
     }
 }

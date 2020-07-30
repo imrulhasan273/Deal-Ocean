@@ -41,6 +41,19 @@
             <p>Shop</p>
           </a>
         </li>
+
+        @if($active=='products')
+        <li class="active ">
+        @else
+        <li>
+        @endif
+          <a class="nav-link" href="{{route('dashboard.products')}}">
+            <i class="material-icons">content_paste</i>
+            <p>Product</p>
+          </a>
+        </li>
+
+
         @if($active=='typography')
         <li class="active ">
         @else

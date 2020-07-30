@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\Admin;
+use App\Product;
 use App\Shop;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
@@ -26,6 +27,13 @@ class DashboardController extends Controller
         $shops = Shop::with(['seller', 'location'])->get(); //reduce complexity
 
         return view('dashboard.shops', compact('shops'));
+    }
+
+    public function products()
+    {
+        $products = Product::all();
+        // $shops = Shop::with(['seller', 'location'])->get(); //reduce complexity
+        return view('dashboard.products', compact('products'));
     }
 
     public function icons()

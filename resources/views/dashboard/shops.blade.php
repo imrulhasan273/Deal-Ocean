@@ -9,8 +9,8 @@ $authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
     <div class="col-md-12">
       <div class="card card-plain">
         <div class="card-header card-header-primary">
-          <h4 class="card-title mt-0">Shop Table</h4>
-          <p class="card-category"> Here is a subtitle for this table</p>
+          <h4 class="card-title mt-0">Shops</h4>
+          <p class="card-category"> All the shops appear here</p>
         </div>
 
         <div class="card-body">

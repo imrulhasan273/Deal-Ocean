@@ -3234,3 +3234,21 @@ public function destroy(Shop $shop)
 ```
 
 ---
+
+# **Product Management**
+
+---
+
+Create a Product Policy
+
+```cmd
+php artisan make:policy ProductPolicy --model=Product
+```
+
+## Everything same as `Shop Panel`
+
+-   Creating `ProductPolicty`
+-   Creating View Operaion
+-   Creating Edit Operaion
+-   Creating Update Operaion
+-   Creating Delete Operation

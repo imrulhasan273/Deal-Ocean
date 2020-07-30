@@ -16,6 +16,7 @@ Route::get('/contact', 'HomeController@contact')->name('contact');
 # Start Admin Routes | Dashboard
 Route::get('admin', 'DashboardController@index')->name('dashboard.index')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/shops', 'DashboardController@shops')->name('dashboard.shops')->middleware(['roleChecker:super_admin,admin,seller']);
+Route::get('admin/products', 'DashboardController@products')->name('dashboard.products')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/icons', 'DashboardController@icons')->name('dashboard.icons')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/map', 'DashboardController@map')->name('dashboard.map')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/notification', 'DashboardController@notification')->name('dashboard.notification')->middleware(['roleChecker:super_admin,admin,seller']);
@@ -27,6 +28,10 @@ Route::get('admin/typography', 'DashboardController@typography')->name('dashboar
 # Start Product Controller
 Route::get('/details', 'ProductController@details')->name('product.details');
 Route::get('/products', 'ProductController@products')->name('product.products');
+// -- -- -- -- -- -- -- -- Below three routes in Dashboard
+Route::get('/admin/products/{product}/edit', 'ProductController@edit')->name('products.edit')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
+Route::post('/admin/products/update', 'ProductController@update')->name('products.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
+Route::get('/admin/products/{product}/destroy', 'ProductController@destroy')->name('products.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
 # End Product Controller
 
 
