@@ -3252,3 +3252,154 @@ php artisan make:policy ProductPolicy --model=Product
 -   Creating Edit Operaion
 -   Creating Update Operaion
 -   Creating Delete Operation
+
+## As Proudct `Update Operation` is Slightly Differnt as there is a Image.
+
+`views/dashboard/products/edit.blade.php`
+
+```php
+@php
+$active='products';
+@endphp
+@extends('layouts.backend')
+
+@section('content')
+<div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title">Edit Product</h4>
+          <p class="card-category">Complete your Shop</p>
+        </div>
+        <div class="card-body">
+
+        <form method="POST" action="{{route('products.update')}}" enctype="multipart/form-data">
+        @csrf
+            <div class="row">
+                <div class="col-md-5" hidden>
+                    <div class="form-group">
+                      <label class="bmd-label-floating">Product id</label>
+                      <input name="product_id" value="{{ $product->id }}" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Product Name</label>
+                        <input name="product_name" value="{{ $product->name }}" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="bmd-label-floating"> Price</label>
+                        <input name="product_price" value="{{ $product->price }}" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="bmd-label-floating"> Shop ID</label>
+                        <input name="shop_id" value="{{ $product->shop_id }}" type="text" class="form-control" disabled>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Shop Name</label>
+                        <input name="shop_name" value="{{ $product->shop->name }}" type="text" class="form-control" disabled>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Product Description</label>
+                        <input name="product_description" value="{{ $product->description }}" type="text" class="form-control">
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <img style="height: 3%" src="{{asset('/storage/products/'.$product->cover_img)}}" alt="">
+                    </div>
+                    <input name="product_img" type="file" class="form-control">
+                </div>
+            </div>
+
+            <button name="submit" type="submit" class="btn btn-primary pull-right">Update Product</button>
+            <div class="clearfix"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+</div>
+@endsection
+```
+
+`ProductController.php`
+
+```php
+    public function update(Request $request, Product $product)
+    {
+        # When update with a new photo
+        if ($request->hasFile('product_img')) {
+
+            $this->deleteOldImage($request->product_id);
+
+            $imageName = $this->storeNewImage($request->file('product_img'));
+
+            $updatingProduct = Product::where('id', $request->product_id)->first();
+            if ($updatingProduct) {
+                $updatingProduct->update([
+                    'name' => $request->product_name,
+                    'price' => $request->product_price,
+                    'description' => $request->product_description,
+                    'cover_img' => $imageName,
+                ]);
+            }
+
+            return Redirect::route('dashboard.products');
+        }
+
+
+        # When no photo is updated
+        $updatingProduct = Product::where('id', $request->product_id)->first();
+        if ($updatingProduct) {
+            $updatingProduct->update([
+                'name' => $request->product_name,
+                'price' => $request->product_price,
+                'description' => $request->product_description,
+            ]);
+        }
+
+        return Redirect::route('dashboard.products');
+    }
+```
+
+```php
+    protected function deleteOldImage($prod_id)
+    {
+        $oldImg = DB::table('products')->where('id', $prod_id)->pluck('cover_img')->toArray();
+        $name = $oldImg[0];
+        Storage::delete('/public/products/' . $name);
+    }
+
+```
+
+```php
+    protected function storeNewImage($file)
+    {
+        $filenameWithExt = $file->getClientOriginalName();
+        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        $fileNameToStore = $filename . '_' . time() . '.' . $extension;
+        $file->storeAs('public/products', $fileNameToStore);
+
+        return $fileNameToStore;
+    }
+```
+
+---

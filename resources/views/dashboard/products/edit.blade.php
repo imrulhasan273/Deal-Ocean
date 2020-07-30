@@ -13,7 +13,7 @@ $active='products';
         </div>
         <div class="card-body">
 
-        <form method="POST" action="{{route('products.update')}}">
+        <form method="POST" action="{{route('products.update')}}" enctype="multipart/form-data">
         @csrf
             <div class="row">
                 <div class="col-md-5" hidden>
@@ -76,5 +76,6 @@ $active='products';
       </div>
     </div>
 
-</div>@endsection
+</div>
+@endsection
 

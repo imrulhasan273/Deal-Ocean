@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
+
 
 class ProductController extends Controller
 {
@@ -81,19 +83,56 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        dd($request->hasFile('product_img'));
+        # When update with a new photo
+        if ($request->hasFile('product_img')) {
 
+            $this->deleteOldImage($request->product_id);
+
+            $imageName = $this->storeNewImage($request->file('product_img'));
+
+            $updatingProduct = Product::where('id', $request->product_id)->first();
+            if ($updatingProduct) {
+                $updatingProduct->update([
+                    'name' => $request->product_name,
+                    'price' => $request->product_price,
+                    'description' => $request->product_description,
+                    'cover_img' => $imageName,
+                ]);
+            }
+
+            return Redirect::route('dashboard.products');
+        }
+
+
+        # When no photo is updated
         $updatingProduct = Product::where('id', $request->product_id)->first();
         if ($updatingProduct) {
             $updatingProduct->update([
                 'name' => $request->product_name,
                 'price' => $request->product_price,
-                'description' => $request->description,
-                'cover_img' => $request->product_img,
+                'description' => $request->product_description,
             ]);
         }
 
         return Redirect::route('dashboard.products');
+    }
+
+    protected function deleteOldImage($prod_id)
+    {
+        $oldImg = DB::table('products')->where('id', $prod_id)->pluck('cover_img')->toArray();
+        $name = $oldImg[0];
+        Storage::delete('/public/products/' . $name);
+    }
+
+    protected function storeNewImage($file)
+    {
+        $filenameWithExt = $file->getClientOriginalName();
+        $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        $fileNameToStore = $filename . '_' . time() . '.' . $extension;
+        $file->storeAs('public/products', $fileNameToStore);
+
+        return $fileNameToStore;
     }
 
     /**
