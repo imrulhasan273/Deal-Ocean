@@ -3339,6 +3339,14 @@ $active='products';
 @endsection
 ```
 
+`Product.php`
+
+```php
+protected $fillable = ['name', 'price', 'description', 'cover_img'];
+```
+
+> Mass assignment is required
+
 `ProductController.php`
 
 ```php
@@ -3379,6 +3387,12 @@ $active='products';
     }
 ```
 
+> **Case 1:** If user input a `file` then `delete` the old image and `store` the new image and `update` the name of the image into database along with others fields.
+
+> **Case 2:** If user `don't` input an image then just update the other information with the input fields
+
+> Below is the two protected function which is for `delete` and `store` operation.
+
 ```php
     protected function deleteOldImage($prod_id)
     {
@@ -3386,7 +3400,6 @@ $active='products';
         $name = $oldImg[0];
         Storage::delete('/public/products/' . $name);
     }
-
 ```
 
 ```php
