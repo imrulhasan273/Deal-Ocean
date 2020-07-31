@@ -1,5 +1,5 @@
 @php
-$active='products';
+$active='coupons';
 $authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
 @endphp
 @extends('layouts.backend')
@@ -7,13 +7,13 @@ $authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
 @section('content')
 <div class="row">
     <div class="col-md-2">
-    <a href="{{route('products.add')}}" name="add" class="btn btn-primary pull-right">Add Product</a>
+    <a href="{{route('coupons.add')}}" name="add" class="btn btn-primary pull-right">Add Coupon</a>
     </div>
 
     <div class="col-md-12">
       <div class="card card-plain">
         <div class="card-header card-header-primary">
-          <h4 class="card-title mt-0">Products</h4>
+          <h4 class="card-title mt-0">Coupons</h4>
           <p class="card-category"> All the shops appear here</p>
         </div>
 
@@ -28,19 +28,16 @@ $authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
                     Name
                 </th>
                 <th>
+                    Code
+                </th>
+                <th>
+                    Type
+                </th>
+                <th>
+                    Discount
+                </th>
+                <th>
                     Description
-                </th>
-                <th>
-                    Price
-                </th>
-                <th>
-                    Shop ID
-                </th>
-                <th>
-                    Shop Name
-                </th>
-                <th>
-                     Cover Image
                 </th>
                 <th>
                     Edit
@@ -49,45 +46,40 @@ $authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
                     Delete
                 </th>
               </thead>
-              @foreach ($products as $product)
+              @foreach ($coupons as $coupon)
 
-                @can('view', $product)
+                {{-- @can('view', $product) --}}
 
                 <tbody>
                     <tr>
                         <td>
-                            {{$product->id}}
+                            {{$coupon->id}}
                         </td>
                         <td>
-                            {{$product->name}}
+                            {{$coupon->name}}
                         </td>
                         <td>
-                            {{$product->description}}
+                            {{$coupon->code}}
                         </td>
                         <td>
-                            {{$product->price}}
+                            {{$coupon->type}}
                         </td>
                         <td>
-                            {{ $product->shop_id }}
-                        </td>
-
-                        <td>
-                            {{ $product->shop->name }}
-                        </td>
-
-                        <td>
-                            <img style="height: 10%" src="{{asset('/storage/products/'.$product->cover_img)}}" alt="">
+                            {{ $coupon->discount }}
                         </td>
                         <td>
-                            <a href="{{route('products.edit',[$product->id])}}">Edit</a>
+                            {{ $coupon->description }}
                         </td>
                         <td>
-                            <a href="{{route('products.destroy',[$product->id])}}">Delete</a>
+                            <a href="{{route('coupons.edit',[$coupon->id])}}">Edit</a>
+                        </td>
+                        <td>
+                            <a href="{{route('coupons.destroy',[$coupon->id])}}">Delete</a>
                         </td>
                     </tr>
                 </tbody>
 
-                @endcan
+                {{-- @endcan --}}
 
               @endforeach
             </table>
@@ -97,4 +89,3 @@ $authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
     </div>
 </div>
 @endsection
-

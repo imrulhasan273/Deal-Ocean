@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Shop;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 
@@ -40,6 +42,15 @@ class ProductController extends Controller
         //
     }
 
+    public function add()
+    {
+        $shops = Shop::all();
+        $user_id = Auth::user()->id;
+        $role = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
+
+        return view('dashboard.products.add', compact('shops', 'user_id', 'role'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -48,7 +59,25 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'product_name' => 'required',
+            'product_price' => 'required',
+            'product_description' => 'required',
+            'shop_id' => 'required',
+            'product_img' => 'required',
+        ]);
+
+        $imageName = $this->storeNewImage($request->file('product_img'));
+
+        $addProduct = Product::create([
+            'name' => $request->input('product_name'),
+            'price' => $request->input('product_price'),
+            'description' => $request->input('product_description'),
+            'shop_id' => $request->input('shop_id'),
+            'cover_img' => $imageName
+        ]);
+
+        return Redirect::route('dashboard.products');
     }
 
     /**

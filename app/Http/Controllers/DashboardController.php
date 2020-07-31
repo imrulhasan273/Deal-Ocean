@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\Admin;
-use App\Product;
 use App\Shop;
+use App\Coupon;
+use App\Product;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
+use App\Http\Middleware\Admin;
 use League\CommonMark\Extension\Table\Table;
 
 class DashboardController extends Controller
@@ -32,8 +33,13 @@ class DashboardController extends Controller
     public function products()
     {
         $products = Product::all();
-        // $shops = Shop::with(['seller', 'location'])->get(); //reduce complexity
         return view('dashboard.products', compact('products'));
+    }
+
+    public function coupons()
+    {
+        $coupons = Coupon::all();
+        return view('dashboard.coupons', compact('coupons'));
     }
 
     public function icons()

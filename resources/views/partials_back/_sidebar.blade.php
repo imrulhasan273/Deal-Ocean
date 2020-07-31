@@ -9,6 +9,12 @@
             <h4>{{ Auth::user()->name }}</h4>
         </a>
     </div>
+
+    @php
+        $roles = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
+        $role = $roles[0];
+    @endphp
+
     <div class="sidebar-wrapper">
       <ul class="nav">
         @if($active=='index')
@@ -52,6 +58,20 @@
             <p>Product</p>
           </a>
         </li>
+
+        @if ($role == 'admin' || $role == 'super_admin')
+            @if($active=='coupons')
+            <li class="active ">
+            @else
+            <li>
+            @endif
+            <a class="nav-link" href="{{route('dashboard.coupons')}}">
+                <i class="material-icons">content_paste</i>
+                <p>Coupon</p>
+            </a>
+            </li>
+        @endif
+
 
 
         @if($active=='typography')

@@ -3416,3 +3416,136 @@ protected $fillable = ['name', 'price', 'description', 'cover_img'];
 ```
 
 ---
+
+## Proudct `Store Operation` [Every other operations looks similar to Shop Management]
+
+---
+
+`views/dashboard/products/add.blade.php`
+
+```php
+@php
+$active='products';
+@endphp
+@extends('layouts.backend')
+
+@section('content')
+<div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title">Add Product</h4>
+          <p class="card-category">Complete your Shop</p>
+        </div>
+        <div class="card-body">
+
+        <form method="POST" action="{{route('products.store')}}" enctype="multipart/form-data">
+        @csrf
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Product Name</label>
+                        <input name="product_name" value="" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="bmd-label-floating"> Price</label>
+                        <input name="product_price" value="" type="text" class="form-control">
+                    </div>
+                </div>
+
+                @if (($role[0] == 'admin') || ($role[0] == 'super_admin'))
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Shop Name</label>
+                        <select name="shop_id" class="form-control">
+                            @foreach ($shops as $shop)
+                                <option style="color: rgb(19, 146, 219)" value="{{$shop->id}}" {{ $shop->user_id == $user_id ? 'selected':'' }}>{{$shop->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                @else
+                <div class="col-md-6" hidden>
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Shop Name</label>
+                        <select name="shop_id" class="form-control">
+                            @foreach ($shops as $shop)
+                                <option style="color: rgb(19, 146, 219)" value="{{$shop->id}}" {{ $shop->user_id == $user_id ? 'selected':'' }}>{{$shop->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                @endif
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Product Description</label>
+                        <input name="product_description" value="" type="text" class="form-control">
+                    </div>
+                </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                        </div>
+                        <input name="product_img" type="file" class="">
+                    </div>
+                </div>
+
+                <button name="submit" type="submit" class="btn btn-primary pull-right">Add Product</button>
+
+            <div class="clearfix"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+</div>
+@endsection
+```
+
+`ProductController.php`
+
+```php
+    public function store(Request $request)
+    {
+        $request->validate([
+            'product_name' => 'required',
+            'product_price' => 'required',
+            'product_description' => 'required',
+            'shop_id' => 'required',
+            'product_img' => 'required',
+        ]);
+
+        $imageName = $this->storeNewImage($request->file('product_img'));
+
+        $addProduct = Product::create([
+            'name' => $request->input('product_name'),
+            'price' => $request->input('product_price'),
+            'description' => $request->input('product_description'),
+            'shop_id' => $request->input('shop_id'),
+            'cover_img' => $imageName
+        ]);
+
+        return Redirect::route('dashboard.products');
+    }
+```
+
+---
+
+# **Coupon Management**
+
+---
+
+## Exactly same as `Product Manegement`
+
+---
+
+# **Order Management**
+
+---

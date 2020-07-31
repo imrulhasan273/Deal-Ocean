@@ -17,6 +17,7 @@ Route::get('/contact', 'HomeController@contact')->name('contact');
 Route::get('admin', 'DashboardController@index')->name('dashboard.index')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/shops', 'DashboardController@shops')->name('dashboard.shops')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/products', 'DashboardController@products')->name('dashboard.products')->middleware(['roleChecker:super_admin,admin,seller']);
+Route::get('admin/coupons', 'DashboardController@coupons')->name('dashboard.coupons')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/icons', 'DashboardController@icons')->name('dashboard.icons')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/map', 'DashboardController@map')->name('dashboard.map')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/notification', 'DashboardController@notification')->name('dashboard.notification')->middleware(['roleChecker:super_admin,admin,seller']);
@@ -28,7 +29,9 @@ Route::get('admin/typography', 'DashboardController@typography')->name('dashboar
 # Start Product Controller
 Route::get('/details', 'ProductController@details')->name('product.details');
 Route::get('/products', 'ProductController@products')->name('product.products');
-// -- -- -- -- -- -- -- -- Below three routes in Dashboard
+// -- -- -- -- -- -- -- -- Below five routes in Dashboard
+Route::get('/admin/products/add', 'ProductController@add')->name('products.add')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
+Route::post('/admin/products/store', 'ProductController@store')->name('products.store')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
 Route::get('/admin/products/{product}/edit', 'ProductController@edit')->name('products.edit')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
 Route::post('/admin/products/update', 'ProductController@update')->name('products.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
 Route::get('/admin/products/{product}/destroy', 'ProductController@destroy')->name('products.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
@@ -50,7 +53,6 @@ Route::get('/cart/checkout', 'CartController@checkout')->name('cart.checkout')->
 Route::post('/order/store', 'OrderController@store')->name('orders.store')->middleware('auth');
 # End Order Controller
 
-
 # Start SSLCOMMERZ Start
 Route::POST('/pay/{orderId}', 'SSLCommerzPaymentController@index')->name('payments.pay');
 Route::POST('/success', 'SSLCommerzPaymentController@success');
@@ -68,3 +70,13 @@ Route::get('/admin/shops/{shop}/edit', 'ShopController@edit')->name('shops.edit'
 Route::post('/admin/shops/update', 'ShopController@update')->name('shops.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
 Route::get('/admin/shops/{shop}/destroy', 'ShopController@destroy')->name('shops.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
 # End Shop Controllers
+
+
+# Start Coupon Controller               *** UNUSED***
+// -- -- -- -- -- -- -- -- Below five routes in Dashboard
+Route::get('/admin/coupons/add', 'CouponController@add')->name('coupons.add')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/coupons/store', 'CouponController@store')->name('coupons.store')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/coupons/{coupon}/edit', 'CouponController@edit')->name('coupons.edit')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/coupons/update', 'CouponController@update')->name('coupons.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/coupons/{coupon}/destroy', 'CouponController@destroy')->name('coupons.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+# End Coupon Controller
