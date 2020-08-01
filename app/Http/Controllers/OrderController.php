@@ -179,7 +179,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        dd('Edit');
+        return view('dashboard.orders.edit', compact(['order']));
     }
 
     /**
@@ -191,7 +191,16 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        dd('update');
+
+        $updatingOrder = Order::where('id', $request->order_id)->first();
+        if ($updatingOrder) {
+            $updatingOrder->update([
+                'is_paid' => $request->is_paid,
+                'status' => $request->status,
+            ]);
+        }
+
+        return Redirect::route('dashboard.orders');
     }
 
     /**

@@ -83,7 +83,11 @@ $authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
                        {{$order->item_count}}
                     </td>
                     <td>
-                        {{$order->is_paid}}
+                        @if($order->is_paid)
+                        Yes
+                        @else
+                        No
+                        @endif
                     </td>
                     <td>
                        {{$order->payment_method}}

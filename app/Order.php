@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    protected $fillable = ['is_paid', 'status'];
+
     public function product()
     {
-        // return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id')->withTimestamps();
         return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id')->withPivot('quantity', 'price')->withTimestamps();
     }
 
