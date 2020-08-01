@@ -2,6 +2,14 @@
 
 ---
 
+# Project Method
+
+---
+
+## SDLC Approach
+
+---
+
 # **Schema Diagram**
 
 ---
@@ -3543,6 +3551,10 @@ $active='products';
 ---
 
 ## Exactly same as `Product Manegement`
+
+-   Note: I make the middlewere of these route to `middleware(['roleChecker:super_admin,admin,null'])`
+
+-   So seller have no way to visit coupons panel `(nulled)`
 
 ---
 

@@ -8,6 +8,7 @@ use App\Product;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use App\Http\Middleware\Admin;
+use App\Order;
 use League\CommonMark\Extension\Table\Table;
 
 class DashboardController extends Controller
@@ -40,6 +41,12 @@ class DashboardController extends Controller
     {
         $coupons = Coupon::all();
         return view('dashboard.coupons', compact('coupons'));
+    }
+
+    public function orders()
+    {
+        $orders = Order::all();
+        return view('dashboard.orders', compact('orders'));
     }
 
     public function icons()

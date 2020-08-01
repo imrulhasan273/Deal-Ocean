@@ -179,7 +179,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        //
+        dd('Edit');
     }
 
     /**
@@ -191,7 +191,7 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        dd('update');
     }
 
     /**
@@ -202,6 +202,6 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        dd('delete');
     }
 }

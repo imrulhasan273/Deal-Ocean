@@ -72,6 +72,17 @@
             </li>
         @endif
 
+        @if($active=='orders')
+        <li class="active ">
+        @else
+        <li>
+        @endif
+          <a class="nav-link" href="{{route('dashboard.orders')}}">
+            <i class="material-icons">content_paste</i>
+            <p>Order</p>
+          </a>
+        </li>
+
 
 
         @if($active=='typography')

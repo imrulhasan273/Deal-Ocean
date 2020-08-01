@@ -18,6 +18,7 @@ Route::get('admin', 'DashboardController@index')->name('dashboard.index')->middl
 Route::get('admin/shops', 'DashboardController@shops')->name('dashboard.shops')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/products', 'DashboardController@products')->name('dashboard.products')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/coupons', 'DashboardController@coupons')->name('dashboard.coupons')->middleware(['roleChecker:super_admin,admin,null']);
+Route::get('admin/orders', 'DashboardController@orders')->name('dashboard.orders')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/icons', 'DashboardController@icons')->name('dashboard.icons')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/map', 'DashboardController@map')->name('dashboard.map')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/notification', 'DashboardController@notification')->name('dashboard.notification')->middleware(['roleChecker:super_admin,admin,seller']);
@@ -51,7 +52,13 @@ Route::get('/cart/checkout', 'CartController@checkout')->name('cart.checkout')->
 
 # Start Order Controller
 Route::post('/order/store', 'OrderController@store')->name('orders.store')->middleware('auth');
+// -- -- -- -- -- -- -- -- Below two routes in Dashboard
+Route::get('/admin/orders/{order}/edit', 'OrderController@edit')->name('orders.edit')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
+Route::post('/admin/orders/update', 'OrderController@update')->name('orders.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
+Route::get('/admin/orders/{order}/destroy', 'OrderController@destroy')->name('orders.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
 # End Order Controller
+
+
 
 # Start SSLCOMMERZ Start
 Route::POST('/pay/{orderId}', 'SSLCommerzPaymentController@index')->name('payments.pay');
@@ -72,7 +79,7 @@ Route::get('/admin/shops/{shop}/destroy', 'ShopController@destroy')->name('shops
 # End Shop Controllers
 
 
-# Start Coupon Controller               *** UNUSED***
+# Start Coupon Controller
 // -- -- -- -- -- -- -- -- Below five routes in Dashboard
 Route::get('/admin/coupons/add', 'CouponController@add')->name('coupons.add')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
 Route::post('/admin/coupons/store', 'CouponController@store')->name('coupons.store')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
