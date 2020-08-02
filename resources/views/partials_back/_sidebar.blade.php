@@ -37,6 +37,21 @@
             <p>User Profile</p>
           </a>
         </li>
+
+        @if ($role == 'admin' || $role == 'super_admin')
+            @if($active=='regions')
+            <li class="active ">
+            @else
+            <li>
+            @endif
+            <a class="nav-link" href="{{route('dashboard.regions')}}">
+                <i class="material-icons">content_paste</i>
+                <p>Region</p>
+            </a>
+            </li>
+        @endif
+
+
         @if($active=='shops')
         <li class="active ">
         @else

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Region;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class RegionController extends Controller
 {
@@ -27,6 +29,10 @@ class RegionController extends Controller
         //
     }
 
+    public function add()
+    {
+        return view('dashboard.regions.add');
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +41,15 @@ class RegionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'region_name' => 'required',
+        ]);
+
+        $addProduct = Region::create([
+            'name' => $request->input('region_name'),
+        ]);
+
+        return Redirect::route('dashboard.regions');
     }
 
     /**
@@ -57,7 +71,8 @@ class RegionController extends Controller
      */
     public function edit(Region $region)
     {
-        //
+        // dd('edit');
+        return view('dashboard.regions.edit', compact(['region']));
     }
 
     /**
@@ -69,7 +84,14 @@ class RegionController extends Controller
      */
     public function update(Request $request, Region $region)
     {
-        //
+        $updatingRegion = Region::where('id', $request->region_id)->first();
+        if ($updatingRegion) {
+            $updatingRegion->update([
+                'name' => $request->region_name,
+            ]);
+        }
+
+        return Redirect::route('dashboard.regions');
     }
 
     /**
@@ -80,6 +102,7 @@ class RegionController extends Controller
      */
     public function destroy(Region $region)
     {
-        //
+        DB::table('regions')->where('id', $region->id)->delete();
+        return Redirect::route('dashboard.regions');
     }
 }

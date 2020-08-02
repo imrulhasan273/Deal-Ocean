@@ -3561,3 +3561,84 @@ $active='products';
 # **Order Management**
 
 ---
+
+## Same as Shop Management
+
+`OrderController.php`
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Order;
+use App\Mail\OrderPaid;
+use Carbon\Traits\Timestamp;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
+
+class OrderController extends Controller
+{
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Order $order)
+    {
+        $order_products = DB::table('order_product')->where('order_id', $order->id)->get();
+
+        $products_id = DB::table('order_product')->where('order_id', $order->id)->pluck('product_id')->toArray();
+
+        $products = DB::table('products')->whereIn('id', $products_id)->get();
+
+        return view('dashboard.orders.edit', compact(['order', 'order_products', 'products']));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Order $order)
+    {
+
+        $updatingOrder = Order::where('id', $request->order_id)->first();
+        if ($updatingOrder) {
+            $updatingOrder->update([
+                'is_paid' => $request->is_paid,
+                'status' => $request->status,
+            ]);
+        }
+
+        return Redirect::route('dashboard.orders');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Order $order)
+    {
+        $delete_order = DB::table('orders')->where('id', $order->id)->delete();
+        return Redirect::route('dashboard.orders');
+    }
+}
+```
+
+---
+
+# **Region Panel**
+
+---
+
+### same as Coupon Panel
+
+---

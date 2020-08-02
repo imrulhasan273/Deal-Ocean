@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Shop;
+use App\Order;
 use App\Coupon;
+use App\Region;
 use App\Product;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use App\Http\Middleware\Admin;
-use App\Order;
+use Illuminate\Support\Facades\DB;
 use League\CommonMark\Extension\Table\Table;
 
 class DashboardController extends Controller
@@ -21,6 +23,15 @@ class DashboardController extends Controller
     public function index()
     {
         return view('dashboard.index');
+    }
+
+    public function regions()
+    {
+        $regions = Region::all();
+
+        // dd($regions);
+
+        return view('dashboard.regions', compact('regions'));
     }
 
     public function shops()

@@ -15,6 +15,7 @@ Route::get('/contact', 'HomeController@contact')->name('contact');
 
 # Start Admin Routes | Dashboard
 Route::get('admin', 'DashboardController@index')->name('dashboard.index')->middleware(['roleChecker:super_admin,admin,seller']);
+Route::get('admin/regions', 'DashboardController@regions')->name('dashboard.regions')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/shops', 'DashboardController@shops')->name('dashboard.shops')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/products', 'DashboardController@products')->name('dashboard.products')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/coupons', 'DashboardController@coupons')->name('dashboard.coupons')->middleware(['roleChecker:super_admin,admin,null']);
@@ -25,6 +26,16 @@ Route::get('admin/notification', 'DashboardController@notification')->name('dash
 Route::get('admin/profile', 'DashboardController@profile')->name('dashboard.profile')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/typography', 'DashboardController@typography')->name('dashboard.typography')->middleware(['roleChecker:super_admin,admin,seller']);
 # End Admin Routes | Dashboard
+
+
+# Strat Region COntroller
+// -- -- -- -- -- -- -- -- Below five routes in Dashboard
+Route::get('/admin/regions/add', 'RegionController@add')->name('regions.add')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/regions/store', 'RegionController@store')->name('regions.store')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/regions/{region}/edit', 'RegionController@edit')->name('regions.edit')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/regions/update', 'RegionController@update')->name('regions.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/regions/{region}/destroy', 'RegionController@destroy')->name('regions.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+# End Region Controller
 
 
 # Start Product Controller
