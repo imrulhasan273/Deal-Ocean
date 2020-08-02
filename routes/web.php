@@ -16,6 +16,8 @@ Route::get('/contact', 'HomeController@contact')->name('contact');
 # Start Admin Routes | Dashboard
 Route::get('admin', 'DashboardController@index')->name('dashboard.index')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/regions', 'DashboardController@regions')->name('dashboard.regions')->middleware(['roleChecker:super_admin,admin,null']);
+Route::get('admin/countries', 'DashboardController@countries')->name('dashboard.countries')->middleware(['roleChecker:super_admin,admin,null']);
+Route::get('admin/locations', 'DashboardController@locations')->name('dashboard.locations')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/shops', 'DashboardController@shops')->name('dashboard.shops')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/products', 'DashboardController@products')->name('dashboard.products')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/coupons', 'DashboardController@coupons')->name('dashboard.coupons')->middleware(['roleChecker:super_admin,admin,null']);
@@ -36,6 +38,17 @@ Route::get('/admin/regions/{region}/edit', 'RegionController@edit')->name('regio
 Route::post('/admin/regions/update', 'RegionController@update')->name('regions.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
 Route::get('/admin/regions/{region}/destroy', 'RegionController@destroy')->name('regions.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
 # End Region Controller
+
+# Strat Country COntroller
+// -- -- -- -- -- -- -- -- Below five routes in Dashboard
+Route::get('/admin/countries/add', 'CountryController@add')->name('countries.add')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/countries/store', 'CountryController@store')->name('countries.store')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/countries/{country}/edit', 'CountryController@edit')->name('countries.edit')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/countries/update', 'CountryController@update')->name('countries.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/countries/{country}/destroy', 'CountryController@destroy')->name('countries.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+# End Country Controller
+
+
 
 
 # Start Product Controller

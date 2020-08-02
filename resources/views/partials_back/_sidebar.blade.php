@@ -51,6 +51,32 @@
             </li>
         @endif
 
+        @if ($role == 'admin' || $role == 'super_admin')
+            @if($active=='countries')
+            <li class="active ">
+            @else
+            <li>
+            @endif
+            <a class="nav-link" href="{{route('dashboard.countries')}}">
+                <i class="material-icons">content_paste</i>
+                <p>Country</p>
+            </a>
+            </li>
+        @endif
+
+        @if ($role == 'admin' || $role == 'super_admin')
+            @if($active=='locations')
+            <li class="active">
+            @else
+            <li>
+            @endif
+            <a class="nav-link" href="{{route('dashboard.locations')}}">
+                <i class="material-icons">content_paste</i>
+                <p>Location</p>
+            </a>
+            </li>
+        @endif
+
 
         @if($active=='shops')
         <li class="active ">

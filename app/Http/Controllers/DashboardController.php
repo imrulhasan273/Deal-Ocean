@@ -6,7 +6,9 @@ use App\Shop;
 use App\Order;
 use App\Coupon;
 use App\Region;
+use App\Country;
 use App\Product;
+use App\Location;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use App\Http\Middleware\Admin;
@@ -33,7 +35,18 @@ class DashboardController extends Controller
 
         return view('dashboard.regions', compact('regions'));
     }
+    public function countries()
+    {
+        $countries = Country::all();
 
+        return view('dashboard.countries', compact('countries'));
+    }
+    public function locations()
+    {
+        $locations = Location::all();
+
+        return view('dashboard.locations', compact('locations'));
+    }
     public function shops()
     {
         # $shops = Shop::all();
