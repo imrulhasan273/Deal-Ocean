@@ -179,7 +179,13 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        return view('dashboard.orders.edit', compact(['order']));
+        $order_products = DB::table('order_product')->where('order_id', $order->id)->get();
+
+        $products_id = DB::table('order_product')->where('order_id', $order->id)->pluck('product_id')->toArray();
+
+        $products = DB::table('products')->whereIn('id', $products_id)->get();
+
+        return view('dashboard.orders.edit', compact(['order', 'order_products', 'products']));
     }
 
     /**
@@ -211,6 +217,7 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        dd('delete');
+        $delete_order = DB::table('orders')->where('id', $order->id)->delete();
+        return Redirect::route('dashboard.orders');
     }
 }

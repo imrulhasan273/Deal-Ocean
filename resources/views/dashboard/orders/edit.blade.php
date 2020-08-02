@@ -1,5 +1,5 @@
 @php
-$active='shops';
+$active='orders';
 @endphp
 @extends('layouts.backend')
 
@@ -208,15 +208,64 @@ $active='shops';
 
             <hr>
 
+            <hr>
+            <label style="color:rgb(221, 58, 167)" class="bmd-label-floating">Ordered Items</label>
+            <hr>
             <div class="row">
+                <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead class="">
+                          <th>
+                             ID
+                          </th>
+                          <th>
+                            Product ID
+                          </th>
+                          <th>
+                             Price
+                          </th>
+                          <th>
+                            Quantity
+                          </th>
+                          <th>
+                              Photo
+                          </th>
 
+                        </thead>
+                        @php
+                            $count = -1;
+                        @endphp
+                        @foreach ($order_products as $item)
+                            @php
+                                $count++;
+                            @endphp
+                          <tbody>
+                              <tr>
+                              <td>
+                                  {{$item->id}}
+                              </td>
+                              <td>
+                                {{$item->product_id}}
+                              </td>
+                              <td>
+                                  {{$item->price}}
+                              </td>
+                              <td>
+                                  {{$item->quantity}}
+                              </td>
+                              <td>
+                                <img style="height: 10%" src="{{asset('/storage/products/'.$products[$count]->cover_img)}}" alt="">
+                              </td>
+                              </tr>
+                          </tbody>
+                        @endforeach
+                      </table>
+                    </div>
+                  </div>
             </div>
 
             <button name="submit" type="submit" class="btn btn-primary pull-right">Update Order</button>
-
-            <div class="col-md-4">
-                <button class="btn btn-primary btn-block" onclick="md.showNotification('top','center')">Bottom Center</button>
-            </div>
             <div class="clearfix"></div>
           </form>
         </div>
