@@ -3641,6 +3641,119 @@ class OrderController extends Controller
 
 ### same as Coupon Panel
 
+`RegionController.php`
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Region;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+
+class RegionController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    public function add()
+    {
+        return view('dashboard.regions.add');
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'region_name' => 'required',
+        ]);
+
+        $addProduct = Region::create([
+            'name' => $request->input('region_name'),
+        ]);
+
+        return Redirect::route('dashboard.regions');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Region  $region
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Region $region)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Region  $region
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Region $region)
+    {
+        // dd('edit');
+        return view('dashboard.regions.edit', compact(['region']));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Region  $region
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Region $region)
+    {
+        $updatingRegion = Region::where('id', $request->region_id)->first();
+        if ($updatingRegion) {
+            $updatingRegion->update([
+                'name' => $request->region_name,
+            ]);
+        }
+
+        return Redirect::route('dashboard.regions');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Region  $region
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Region $region)
+    {
+        DB::table('regions')->where('id', $region->id)->delete();
+        return Redirect::route('dashboard.regions');
+    }
+}
+```
+
 ---
 
 ---
@@ -3651,6 +3764,129 @@ class OrderController extends Controller
 
 ### same as Coupon Panel
 
+`CountryController.php`
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Region;
+use App\Country;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+
+class CountryController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    public function add()
+    {
+        $regions = Region::all();
+
+        return view('dashboard.countries.add', compact('regions'));
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'country_name' => 'required',
+            'region_id' => 'required'
+        ]);
+
+        //Save to db
+        $country = Country::create([
+            'name' => $request->input('country_name'),
+            'region_id' => $request->input('region_id'),
+        ]);
+
+
+        return Redirect::route('dashboard.countries');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Country  $country
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Country $country)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Country  $country
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Country $country)
+    {
+        $regions = Region::all();
+
+        return view('dashboard.countries.edit', compact(['country', 'regions']));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Country  $country
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Country $country)
+    {
+        $updatingCountry = Country::where('id', $request->country_id)->first();
+        if ($updatingCountry) {
+            $updatingCountry->update([
+                'name' => $request->country_name,
+                'region_id' => $request->region_id,
+            ]);
+        }
+
+        return Redirect::route('dashboard.countries');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Country  $country
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Country $country)
+    {
+        $deleteCountry = DB::table('countries')->where('id', $country->id)->delete();
+
+        return Redirect::route('dashboard.countries');
+    }
+}
+```
+
 ---
 
 ---
@@ -3660,5 +3896,134 @@ class OrderController extends Controller
 ---
 
 ### same as Coupon Panel
+
+`locationController.php`
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Country;
+use App\Location;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+
+class LocationController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    public function add()
+    {
+        $countries = Country::all();
+
+        return view('dashboard.locations.add', compact('countries'));
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'address' => 'required',
+            'postal_code' => 'required',
+            'country_id' => 'required'
+        ]);
+
+        //Save to db
+        $location = Location::create([
+            'address' => $request->input('address'),
+            'postal_code' => $request->input('postal_code'),
+            'country_id' => $request->input('country_id'),
+        ]);
+
+        return Redirect::route('dashboard.locations');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Location  $location
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Location $location)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Location  $location
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Location $location)
+    {
+        $countries = Country::all();
+
+        return view('dashboard.locations.edit', compact(['location', 'countries']));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Location  $location
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Location $location)
+    {
+        $updatingLocation = Location::where('id', $request->location_id)->first();
+        if ($updatingLocation) {
+            $updatingLocation->update([
+                'address' => $request->address,
+                'postal_code' => $request->postal_code,
+                'country_id' => $request->country_id,
+            ]);
+        }
+
+        return Redirect::route('dashboard.locations');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Location  $location
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Location $location)
+    {
+        $deleteLocation = DB::table('locations')->where('id', $location->id)->delete();
+
+        return Redirect::route('dashboard.locations');
+    }
+}
+```
+
+---
+
+# **Shop Create Request | Ajax Method | **
 
 ---

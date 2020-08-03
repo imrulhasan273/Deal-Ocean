@@ -119,3 +119,8 @@ Route::get('/admin/coupons/{coupon}/edit', 'CouponController@edit')->name('coupo
 Route::post('/admin/coupons/update', 'CouponController@update')->name('coupons.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
 Route::get('/admin/coupons/{coupon}/destroy', 'CouponController@destroy')->name('coupons.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
 # End Coupon Controller
+
+
+# Start Ajax Request to find country for a selected region
+Route::get('/shops/findCountry', 'ShopController@findCountry')->name('countryListRoute');
+# End Ajax Request to find country for a selected region

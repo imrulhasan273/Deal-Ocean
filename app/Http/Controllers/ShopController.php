@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Role;
 use App\Shop;
 use App\User;
+use App\Region;
+use App\Country;
 use App\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,9 +34,19 @@ class ShopController extends Controller
      */
     public function create()
     {
+        $regions = Region::all();
+        $countries = Country::all();
         $locations = Location::all();
-        return view('shops.create', compact('locations'));
+        return view('shops.create', compact('regions', 'countries', 'locations'));
     }
+
+    # ----=================---------------------------
+    public function findCountry(Request $request)
+    {
+        $data = Country::select('id', 'name')->where('region_id', $request->id)->take(100)->get();
+        return response()->json($data);
+    }
+    # ----=================---------------------------
 
     /**
      * Store a newly created resource in storage.
@@ -44,7 +56,7 @@ class ShopController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
+        dd($request);
 
         $request->validate([
             'name' => 'required'
