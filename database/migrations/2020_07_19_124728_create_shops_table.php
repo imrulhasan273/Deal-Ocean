@@ -23,9 +23,13 @@ class CreateShopsTable extends Migration
             $table->boolean('is_active')->default(false);
             $table->text('description')->nullable();
             $table->float('rating')->default(0);
-            $table->unsignedBigInteger('location_id');
+            // $table->unsignedBigInteger('location_id');
+            $table->string('address');
+            $table->unsignedBigInteger('country_id');
 
-            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
+            // $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
+
 
             $table->timestamps();
         });

@@ -36,6 +36,9 @@ $authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
                     Location
                 </th>
                 <th>
+                    Country
+                </th>
+                <th>
                     Edit
                 </th>
                 <th>
@@ -70,7 +73,10 @@ $authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
                         {{$shop->rating}}
                     </td>
                     <td>
-                        {{$shop->location->address}}
+                        {{$shop->address}}
+                    </td>
+                    <td>
+                        {{$shop->country->name}}
                     </td>
                     <td>
                         <a href="{{route('shops.edit',[$shop->id])}}">Edit</a>

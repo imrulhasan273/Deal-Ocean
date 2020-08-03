@@ -3891,139 +3891,130 @@ class CountryController extends Controller
 
 ---
 
-# **Location Panel**
+# **Shop Create Request | Ajax Method **
 
 ---
 
-### same as Coupon Panel
-
-`locationController.php`
+`ShopController.php`
 
 ```php
-<?php
-
-namespace App\Http\Controllers;
-
-use App\Country;
-use App\Location;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
-
-class LocationController extends Controller
+public function create()
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    public function add()
-    {
-        $countries = Country::all();
-
-        return view('dashboard.locations.add', compact('countries'));
-    }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'address' => 'required',
-            'postal_code' => 'required',
-            'country_id' => 'required'
-        ]);
-
-        //Save to db
-        $location = Location::create([
-            'address' => $request->input('address'),
-            'postal_code' => $request->input('postal_code'),
-            'country_id' => $request->input('country_id'),
-        ]);
-
-        return Redirect::route('dashboard.locations');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Location  $location
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Location $location)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Location  $location
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Location $location)
-    {
-        $countries = Country::all();
-
-        return view('dashboard.locations.edit', compact(['location', 'countries']));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Location  $location
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Location $location)
-    {
-        $updatingLocation = Location::where('id', $request->location_id)->first();
-        if ($updatingLocation) {
-            $updatingLocation->update([
-                'address' => $request->address,
-                'postal_code' => $request->postal_code,
-                'country_id' => $request->country_id,
-            ]);
-        }
-
-        return Redirect::route('dashboard.locations');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Location  $location
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Location $location)
-    {
-        $deleteLocation = DB::table('locations')->where('id', $location->id)->delete();
-
-        return Redirect::route('dashboard.locations');
-    }
+    $regions = Region::all();
+    $countries = Country::all();
+    return view('shops.create', compact('regions', 'countries'));
+    # findCountry is used in this function
 }
 ```
 
----
+> all the data of `Country` and `Region` is passed through the blade file.
 
-# **Shop Create Request | Ajax Method | **
+`views/shops/create.blade.php`
+
+```php
+@extends('layouts.frontend')
+@section('content')
+<div style="margin-bottom: 30px;margin-top:30px" class="container">
+    <div class="container">
+        <h2>Submit Your Shop</h2>
+        <form action="{{route('shops.store')}}" method="post">
+            @csrf
+
+            <div class="form-group">
+                <label for="name">Name of Shop</label>
+                <input type="text" class="form-control" name="name" id="" aria-describedby="helpId" placeholder="">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" name="description" id="" rows="3"></textarea>
+            </div>
+
+            <label for="region">Region</label>
+            <select name="region" class="form-control RegionAjax" id="">
+                <option value="0" disabled="true" selected="true">Select-</option>
+                @foreach($regions as $region)
+                    <option value="{{$region->id}}">{{$region->name}}</option>
+                @endforeach
+            </select>
+
+            <label for="country">Country</label>
+            <select name="country" class="form-control CountryAjax">
+                <option value="0" disabled="true" selected="true">Select</option>
+            </select>
+
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input name="address" type="text" class="form-control"  aria-describedby="helpId" placeholder="">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+@endsection
+```
+
+> Here `name="region"` field is the key to find the countries. All the countries will be displayed on `name="country"` field based on selected `region`.
+
+> We can set the `address` field of our own in the text field.
+
+Below is the Ajax Code.
+
+`layouts/frontend.blade.php`
+
+```js
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(document).on('change','.RegionAjax',function(){
+                var region_id=$(this).val();
+                var div=$(this).parent();
+                var op=" ";
+                $.ajax({
+                    type:'get',
+                    url:"{{ route('countryListRoute') }}",
+                    data:{'id':region_id},
+                    success:function(data){
+                        op+='<option value="0" selected disabled>Choose Country</option>';
+                        for(var i=0;i<data.length;i++){
+                        op+='<option value="'+data[i].id+'">'+data[i].name+'</option>';
+                       }
+                       div.find('.CountryAjax').html(" ");
+                       div.find('.CountryAjax').append(op);
+                    },
+                    error:function(){
+                    }
+                });
+            });
+        });
+    </script>
+```
+
+> Here `RegionAjax` is the class name of `Region` field in the blade file
+
+> Here `CountryAjax` is the class name of `Country` field in the blade file
+
+`web.php`
+
+```php
+Route::get('/shops/findCountry', 'ShopController@findCountry')->name('countryListRoute');
+```
+
+> **ajax** request is send to `findCountry` function in `ShopController` to get the countries of the selected `region`.
+
+`ShopController.php`
+
+```php
+public function findCountry(Request $request)
+{
+    $data = Country::select('id', 'name')->where('region_id', $request->id)->take(100)->get();
+    return response()->json($data);
+}
+```
+
+> In this function get the countries `id` and `name` of the selected `region`.
+
+> Here we just get the top 100 rows. We can change the value.
 
 ---

@@ -50,7 +50,7 @@ class DashboardController extends Controller
     public function shops()
     {
         # $shops = Shop::all();
-        $shops = Shop::with(['seller', 'location'])->get(); //reduce complexity
+        $shops = Shop::with(['seller'])->get(); //reduce complexity
 
         return view('dashboard.shops', compact('shops'));
     }

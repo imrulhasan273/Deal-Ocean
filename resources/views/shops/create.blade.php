@@ -17,9 +17,7 @@
                 <textarea class="form-control" name="description" id="" rows="3"></textarea>
             </div>
 
-            {{--  --}}
-
-            <label for="description">Region</label>
+            <label for="region">Region</label>
             <select name="region" class="form-control RegionAjax" id="">
                 <option value="0" disabled="true" selected="true">Select-</option>
                 @foreach($regions as $region)
@@ -27,14 +25,14 @@
                 @endforeach
             </select>
 
-            <label for="description">Country</label>
+            <label for="country">Country</label>
             <select name="country" class="form-control CountryAjax">
                 <option value="0" disabled="true" selected="true">Select</option>
             </select>
 
             <div class="form-group">
-                <label for="description">Location</label>
-                <input name="location" type="text" class="form-control"  aria-describedby="helpId" placeholder="">
+                <label for="address">Address</label>
+                <input name="address" type="text" class="form-control"  aria-describedby="helpId" placeholder="">
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>

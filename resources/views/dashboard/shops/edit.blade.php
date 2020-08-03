@@ -53,8 +53,9 @@ $active='shops';
                     </div>
                 </div>
             </div>
+
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-group">
                     <label class="bmd-label-floating">Rating</label>
                     <input name="rating" value="{{ $shop->rating }}" type="text" class="form-control" disabled>
@@ -63,15 +64,21 @@ $active='shops';
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="bmd-label-floating">Location</label>
-                        <select name="location" class="form-control">
-                            @foreach ($locations as $location)
-                                <option style="color: rgb(19, 146, 219)" value="{{$location->id}}" {{ $shop->location_id == $location->id ? 'selected':'' }}>{{$location->address}}</option>
+                        <label class="bmd-label-floating">Address</label>
+                        <input name="address" value="{{ $shop->address }}" type="text" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Country</label>
+                        <select name="country" class="form-control">
+                            @foreach ($countries as $country)
+                                <option style="color: rgb(19, 146, 219)" value="{{$country->id}}" {{ $shop->country_id == $country->id ? 'selected':'' }}>{{$country->name}}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
-
             </div>
 
             <button name="submit" type="submit" class="btn btn-primary pull-right">Update Shop</button>

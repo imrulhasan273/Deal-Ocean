@@ -15,9 +15,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(RegionSeeder::class);
         $this->call(CountrySeeder::class);
-        $this->call(LocationSeeder::class);
-
-
 
         $this->call(SliderSeeder::class);
         $this->call(BannerSeeder::class);

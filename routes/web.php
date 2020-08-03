@@ -17,7 +17,6 @@ Route::get('/contact', 'HomeController@contact')->name('contact');
 Route::get('admin', 'DashboardController@index')->name('dashboard.index')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/regions', 'DashboardController@regions')->name('dashboard.regions')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/countries', 'DashboardController@countries')->name('dashboard.countries')->middleware(['roleChecker:super_admin,admin,null']);
-Route::get('admin/locations', 'DashboardController@locations')->name('dashboard.locations')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/shops', 'DashboardController@shops')->name('dashboard.shops')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/products', 'DashboardController@products')->name('dashboard.products')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/coupons', 'DashboardController@coupons')->name('dashboard.coupons')->middleware(['roleChecker:super_admin,admin,null']);
@@ -48,15 +47,6 @@ Route::post('/admin/countries/update', 'CountryController@update')->name('countr
 Route::get('/admin/countries/{country}/destroy', 'CountryController@destroy')->name('countries.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
 # End Country Controller
 
-
-# Strat Location COntroller
-// -- -- -- -- -- -- -- -- Below five routes in Dashboard
-Route::get('/admin/locations/add', 'LocationController@add')->name('locations.add')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
-Route::post('/admin/locations/store', 'LocationController@store')->name('locations.store')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
-Route::get('/admin/locations/{location}/edit', 'LocationController@edit')->name('locations.edit')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
-Route::post('/admin/locations/update', 'LocationController@update')->name('locations.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
-Route::get('/admin/locations/{location}/destroy', 'LocationController@destroy')->name('locations.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
-# End Location Controller
 
 
 # Start Product Controller

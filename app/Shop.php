@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Shop extends Model
 {
-    protected $fillable = ['name', 'is_active', 'description', 'location_id'];
+    protected $fillable = ['name', 'is_active', 'description', 'address', 'country_id'];
 
     public function product()
     {
@@ -18,8 +18,13 @@ class Shop extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function location()    //user --> seller
+    // public function location()    //user --> seller
+    // {
+    //     return $this->belongsTo(Location::class, 'location_id');
+    // }
+
+    public function country()
     {
-        return $this->belongsTo(Location::class, 'location_id');
+        return $this->belongsTo(Country::class, 'country_id');
     }
 }

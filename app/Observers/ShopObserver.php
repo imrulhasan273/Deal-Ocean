@@ -47,7 +47,7 @@ class ShopObserver
                     $shop->seller->role()->attach($nextRole);
                 }
             } else {
-                dd('shop change to inactive');
+                // dd('shop change to inactive');
             }
         }
     }

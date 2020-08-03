@@ -36,8 +36,9 @@ class ShopController extends Controller
     {
         $regions = Region::all();
         $countries = Country::all();
-        $locations = Location::all();
-        return view('shops.create', compact('regions', 'countries', 'locations'));
+        return view('shops.create', compact('regions', 'countries'));
+
+        # findCountry is used in this function
     }
 
     # ----=================---------------------------
@@ -56,17 +57,21 @@ class ShopController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
 
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'description' => 'required',
+            'country' => 'required',
+            'address' => 'required'
         ]);
 
         //Save to db
         $shop = auth()->user()->shop()->create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'location_id' => $request->input('location')
+            'country_id' => $request->input('country'),
+            'address' => $request->input('address')
         ]);
 
         //send mail to admin
@@ -101,9 +106,9 @@ class ShopController extends Controller
         $this->authorize('edit', $shop);
         # ---------------------------
 
-        $locations = Location::all();
+        $countries = Country::all();
 
-        return view('dashboard.shops.edit', compact(['shop', 'locations']));
+        return view('dashboard.shops.edit', compact(['shop', 'countries']));
     }
 
 
@@ -121,7 +126,8 @@ class ShopController extends Controller
             $updatingShop->update([
                 'is_active' => $request->is_active,
                 'description' => $request->description,
-                'location_id' => $request->location
+                'address' => $request->address,
+                'country_id' => $request->country
             ]);
         }
 
