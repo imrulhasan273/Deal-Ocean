@@ -145,6 +145,7 @@ class ShopController extends Controller
     {
         $prevRole = Role::where('name', 'seller')->first();
         $nextRole = Role::where('name', 'customer')->first();
+
         $det = $shop->seller->role()->detach($prevRole);
         if ($det) {
             $shop->seller->role()->attach($nextRole);

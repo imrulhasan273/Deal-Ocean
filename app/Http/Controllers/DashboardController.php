@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Role;
 use App\Shop;
+use App\User;
 use App\Order;
 use App\Coupon;
 use App\Region;
@@ -27,6 +29,13 @@ class DashboardController extends Controller
         return view('dashboard.index');
     }
 
+    public function users()
+    {
+        $users = User::all();
+
+        return view('dashboard.users', compact('users'));
+    }
+
     public function regions()
     {
         $regions = Region::all();
@@ -41,12 +50,7 @@ class DashboardController extends Controller
 
         return view('dashboard.countries', compact('countries'));
     }
-    public function locations()
-    {
-        $locations = Location::all();
 
-        return view('dashboard.locations', compact('locations'));
-    }
     public function shops()
     {
         # $shops = Shop::all();

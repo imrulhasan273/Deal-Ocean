@@ -4031,3 +4031,19 @@ public function findCountry(Request $request)
 > Here we just get the top 100 rows. We can change the value.
 
 ---
+
+# **Role Panel**
+
+---
+
+---
+
+# **User Panel**
+
+---
+
+---
+
+# **role_user** Panel
+
+---

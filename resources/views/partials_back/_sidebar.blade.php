@@ -39,6 +39,19 @@
         </li>
 
         @if ($role == 'admin' || $role == 'super_admin')
+            @if($active=='users')
+            <li class="active ">
+            @else
+            <li>
+            @endif
+            <a class="nav-link" href="{{route('dashboard.users')}}">
+                <i class="material-icons">content_paste</i>
+                <p>User</p>
+            </a>
+            </li>
+        @endif
+
+        @if ($role == 'admin' || $role == 'super_admin')
             @if($active=='regions')
             <li class="active ">
             @else
