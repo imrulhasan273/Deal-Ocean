@@ -49,6 +49,14 @@ Route::get('/admin/countries/{country}/destroy', 'CountryController@destroy')->n
 # End Country Controller
 
 
+# Strat Location COntroller
+// -- -- -- -- -- -- -- -- Below five routes in Dashboard
+Route::get('/admin/locations/add', 'LocationController@add')->name('locations.add')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/locations/store', 'LocationController@store')->name('locations.store')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/locations/{location}/edit', 'LocationController@edit')->name('locations.edit')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/locations/update', 'LocationController@update')->name('locations.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/locations/{location}/destroy', 'LocationController@destroy')->name('locations.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+# End Location Controller
 
 
 # Start Product Controller

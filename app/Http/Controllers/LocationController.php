@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Country;
 use App\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class LocationController extends Controller
 {
@@ -27,6 +30,12 @@ class LocationController extends Controller
         //
     }
 
+    public function add()
+    {
+        $countries = Country::all();
+
+        return view('dashboard.locations.add', compact('countries'));
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +44,20 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'address' => 'required',
+            'postal_code' => 'required',
+            'country_id' => 'required'
+        ]);
+
+        //Save to db
+        $location = Location::create([
+            'address' => $request->input('address'),
+            'postal_code' => $request->input('postal_code'),
+            'country_id' => $request->input('country_id'),
+        ]);
+
+        return Redirect::route('dashboard.locations');
     }
 
     /**
@@ -57,7 +79,9 @@ class LocationController extends Controller
      */
     public function edit(Location $location)
     {
-        //
+        $countries = Country::all();
+
+        return view('dashboard.locations.edit', compact(['location', 'countries']));
     }
 
     /**
@@ -69,7 +93,16 @@ class LocationController extends Controller
      */
     public function update(Request $request, Location $location)
     {
-        //
+        $updatingLocation = Location::where('id', $request->location_id)->first();
+        if ($updatingLocation) {
+            $updatingLocation->update([
+                'address' => $request->address,
+                'postal_code' => $request->postal_code,
+                'country_id' => $request->country_id,
+            ]);
+        }
+
+        return Redirect::route('dashboard.locations');
     }
 
     /**
@@ -80,6 +113,8 @@ class LocationController extends Controller
      */
     public function destroy(Location $location)
     {
-        //
+        $deleteLocation = DB::table('locations')->where('id', $location->id)->delete();
+
+        return Redirect::route('dashboard.locations');
     }
 }

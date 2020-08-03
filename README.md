@@ -3642,3 +3642,23 @@ class OrderController extends Controller
 ### same as Coupon Panel
 
 ---
+
+---
+
+# **Country Panel**
+
+---
+
+### same as Coupon Panel
+
+---
+
+---
+
+# **Location Panel**
+
+---
+
+### same as Coupon Panel
+
+---
