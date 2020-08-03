@@ -78,7 +78,9 @@
         $(document).ready(function(){
             $(document).on('change','.RegionAjax',function(){
                 var region_id=$(this).val();
+
                 var div=$(this).parent();
+
                 var op=" ";
                 $.ajax({
                     type:'get',
@@ -89,6 +91,7 @@
                         for(var i=0;i<data.length;i++){
                         op+='<option value="'+data[i].id+'">'+data[i].name+'</option>';
                        }
+
                        div.find('.CountryAjax').html(" ");
                        div.find('.CountryAjax').append(op);
                     },

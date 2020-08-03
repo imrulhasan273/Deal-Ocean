@@ -3967,20 +3967,33 @@ Below is the Ajax Code.
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+            //below function executes if there is a change in the text field class named `RegionAjax`
             $(document).on('change','.RegionAjax',function(){
+                //take the `region_id` from this method. and .val(). -> this .val() get the value from value atttibute of the text field.
                 var region_id=$(this).val();
+                //parent of this tag..... not necessary in this code
                 var div=$(this).parent();
+                //initially `option` variable is empty. [op]
                 var op=" ";
+                //now the ajax code
                 $.ajax({
+                    //method type: get
                     type:'get',
+                    //url is given in name route.
                     url:"{{ route('countryListRoute') }}",
+                    //this is the data passing in the url to the function
                     data:{'id':region_id},
+                    //when the function return the json data successfully the json data inside the function parameter
                     success:function(data){
+                        //the options are put in the `op` variable.
                         op+='<option value="0" selected disabled>Choose Country</option>';
+                        //loop through the json data and take the id as value and name as display in the `op` variable.
                         for(var i=0;i<data.length;i++){
                         op+='<option value="'+data[i].id+'">'+data[i].name+'</option>';
                        }
+                       //let first empty the existing tag value of class named `CountryAjax`
                        div.find('.CountryAjax').html(" ");
+                       //then append the `op` variable into the `CountryAjax`
                        div.find('.CountryAjax').append(op);
                     },
                     error:function(){

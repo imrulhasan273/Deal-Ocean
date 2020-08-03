@@ -242,4 +242,33 @@
 
   });
 </script>
+
+<!--==== Start For Dynamic Dependent Dropdown ====-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(document).on('change','.RegionAjax',function(){
+            var region_id=$(this).val();
+            var div=$(this).parent();
+            var op=" ";
+            $.ajax({
+                type:'get',
+                url:"{{ route('countryListRoute') }}",
+                data:{'id':region_id},
+                success:function(data){
+                    op+='<option value="0" selected disabled>Choose Country</option>';
+                    for(var i=0;i<data.length;i++){
+                    op+='<option value="'+data[i].id+'">'+data[i].name+'</option>';
+                   }
+                   div.find('.CountryAjax').html(" ");
+                   div.find('.CountryAjax').append(op);
+                },
+                error:function(){
+                }
+            });
+        });
+    });
+</script>
+<!--==== End For Dynamic Dependent Dropdown ====-->
+
 </html>
