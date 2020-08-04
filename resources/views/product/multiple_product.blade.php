@@ -21,25 +21,26 @@
                 <div class="filter-widget">
                     <h2 class="fw-title">Categories</h2>
                     <ul class="category-menu">
-                        <li><a href="#">Woman wear</a>
+
+                        @foreach ($categories as $category)
+                        <li><a href="{{route('product.products',$category->id)}}">{{$category->name}}</a>
                             <ul class="sub-menu">
-                                <li><a href="#">Midi Dresses <span>(2)</span></a></li>
-                                <li><a href="#">Maxi Dresses<span>(56)</span></a></li>
-                                <li><a href="#">Prom Dresses<span>(36)</span></a></li>
-                                <li><a href="#">Little Black Dresses <span>(27)</span></a></li>
-                                <li><a href="#">Mini Dresses<span>(19)</span></a></li>
+                                @php
+                                    $subCategories = App\Category::where('parent_id',$category->id)->get();
+                                @endphp
+                                @foreach ($subCategories as $subCategory)
+                                <li><a href="{{route('product.products',$subCategory->id)}}">{{$subCategory->name}}<span>(2)</span></a></li>
+                                @endforeach
                             </ul>
                         </li>
-                        <li><a href="#">Man Wear</a>
+                        @endforeach
+
+                        {{-- <li><a href="">Parent Category</a>
                             <ul class="sub-menu">
-                                <li><a href="#">Midi Dresses <span>(2)</span></a></li>
-                                <li><a href="#">Maxi Dresses<span>(56)</span></a></li>
-                                <li><a href="#">Prom Dresses<span>(36)</span></a></li>
-                            </ul></li>
-                        <li><a href="#">Children</a></li>
-                        <li><a href="#">Bags & Purses</a></li>
-                        <li><a href="#">Eyewear</a></li>
-                        <li><a href="#">Footwear</a></li>
+                                <li><a href="#">Child Category<span>(2)</span></a></li>
+                            </ul>
+                        </li> --}}
+
                     </ul>
                 </div>
                 <div class="filter-widget mb-0">

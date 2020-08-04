@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Banner;
+use App\Category;
 use App\Slider;
 use App\Product;
 use SliderSeeder;
@@ -37,7 +38,10 @@ class HomeController extends Controller
         $res = preg_split('/\s+/', $cartItems);
         $itemCount = count($res) - 1;
 
-        return view('home', compact('products', 'sliders', 'banners', 'itemCount'));
+        $categories = Category::where('parent_id', 0)->get();
+
+
+        return view('home', compact('products', 'sliders', 'banners', 'itemCount', 'categories'));
     }
     public function contact()
     {

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class CategoryController extends Controller
 {
@@ -27,6 +29,11 @@ class CategoryController extends Controller
         //
     }
 
+    public function add()
+    {
+        $categories = Category::all();
+        return view('dashboard.categories.add', compact('categories'));
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +42,28 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request);
+        $request->validate([
+            'parent_id' => 'required',
+            'name' => 'required',
+            'slug' => 'required'
+        ]);
+
+        if ($request->parent_id == 'null') {
+            $parentID = 0;
+        } else {
+            $parentID = $request->parent_id;
+        }
+
+        //Save to db
+        $category = Category::create([
+            'parent_id' =>  $parentID,
+            'name' => $request->input('name'),
+            'slug' => $request->input('slug'),
+
+        ]);
+
+        return Redirect::route('dashboard.categories');
     }
 
     /**
@@ -57,7 +85,8 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        $categories = Category::all();
+        return view('dashboard.categories.edit', compact(['category', 'categories']));
     }
 
     /**
@@ -69,7 +98,24 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+
+
+        if ($request->parent_id == 'null') {
+            $parentID = 0;
+        } else {
+            $parentID = $request->parent_id;
+        }
+
+        $updatingCategory = Category::where('id', $request->id)->first();
+        if ($updatingCategory) {
+            $updatingCategory->update([
+                'parent_id' =>  $parentID,
+                'name' => $request->name,
+                'slug' => $request->slug,
+            ]);
+        }
+
+        return Redirect::route('dashboard.categories');
     }
 
     /**
@@ -80,6 +126,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $deleteCategory = DB::table('categories')->where('id', $category->id)->delete();
+
+        return Redirect::route('dashboard.categories');
     }
 }

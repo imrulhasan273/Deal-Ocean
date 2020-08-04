@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Shop;
 use App\Product;
+use App\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -18,9 +19,11 @@ class ProductController extends Controller
         return view('product.single_product');
     }
 
-    public function products()
+    public function products(Product $product)
     {
-        return view('product.multiple_product');
+        $categories = Category::where('parent_id', $product->id)->get();
+
+        return view('product.multiple_product', compact('categories'));
     }
     /**
      * Display a listing of the resource.

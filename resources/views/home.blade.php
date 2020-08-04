@@ -70,6 +70,8 @@
 	<section class="product-filter-section">
 		<div class="container">
 
+
+
 			<div class="section-title">
 				<h2>BROWSE MORE PRODUCTS</h2>
 			</div>

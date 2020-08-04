@@ -45,8 +45,34 @@
             <li>
             @endif
             <a class="nav-link" href="{{route('dashboard.users')}}">
-                <i class="material-icons">content_paste</i>
+                <i class="material-icons">people</i>
                 <p>User</p>
+            </a>
+            </li>
+        @endif
+
+        @if ($role == 'admin' || $role == 'super_admin')
+            @if($active=='categories')
+            <li class="active ">
+            @else
+            <li>
+            @endif
+            <a class="nav-link" href="{{route('dashboard.categories')}}">
+                <i class="material-icons">category</i>
+                <p>Product Category</p>
+            </a>
+            </li>
+        @endif
+
+        @if ($role == 'admin' || $role == 'super_admin')
+            @if($active=='users')
+            <li class="active ">
+            @else
+            <li>
+            @endif
+            <a class="nav-link" href="">
+                <i class="material-icons">category</i>
+                <p>Product Sub-Category</p>
             </a>
             </li>
         @endif
@@ -58,7 +84,7 @@
             <li>
             @endif
             <a class="nav-link" href="{{route('dashboard.roles')}}">
-                <i class="material-icons">content_paste</i>
+                <i class="material-icons">psychology</i>
                 <p>Role</p>
             </a>
             </li>
@@ -71,7 +97,7 @@
             <li>
             @endif
             <a class="nav-link" href="{{route('dashboard.sliders')}}">
-                <i class="material-icons">content_paste</i>
+                <i class="material-icons">slideshow</i>
                 <p>Slider</p>
             </a>
             </li>
@@ -84,7 +110,7 @@
             <li>
             @endif
             <a class="nav-link" href="{{route('dashboard.regions')}}">
-                <i class="material-icons">content_paste</i>
+                <i class="material-icons">home_work</i>
                 <p>Region</p>
             </a>
             </li>
@@ -97,7 +123,7 @@
             <li>
             @endif
             <a class="nav-link" href="{{route('dashboard.countries')}}">
-                <i class="material-icons">content_paste</i>
+                <i class="material-icons">home</i>
                 <p>Country</p>
             </a>
             </li>
@@ -109,7 +135,7 @@
         <li>
         @endif
           <a class="nav-link" href="{{route('dashboard.shops')}}">
-            <i class="material-icons">content_paste</i>
+            <i class="material-icons">storefront</i>
             <p>Shop</p>
           </a>
         </li>
@@ -120,7 +146,7 @@
         <li>
         @endif
           <a class="nav-link" href="{{route('dashboard.products')}}">
-            <i class="material-icons">content_paste</i>
+            <i class="material-icons">luggage</i>
             <p>Product</p>
           </a>
         </li>
@@ -132,7 +158,7 @@
             <li>
             @endif
             <a class="nav-link" href="{{route('dashboard.coupons')}}">
-                <i class="material-icons">content_paste</i>
+                <i class="material-icons">favorite_border</i>
                 <p>Coupon</p>
             </a>
             </li>
@@ -144,7 +170,7 @@
         <li>
         @endif
           <a class="nav-link" href="{{route('dashboard.orders')}}">
-            <i class="material-icons">content_paste</i>
+            <i class="material-icons">add_shopping_cart</i>
             <p>Order</p>
           </a>
         </li>

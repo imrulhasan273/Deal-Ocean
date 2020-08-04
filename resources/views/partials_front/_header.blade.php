@@ -52,32 +52,33 @@
     <nav class="main-navbar">
         <div class="container">
             <!-- menu -->
-            <ul class="main-menu">
+            <ul style="width: 100%" class="main-menu">
                 <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="#">Women</a></li>
-                <li><a href="#">Men</a></li>
-                <li><a href="#">Jewelry
-                    <span class="new">New</span>
-                </a></li>
-                <li><a href="#">Shoes</a>
-                    <ul class="sub-menu">
-                        <li><a href="#">Sneakers</a></li>
-                        <li><a href="#">Sandals</a></li>
-                        <li><a href="#">Formal Shoes</a></li>
-                        <li><a href="#">Boots</a></li>
-                        <li><a href="#">Flip Flops</a></li>
-                    </ul>
-                </li>
                 <li><a href="#">Pages</a>
                     <ul class="sub-menu">
                         <li><a href="{{ route('product.details') }}">Product Page</a></li>
-                        <li><a href="{{ route('product.products') }}">Category Page</a></li>
+                        {{-- <li><a href="{{ route('product.products') }}">Category Page</a></li> --}}
                         <li><a href="{{ route('cart.index')}}">Cart Page</a></li>
-                        {{-- <li><a href="{{ route('cart.checkout')}}">Checkout Page</a></li> --}}
                         <li><a href="{{route('contact')}}">Contact Page</a></li>
                     </ul>
                 </li>
-                <li><a href="{{ route('product.products') }}">Category</a></li>
+
+                @foreach ($categories as $category)
+                <li><a href="{{ route('product.products',$category->id) }}">{{$category->name}}</a>
+                    <ul class="sub-menu">
+                        @php
+                            $subCategories = App\Category::where('parent_id',$category->id)->get();
+                        @endphp
+                        @foreach ($subCategories as $subCategory)
+                        <li><a href="{{route('product.products',$subCategory->id)}}">{{$subCategory->name}}<span></span></a></li>
+                        @endforeach
+                    </ul>
+                </li>
+                @endforeach
+
+                {{-- @foreach ($categories as $category)
+                    <li><a href="{{ route('product.products',$category->id) }}">{{$category->name}}</a></li>
+                @endforeach --}}
             </ul>
         </div>
     </nav>

@@ -29,8 +29,17 @@ Route::get('admin/map', 'DashboardController@map')->name('dashboard.map')->middl
 Route::get('admin/notification', 'DashboardController@notification')->name('dashboard.notification')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/profile', 'DashboardController@profile')->name('dashboard.profile')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/typography', 'DashboardController@typography')->name('dashboard.typography')->middleware(['roleChecker:super_admin,admin,seller']);
+Route::get('admin/categories', 'DashboardController@categories')->name('dashboard.categories')->middleware(['roleChecker:super_admin,admin,null']);
 # End Admin Routes | Dashboard
 
+# Strat Category COntroller
+// -- -- -- -- -- -- -- -- Below five routes in Dashboard
+Route::get('/admin/categories/add', 'CategoryController@add')->name('categories.add')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/categories/store', 'CategoryController@store')->name('categories.store')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/categories/{category}/edit', 'CategoryController@edit')->name('categories.edit')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/categories/update', 'CategoryController@update')->name('categories.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/categories/{category}/destroy', 'CategoryController@destroy')->name('categories.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+# End Category Controller
 
 # Strat User COntroller
 // -- -- -- -- -- -- -- -- Below five routes in Dashboard
@@ -81,7 +90,7 @@ Route::get('/admin/countries/{country}/destroy', 'CountryController@destroy')->n
 
 # Start Product Controller
 Route::get('/details', 'ProductController@details')->name('product.details');
-Route::get('/products', 'ProductController@products')->name('product.products');
+Route::get('/products/{product}', 'ProductController@products')->name('product.products');
 // -- -- -- -- -- -- -- -- Below five routes in Dashboard
 Route::get('/admin/products/add', 'ProductController@add')->name('products.add')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
 Route::post('/admin/products/store', 'ProductController@store')->name('products.store')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin

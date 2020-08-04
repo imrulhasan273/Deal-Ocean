@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Role;
 use App\Shop;
 use App\User;
@@ -37,6 +38,11 @@ class DashboardController extends Controller
         return view('dashboard.users', compact('users'));
     }
 
+    public function categories()
+    {
+        $categories = Category::all();
+        return view('dashboard.categories', compact('categories'));
+    }
 
     public function roles()
     {
