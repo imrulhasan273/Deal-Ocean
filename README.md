@@ -4047,3 +4047,11 @@ public function findCountry(Request $request)
 ## Completed
 
 ---
+
+# **Slider Panel**
+
+---
+
+## Completed
+
+---

@@ -8,6 +8,7 @@ use App\User;
 use App\Order;
 use App\Coupon;
 use App\Region;
+use App\Slider;
 use App\Country;
 use App\Product;
 use App\Location;
@@ -44,11 +45,16 @@ class DashboardController extends Controller
         return view('dashboard.roles', compact('roles'));
     }
 
+    public function sliders()
+    {
+        $sliders = Slider::all();
+
+        return view('dashboard.sliders', compact('sliders'));
+    }
+
     public function regions()
     {
         $regions = Region::all();
-
-        // dd($regions);
 
         return view('dashboard.regions', compact('regions'));
     }

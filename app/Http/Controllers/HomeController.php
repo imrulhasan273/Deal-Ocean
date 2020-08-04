@@ -28,7 +28,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $sliders = Slider::take(3)->get();
+        $sliders = Slider::take(5)->get();
         $banners = Banner::take(1)->get();
         $products = Product::take(12)->get();
 

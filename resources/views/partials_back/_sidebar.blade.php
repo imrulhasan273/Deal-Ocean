@@ -65,6 +65,19 @@
         @endif
 
         @if ($role == 'admin' || $role == 'super_admin')
+            @if($active=='sliders')
+            <li class="active ">
+            @else
+            <li>
+            @endif
+            <a class="nav-link" href="{{route('dashboard.sliders')}}">
+                <i class="material-icons">content_paste</i>
+                <p>Slider</p>
+            </a>
+            </li>
+        @endif
+
+        @if ($role == 'admin' || $role == 'super_admin')
             @if($active=='regions')
             <li class="active ">
             @else

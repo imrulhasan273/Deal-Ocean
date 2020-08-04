@@ -18,6 +18,7 @@ Route::get('admin', 'DashboardController@index')->name('dashboard.index')->middl
 Route::get('admin/regions', 'DashboardController@regions')->name('dashboard.regions')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/users', 'DashboardController@users')->name('dashboard.users')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/roles', 'DashboardController@roles')->name('dashboard.roles')->middleware(['roleChecker:super_admin,admin,null']);
+Route::get('admin/sliders', 'DashboardController@sliders')->name('dashboard.sliders')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/countries', 'DashboardController@countries')->name('dashboard.countries')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/shops', 'DashboardController@shops')->name('dashboard.shops')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/products', 'DashboardController@products')->name('dashboard.products')->middleware(['roleChecker:super_admin,admin,seller']);
@@ -48,6 +49,15 @@ Route::get('/admin/roles/{role}/edit', 'RoleController@edit')->name('roles.edit'
 Route::post('/admin/roles/update', 'RoleController@update')->name('roles.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
 Route::get('/admin/roles/{role}/destroy', 'RoleController@destroy')->name('roles.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
 # End Role Controller
+
+# Strat Slider COntroller
+// -- -- -- -- -- -- -- -- Below five routes in Dashboard
+Route::get('/admin/sliders/add', 'SliderController@add')->name('sliders.add')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/sliders/store', 'SliderController@store')->name('sliders.store')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/sliders/{slider}/edit', 'SliderController@edit')->name('sliders.edit')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/sliders/update', 'SliderController@update')->name('sliders.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/sliders/{slider}/destroy', 'SliderController@destroy')->name('sliders.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+# End Slider Controller
 
 # Strat Region COntroller
 // -- -- -- -- -- -- -- -- Below five routes in Dashboard
