@@ -4036,14 +4036,14 @@ public function findCountry(Request $request)
 
 ---
 
+## Completed
+
 ---
 
 # **User Panel**
 
 ---
 
----
-
-# **role_user** Panel
+## Completed
 
 ---

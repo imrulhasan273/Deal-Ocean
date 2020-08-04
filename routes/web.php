@@ -17,6 +17,7 @@ Route::get('/contact', 'HomeController@contact')->name('contact');
 Route::get('admin', 'DashboardController@index')->name('dashboard.index')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/regions', 'DashboardController@regions')->name('dashboard.regions')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/users', 'DashboardController@users')->name('dashboard.users')->middleware(['roleChecker:super_admin,admin,null']);
+Route::get('admin/roles', 'DashboardController@roles')->name('dashboard.roles')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/countries', 'DashboardController@countries')->name('dashboard.countries')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/shops', 'DashboardController@shops')->name('dashboard.shops')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/products', 'DashboardController@products')->name('dashboard.products')->middleware(['roleChecker:super_admin,admin,seller']);
@@ -38,6 +39,15 @@ Route::get('/admin/users/{user}/edit', 'UserController@edit')->name('users.edit'
 Route::post('/admin/users/update', 'UserController@update')->name('users.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
 Route::get('/admin/users/{user}/destroy', 'UserController@destroy')->name('users.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
 # End User Controller
+
+# Strat Role COntroller
+// -- -- -- -- -- -- -- -- Below five routes in Dashboard
+Route::get('/admin/roles/add', 'RoleController@add')->name('roles.add')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/roles/store', 'RoleController@store')->name('roles.store')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/roles/{role}/edit', 'RoleController@edit')->name('roles.edit')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::post('/admin/roles/update', 'RoleController@update')->name('roles.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+Route::get('/admin/roles/{role}/destroy', 'RoleController@destroy')->name('roles.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+# End Role Controller
 
 # Strat Region COntroller
 // -- -- -- -- -- -- -- -- Below five routes in Dashboard

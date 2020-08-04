@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class RoleController extends Controller
 {
@@ -27,6 +29,11 @@ class RoleController extends Controller
         //
     }
 
+    public function add()
+    {
+        return view('dashboard.roles.add');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +42,19 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'display_name' => 'required'
+        ]);
+
+        //Save to db
+        $role = Role::create([
+            'name' => $request->input('name'),
+            'display_name' => $request->input('display_name'),
+        ]);
+
+
+        return Redirect::route('dashboard.roles');
     }
 
     /**
@@ -57,7 +76,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        //
+        return view('dashboard.roles.edit', compact(['role']));
     }
 
     /**
@@ -80,6 +99,10 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
+
+        dd('delete');
+        $deleteRole = DB::table('roles')->where('id', $role->id)->delete();
+
+        return Redirect::route('dashboard.roles');
     }
 }

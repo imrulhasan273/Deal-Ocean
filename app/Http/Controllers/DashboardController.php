@@ -36,6 +36,14 @@ class DashboardController extends Controller
         return view('dashboard.users', compact('users'));
     }
 
+
+    public function roles()
+    {
+        $roles = Role::all();
+
+        return view('dashboard.roles', compact('roles'));
+    }
+
     public function regions()
     {
         $regions = Region::all();
