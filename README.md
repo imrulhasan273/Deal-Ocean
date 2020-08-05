@@ -4055,3 +4055,69 @@ public function findCountry(Request $request)
 ## Completed
 
 ---
+
+# **Category Wise Product Filtering | My Own Unique Algorithm**
+
+---
+
+## Child Categories Filtering with parent category
+
+### Tree Example
+
+![](MARKDOWN_NOTES/table.png)
+
+> This is an example of categories table
+
+![](MARKDOWN_NOTES/algo1.png)
+
+> This is an example of tree
+
+### Simulation
+
+![](MARKDOWN_NOTES/algo2.png)
+
+> This is a simulation example when `category_id = 1` is pressed.
+
+> My task is to get all the child categories too.
+
+### Implementation
+
+```php
+$categories = Category::where('parent_id', $product->id)->get();
+
+$stack = array();
+$result = array();
+
+$catwithChildCat = $this->recursion($product->id, $categories, $stack, $result);
+
+dd($catwithChildCat);
+```
+
+> And we will get the desired array with values `[1,7,8,3,6,5,4]`
+
+```php
+function recursion($prod, $categories, $stack, $result)
+{
+    //initially $prod = prod id, $categories = Collection, $stack = [], $result = []
+    array_push($result, $prod);
+
+    foreach ($categories as $cat) {
+        array_push($stack, $cat->id);
+    }
+
+    $pop = array_pop($stack);
+    $cats = Category::where('parent_id', $pop)->get();
+    $countCats = $cats->count();
+
+    if ($stack == null && $countCats == 0) {
+        array_push($result, $pop);
+        return $result;
+    } else {
+        return $this->recursion($pop, $cats, $stack, $result);
+    }
+}
+```
+
+> This is the main algorithm for finding the child categoires withh recursive way.
+
+---

@@ -25,16 +25,13 @@ class ProductController extends Controller
         $categories = Category::where('parent_id', $product->id)->get();
 
         # --------------------------------------------------------------------
+
         $stack = array();
+        $result = array();
 
+        $catwithChildCat = $this->recursion($product->id, $categories, $stack, $result);
 
-
-
-        foreach ($categories as $cat) {
-            array_push($stack, $cat->id);
-        }
-
-        dd($stack);
+        dd($catwithChildCat);
 
         #----------------------------------------------------------------------
 
@@ -45,6 +42,27 @@ class ProductController extends Controller
 
 
         return view('product.multiple_product', compact('categories'));
+    }
+
+    function recursion($prod, $categories, $stack, $result)
+    {
+        //initially $prod = prod id, $categories = Collection, $stack = [], $result = []
+        array_push($result, $prod);
+
+        foreach ($categories as $cat) {
+            array_push($stack, $cat->id);
+        }
+
+        $pop = array_pop($stack);
+        $cats = Category::where('parent_id', $pop)->get();
+        $countCats = $cats->count();
+
+        if ($stack == null && $countCats == 0) {
+            array_push($result, $pop);
+            return $result;
+        } else {
+            return $this->recursion($pop, $cats, $stack, $result);
+        }
     }
 
     /**
