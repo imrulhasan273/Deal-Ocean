@@ -19,12 +19,34 @@ class ProductController extends Controller
         return view('product.single_product');
     }
 
+    # For multiple products
     public function products(Product $product)
     {
         $categories = Category::where('parent_id', $product->id)->get();
 
+        # --------------------------------------------------------------------
+        $stack = array();
+
+
+
+
+        foreach ($categories as $cat) {
+            array_push($stack, $cat->id);
+        }
+
+        dd($stack);
+
+        #----------------------------------------------------------------------
+
+        // dd($categories);
+
+
+        #------
+
+
         return view('product.multiple_product', compact('categories'));
     }
+
     /**
      * Display a listing of the resource.
      *
