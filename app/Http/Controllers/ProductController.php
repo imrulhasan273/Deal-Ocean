@@ -24,27 +24,27 @@ class ProductController extends Controller
     {
         $categories = Category::where('parent_id', $product->id)->get();
 
-        # --------------------------------------------------------------------
-
+        # ----------------
         $stack = array();
         $result = array();
 
-        $catwithChildCat = $this->recursion($product->id, $categories, $stack, $result);
+        $catwithChildCat = $this->CategoryRecursion($product->id, $categories, $stack, $result);
+        $products = DB::table('products')->whereIn('category_id', $catwithChildCat)->paginate(12);
 
-        dd($catwithChildCat);
-
-        #----------------------------------------------------------------------
-
-        // dd($categories);
-
-
-        #------
-
-
-        return view('product.multiple_product', compact('categories'));
+        return view('product.multiple_product', compact('categories', 'products'));
     }
 
-    function recursion($prod, $categories, $stack, $result)
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $products = Product::where('name', 'LIKE', "%$query%")->paginate(12);
+
+        $categories = Category::where('parent_id', 0)->get();
+
+        return view('product.multiple_product', compact('categories', 'products'));
+    }
+
+    function CategoryRecursion($prod, $categories, $stack, $result)
     {
         //initially $prod = prod id, $categories = Collection, $stack = [], $result = []
         array_push($result, $prod);
@@ -61,7 +61,7 @@ class ProductController extends Controller
             array_push($result, $pop);
             return $result;
         } else {
-            return $this->recursion($pop, $cats, $stack, $result);
+            return $this->CategoryRecursion($pop, $cats, $stack, $result);
         }
     }
 
@@ -90,8 +90,9 @@ class ProductController extends Controller
         $shops = Shop::all();
         $user_id = Auth::user()->id;
         $role = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
+        $categories = Category::all();
 
-        return view('dashboard.products.add', compact('shops', 'user_id', 'role'));
+        return view('dashboard.products.add', compact('shops', 'user_id', 'role', 'categories'));
     }
 
     /**
@@ -104,6 +105,7 @@ class ProductController extends Controller
     {
         $request->validate([
             'product_name' => 'required',
+            'category_id' => 'required',
             'product_price' => 'required',
             'product_description' => 'required',
             'shop_id' => 'required',
@@ -114,6 +116,7 @@ class ProductController extends Controller
 
         $addProduct = Product::create([
             'name' => $request->input('product_name'),
+            'category_id' => $request->input('category_id'),
             'price' => $request->input('product_price'),
             'description' => $request->input('product_description'),
             'shop_id' => $request->input('shop_id'),
@@ -143,7 +146,8 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         // dd('edit');
-        return view('dashboard.products.edit', compact(['product']));
+        $categories = Category::all();
+        return view('dashboard.products.edit', compact(['product', 'categories']));
     }
 
     /**
@@ -166,6 +170,7 @@ class ProductController extends Controller
             if ($updatingProduct) {
                 $updatingProduct->update([
                     'name' => $request->product_name,
+                    'category_id' => $request->category_id,
                     'price' => $request->product_price,
                     'description' => $request->product_description,
                     'cover_img' => $imageName,
@@ -181,6 +186,7 @@ class ProductController extends Controller
         if ($updatingProduct) {
             $updatingProduct->update([
                 'name' => $request->product_name,
+                'category_id' => $request->category_id,
                 'price' => $request->product_price,
                 'description' => $request->product_description,
             ]);

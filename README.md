@@ -4082,15 +4082,22 @@ public function findCountry(Request $request)
 
 ### Implementation
 
+`ProductController.php`
+
 ```php
-$categories = Category::where('parent_id', $product->id)->get();
+public function products(Product $product)
+{
+    $categories = Category::where('parent_id', $product->id)->get();
 
-$stack = array();
-$result = array();
+    $stack = array();
+    $result = array();
 
-$catwithChildCat = $this->recursion($product->id, $categories, $stack, $result);
+    $catwithChildCat = $this->CategoryRecursion($product->id, $categories, $stack, $result);
 
-dd($catwithChildCat);
+    $products = DB::table('products')->whereIn('category_id', $catwithChildCat)->paginate(12);
+
+    return view('product.multiple_product', compact('categories', 'products'));
+}
 ```
 
 > And we will get the desired array with values `[1,7,8,3,6,5,4]`
@@ -4119,5 +4126,98 @@ function recursion($prod, $categories, $stack, $result)
 ```
 
 > This is the main algorithm for finding the child categoires withh recursive way.
+
+---
+
+# iseed | package | Database Backup
+
+---
+
+```cmd
+~$ composer require orangehill/iseed
+~$ php artisan iseed categories --force
+```
+
+---
+
+# **Shopping Cart Product Count in Header**
+
+---
+
+`_header.blade.php`
+
+```php
+@php
+    $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');
+    $res = preg_split('/\s+/', $cartItems);
+    $itemCount = count($res) - 1;
+@endphp
+<div class="up-item">
+    <div class="shopping-card">
+    <i class="flaticon-bag"></i>
+        <span>{{ $itemCount ?? '' }}</span>
+    </div>
+    <a href="{{ route('cart.index')}}">Shopping Cart</a>
+</div>
+```
+
+---
+
+# **Category with Sub-Category View**
+
+---
+
+`multiple_product.blade.php`
+
+```php
+@foreach ($categories as $category)
+    <li><a href="{{route('product.products',$category->id)}}">{{$category->name}}</a>
+        <ul class="sub-menu">
+        @php
+            $subCategories = App\Category::where('parent_id',$category->id)->get();
+        @endphp
+        @foreach ($subCategories as $subCategory)
+            <li><a href="{{route('product.products',$subCategory->id)}}">{{$subCategory->name}}<span>(2)</span></a></li>
+        @endforeach
+        </ul>
+    </li>
+@endforeach
+```
+
+---
+
+# **Search Functionality**
+
+---
+
+`views/partial_front/_header.blade.php`
+
+```php
+<form class="header-search-form" action="{{route('products.search')}}" method="GET">
+    @csrf
+    <input name="query" type="text" placeholder="Search on Deal Ocean ....">
+    <button type="submit" name="submit"><i class="flaticon-search"></i></button>
+</form>
+```
+
+`web.php`
+
+```php
+Route::get('/products/search', 'ProductController@search')->name('products.search');
+```
+
+`ProductController.php`
+
+```php
+public function search(Request $request)
+{
+    $query = $request->input('query');
+    $products = Product::where('name', 'LIKE', "%$query%")->paginate(12);
+
+    $categories = Category::where('parent_id', 0)->get();
+
+    return view('product.multiple_product', compact('categories', 'products'));
+}
+```
 
 ---

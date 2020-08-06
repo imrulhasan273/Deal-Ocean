@@ -28,6 +28,9 @@ $authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
                     Name
                 </th>
                 <th>
+                    Category
+                </th>
+                <th>
                     Description
                 </th>
                 <th>
@@ -60,6 +63,9 @@ $authRole = Auth::check() ? Auth::user()->role->pluck('name')->toArray() : [];
                         </td>
                         <td>
                             {{$product->name}}
+                        </td>
+                        <td>
+                            {{$product->category->name}}
                         </td>
                         <td>
                             {{$product->description}}

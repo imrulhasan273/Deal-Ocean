@@ -10,14 +10,20 @@
                     </a>
                 </div>
                 <div class="col-xl-6 col-lg-5">
-                    <form class="header-search-form">
-                        <input type="text" placeholder="Search on divisima ....">
-                        <button><i class="flaticon-search"></i></button>
+                    <form class="header-search-form" action="{{route('products.search')}}" method="GET">
+                        @csrf
+                        <input name="query" type="text" placeholder="Search on Deal Ocean ....">
+                        <button type="submit" name="submit"><i class="flaticon-search"></i></button>
                     </form>
+
                 </div>
                 <div class="col-xl-4 col-lg-5">
                     <div style="text-align: right" class="user-panel">
-
+                        @php
+                            $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');
+                            $res = preg_split('/\s+/', $cartItems);
+                            $itemCount = count($res) - 1;
+                        @endphp
                         <div class="up-item">
                             <div class="shopping-card">
                                 <i class="flaticon-bag"></i>
@@ -57,24 +63,28 @@
                 <li><a href="#">Pages</a>
                     <ul class="sub-menu">
                         <li><a href="{{ route('product.details') }}">Product Page</a></li>
-                        {{-- <li><a href="{{ route('product.products') }}">Category Page</a></li> --}}
+                        {{-- <li><a href="{{ route('product.products',1) }}">Category Page</a></li> --}}
                         <li><a href="{{ route('cart.index')}}">Cart Page</a></li>
                         <li><a href="{{route('contact')}}">Contact Page</a></li>
                     </ul>
                 </li>
+                @php
+                    $categoriesH = App\Category::where('parent_id', 0)->get();
+                @endphp
 
-                @foreach ($categories as $category)
-                <li><a href="{{ route('product.products',$category->id) }}">{{$category->name}}</a>
+                @foreach ($categoriesH as $categoryH)
+                <li><a href="{{ route('product.products',$categoryH->id) }}">{{$categoryH->name}}</a>
                     <ul class="sub-menu">
                         @php
-                            $subCategories = App\Category::where('parent_id',$category->id)->get();
+                            $subCategoriesH = App\Category::where('parent_id',$categoryH->id)->get();
                         @endphp
-                        @foreach ($subCategories as $subCategory)
-                        <li><a href="{{route('product.products',$subCategory->id)}}">{{$subCategory->name}}<span></span></a></li>
+                        @foreach ($subCategoriesH as $subCategoryH)
+                        <li><a href="{{route('product.products',$subCategoryH->id)}}">{{$subCategoryH->name}}<span></span></a></li>
                         @endforeach
                     </ul>
                 </li>
                 @endforeach
+
 
                 {{-- @foreach ($categories as $category)
                     <li><a href="{{ route('product.products',$category->id) }}">{{$category->name}}</a></li>
@@ -84,3 +94,4 @@
     </nav>
 </header>
 <!-- Header section end -->
+

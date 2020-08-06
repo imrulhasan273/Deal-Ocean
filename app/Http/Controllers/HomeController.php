@@ -19,7 +19,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
+        # $this->middleware('auth');
     }
 
     /**
@@ -33,24 +33,10 @@ class HomeController extends Controller
         $banners = Banner::take(1)->get();
         $products = Product::take(12)->get();
 
-        $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');
-
-        $res = preg_split('/\s+/', $cartItems);
-        $itemCount = count($res) - 1;
-
-        $categories = Category::where('parent_id', 0)->get();
-
-
-        return view('home', compact('products', 'sliders', 'banners', 'itemCount', 'categories'));
+        return view('home', compact('products', 'sliders', 'banners'));
     }
     public function contact()
     {
-        //Item Count in Cart
-        $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');
-        $res = preg_split('/\s+/', $cartItems);
-        $itemCount = count($res) - 1;
-        //-------------------
-
-        return view('contact', compact('itemCount'));
+        return view('contact');
     }
 }

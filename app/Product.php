@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['name', 'price', 'description', 'shop_id', 'cover_img'];
+    protected $fillable = ['name', 'category_id', 'price', 'description', 'shop_id', 'cover_img'];
 
     public function order()
     {
@@ -16,5 +16,10 @@ class Product extends Model
     public function shop()
     {
         return $this->belongsTo(Shop::class, 'shop_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }

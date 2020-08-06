@@ -26,6 +26,17 @@ $active='products';
 
                 <div class="col-md-6">
                     <div class="form-group">
+                        <label class="bmd-label-floating">Category</label>
+                        <select name="category_id" class="form-control">
+                            @foreach ($categories as $category)
+                                <option style="color: rgb(19, 146, 219)" value="{{$category->id}}">{{$category->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
                         <label class="bmd-label-floating"> Price</label>
                         <input name="product_price" value="" type="text" class="form-control">
                     </div>

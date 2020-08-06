@@ -89,6 +89,7 @@ Route::get('/admin/countries/{country}/destroy', 'CountryController@destroy')->n
 
 
 # Start Product Controller
+Route::get('/products/search', 'ProductController@search')->name('products.search');
 Route::get('/details', 'ProductController@details')->name('product.details');
 Route::get('/products/{product}', 'ProductController@products')->name('product.products');
 // -- -- -- -- -- -- -- -- Below five routes in Dashboard
