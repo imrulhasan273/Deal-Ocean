@@ -104,6 +104,35 @@
     <!--==== End For Dynamic Dependent Dropdown ====-->
 
 
+    <!---- ==== Start Dynamic Cart Item Count =======----->
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+        let x;
+        <?php
+             $maxP = count($products);
+             for($i = 0;$i<$maxP;$i++)
+             { ?>
+                $('#addCart<?php echo $i; ?>').click(function() {
+                    x = pro_id<?php echo $i;?> = $('#pro_id<?php echo $i;?>').val();
+                    var ID = x;
+                    $.ajax({
+                        type:'get',
+                        data:{'id':ID},
+                        url:"{{ route('ajaxcart') }}",
+                        success:function(data){
+                            $('.itemCountAjax').text(data);
+                        },
+                        error:function(){
+                        }
+                    });
+                });
+       <?php } ?>
+        });
+    </script>
+
+    <!---- ==== End Dynamic Cart Item Count =======----->
+
 
 	</body>
 </html>

@@ -4330,3 +4330,118 @@ public function githubRedirect()
 ---
 
 ---
+
+---
+
+# **Add to Cart | JQuery - Ajax**
+
+---
+
+`home.blade.php`
+
+```php
+<div class="row">
+    @php
+        $countP = 0;
+    @endphp
+    @foreach ($products as $product)
+
+    <input type="text" id="pro_id<?php echo $countP;?>" value="{{$product->id}}" hidden> <!-- added -->
+
+    <div class="col-lg-3 col-sm-6">
+        <div class="product-item">
+            <div class="pi-pic">
+                <img src="{{asset('/storage/products/'.$product->cover_img)}}" alt="">
+                <div class="pi-links">
+                    <a href="{{ route('cart.add', $product->id) }}" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
+                    <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
+                </div>
+            </div>
+            <div class="pi-text">
+                <h6>${{ $product->price }}</h6>
+                <p>{{ $product->name }} </p>
+            </div>
+            {{--  --}}
+            <button class="add-card cart_item_count" id="addCart<?php echo $countP;?>">Add</button>
+            {{--  --}}
+        </div>
+    </div>
+    @php
+        $countP++;
+    @endphp
+    @endforeach
+</div>
+```
+
+```php
+<button class="add-card cart_item_count" id="addCart<?php echo $countP;?>">Add</button>
+```
+
+`frontend.blade.php`
+
+```php
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+        $(document).ready(function(){
+        let x;
+        <?php
+             $maxP = count($products);
+             for($i = 0;$i<$maxP;$i++)
+             { ?>
+                $('#addCart<?php echo $i; ?>').click(function() {
+                    x = pro_id<?php echo $i;?> = $('#pro_id<?php echo $i;?>').val();
+                    var ID = x;
+                    $.ajax({
+                        type:'get',
+                        data:{'id':ID},
+                        url:"{{ route('ajaxcart') }}",
+                        success:function(data){
+                            $('.itemCountAjax').text(data);
+                        },
+                        error:function(){
+                        }
+                    });
+                });
+       <?php } ?>
+        });
+</script>
+```
+
+`web.php`
+
+```php
+Route::get('/cart/add', 'CartController@ajaxAddCart')->name('ajaxcart')->middleware('auth');
+```
+
+`CartController.php`
+
+```php
+    public function ajaxAddCart(Request $request)
+    {
+        #----===Below is the code to add the item to cart ===----
+        $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');
+
+        if ($cartItems == NULL) {
+            $cartItems = " " . $request->id;
+        } else {
+            $cartItems = $cartItems . " " . $request->id;
+        }
+
+        $update_cart = DB::table('users')
+            ->where('id', auth()->id())
+            ->update(['cartitems' => $cartItems]);
+
+
+        #--=== Below is the code to count number of items in cart ===---
+        $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');
+        $res = preg_split('/\s+/', $cartItems);
+        $itemCount = count($res) - 1;
+
+        $data = $itemCount;
+
+        return response()->json($data);
+    }
+```
+
+---

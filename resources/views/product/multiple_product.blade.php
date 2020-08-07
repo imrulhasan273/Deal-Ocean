@@ -146,7 +146,13 @@
 
             <div class="col-lg-9  order-1 order-lg-2 mb-5 mb-lg-0">
                 <div class="row">
+                    @php
+                        $countP = 0;
+                    @endphp
                     @foreach ($products as $product)
+
+                    <input type="text" id="pro_id<?php echo $countP;?>" value="{{$product->id}}" hidden> <!-- added -->
+
                     <div class="col-lg-4 col-sm-6">
                         <div class="product-item">
                             <div class="pi-pic">
@@ -161,8 +167,14 @@
                                 <h6>${{ $product->price }}</h6>
                                 <p>{{ $product->name }} </p>
                             </div>
+                            {{--  --}}
+                            <button class="add-card cart_item_count" id="addCart<?php echo $countP;?>">Add</button>
+                            {{--  --}}
                         </div>
                     </div>
+                    @php
+                        $countP++;
+                    @endphp
                     @endforeach
 
                     <div>

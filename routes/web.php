@@ -103,6 +103,8 @@ Route::get('/admin/products/{product}/destroy', 'ProductController@destroy')->na
 # End Product Controller
 
 
+# AJax Method to Update cart
+Route::get('/cart/add', 'CartController@ajaxAddCart')->name('ajaxcart')->middleware('auth');
 # Start Cart Controller
 Route::get('/add-to-cart/{product}', 'CartController@add')->name('cart.add')->middleware('auth');
 Route::get('/cart', 'CartController@index')->name('cart.index')->middleware('auth');
@@ -156,6 +158,7 @@ Route::get('/admin/coupons/{coupon}/destroy', 'CouponController@destroy')->name(
 # Start Ajax Request to find country for a selected region
 Route::get('/shops/findCountry', 'ShopController@findCountry')->name('countryListRoute');
 # End Ajax Request to find country for a selected region
+
 
 
 

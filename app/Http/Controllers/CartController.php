@@ -9,6 +9,32 @@ use Illuminate\Support\Facades\Redirect;
 
 class CartController extends Controller
 {
+    public function ajaxAddCart(Request $request)
+    {
+        #----===Below is the code to add the item to cart ===----
+        $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');
+
+        if ($cartItems == NULL) {
+            $cartItems = " " . $request->id;
+        } else {
+            $cartItems = $cartItems . " " . $request->id;
+        }
+
+        $update_cart = DB::table('users')
+            ->where('id', auth()->id())
+            ->update(['cartitems' => $cartItems]);
+
+
+        #--=== Below is the code to count number of items in cart ===---
+        $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');
+        $res = preg_split('/\s+/', $cartItems);
+        $itemCount = count($res) - 1;
+
+        $data = $itemCount;
+
+        return response()->json($data);
+    }
+
     public function add($product)
     {
         $cartItems = DB::table('users')->where('id', auth()->id())->value('cartitems');

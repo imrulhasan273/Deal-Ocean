@@ -27,7 +27,8 @@
                         <div class="up-item">
                             <div class="shopping-card">
                                 <i class="flaticon-bag"></i>
-                                <span>{{ $itemCount ?? '' }}</span>
+                                <div></div>
+                                <span class="itemCountAjax">{{ $itemCount ?? '' }}</span>
                             </div>
                             <a href="{{ route('cart.index')}}">Shopping Cart</a>
                         </div>

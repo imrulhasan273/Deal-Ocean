@@ -87,7 +87,13 @@
             </ul>
 
 			<div class="row">
+                @php
+                    $countP = 0;
+                @endphp
                 @foreach ($products as $product)
+
+                <input type="text" id="pro_id<?php echo $countP;?>" value="{{$product->id}}" hidden> <!-- added -->
+
                 <div class="col-lg-3 col-sm-6">
 					<div class="product-item">
 						<div class="pi-pic">
@@ -100,12 +106,16 @@
 						<div class="pi-text">
                             <h6>${{ $product->price }}</h6>
 							<p>{{ $product->name }} </p>
-						</div>
+                        </div>
+                        {{--  --}}
+                        <button class="add-card cart_item_count" id="addCart<?php echo $countP;?>">Add</button>
+                        {{--  --}}
 					</div>
-				</div>
+                </div>
+                @php
+                    $countP++;
+                @endphp
                 @endforeach
-
-
             </div>
 
 			<div class="text-center pt-5">
@@ -118,3 +128,5 @@
     @include('partials_front._banner')
 
 @endsection
+
+
