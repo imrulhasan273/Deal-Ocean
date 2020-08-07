@@ -48,30 +48,34 @@
 						<i class="zmdi zmdi-font"></i>
 					</span>
 
-					<div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
-                        <label for="">Email</label>
-                        <input id="email" class="input100 @error('email') is-invalid @enderror" type="email" name="email">
-                        @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-						{{-- <span class="focus-input100" data-placeholder="Email"></span> --}}
-					</div>
+                    <div style="padding-bottom: 20px" class="">
+                        <label for="email" class="">{{ __('E-Mail Address') }}</label>
 
-					<div class="wrap-input100 validate-input" data-validate="Enter password">
-                        <label for="">Password</label>
-						{{-- <span class="btn-show-pass">
-							<i class="zmdi zmdi-eye"></i>
-                        </span> --}}
-                        <input id="password" class="input100 @error('password') is-invalid @enderror" type="password" name="password">
-                        @error('password')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-						{{-- <span class="focus-input100" data-placeholder="Password"></span> --}}
-					</div>
+                        <div class="">
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+
+                            @error('email')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+
+
+                    <div style="padding-bottom: 25px"  class="">
+                        <label for="password">{{ __('Password') }}</label>
+
+                        <div class="">
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+
+                            @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
 
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
@@ -85,6 +89,10 @@
                                 {{ __('Forgot Your Password?') }}
                             </a>
                         @endif
+                    </div>
+
+                    <div style="">
+                        <a href="/sign-in/github" class="btn fa fa-github" style="font-size:30px"></a>
                     </div>
 
 					<div class="text-center p-t-20">

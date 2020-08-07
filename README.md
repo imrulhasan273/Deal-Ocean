@@ -4221,3 +4221,112 @@ public function search(Request $request)
 ```
 
 ---
+
+# **Laravel | Socialite**
+
+---
+
+### Step 1
+
+`LoginController.php`
+
+```php
+<div style="padding-top: 12px">
+Sign in with
+</div>
+<div style="">
+    <a href="/sign-in/github" class="btn fa fa-github" style="font-size:30px"></a>
+</div>
+```
+
+> Add the `github` button for login
+
+### Step 2
+
+Run below command for `Socialite` package
+
+```cmd
+composer require laravel/socialite
+```
+
+### Step 3
+
+`.env`
+
+```cmd
+GITHUB_CLIENT_ID=778622d7404d026b7cca
+GITHUB_CLIENT_SECRET=ec6bfff940f88fbf4996be74932644e40ad9412f
+GITHUB_REDIRECT_URL=http://127.0.0.1:8000/sign-in/github/redirect
+```
+
+`app/services.php`
+
+```php
+'github' => [
+        'client_id'     => env('GITHUB_CLIENT_ID'),
+        'client_secret' => env('GITHUB_CLIENT_SECRET'),
+        'redirect'      => env('GITHUB_REDIRECT_URL'),
+    ],
+```
+
+### Step 5
+
+Add route
+
+`web.php`
+
+```php
+Route::get('/sign-in/github', 'Auth\LoginController@github');
+Route::get('/sign-in/github/redirect', 'Auth\LoginController@githubRedirect');
+```
+
+### Step 6
+
+`LoginController.php`
+
+```php
+use Hash;
+use Socialite;
+use Str;
+use App\User;
+```
+
+```php
+public function github()
+{
+    //send the users request to github
+    return Socialite::driver('github')->redirect();
+}
+
+public function githubRedirect()
+{
+    //get oauth request back from github to authenticated user
+    $user = Socialite::driver('github')->user();
+    //If they do, get the model
+    //either way, authenticated the user int the application and redirect afterwards
+    $user = User::firstOrCreate(
+        [
+            'email' => $user->email
+        ],
+        [
+            'name' => $user->name,
+            'password' => Hash::make(Str::random(24))
+        ]
+        );
+
+    Auth::login($user, true);
+
+    return redirect(route('home'));
+}
+```
+
+## Step 7
+
+```cmd
+~$ php artisan config:cache
+~$ php artisan cache:clear
+```
+
+---
+
+---

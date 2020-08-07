@@ -13,6 +13,8 @@ Route::get('/contact', 'HomeController@contact')->name('contact');
 
 
 
+
+
 # Start Admin Routes | Dashboard
 Route::get('admin', 'DashboardController@index')->name('dashboard.index')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/regions', 'DashboardController@regions')->name('dashboard.regions')->middleware(['roleChecker:super_admin,admin,null']);
@@ -154,3 +156,8 @@ Route::get('/admin/coupons/{coupon}/destroy', 'CouponController@destroy')->name(
 # Start Ajax Request to find country for a selected region
 Route::get('/shops/findCountry', 'ShopController@findCountry')->name('countryListRoute');
 # End Ajax Request to find country for a selected region
+
+
+
+Route::get('/sign-in/github', 'Auth\LoginController@github');
+Route::get('/sign-in/github/redirect', 'Auth\LoginController@githubRedirect');
