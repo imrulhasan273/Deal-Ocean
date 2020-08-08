@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Shop;
 use App\Product;
 use App\Category;
+use App\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +15,21 @@ use Illuminate\Support\Facades\Redirect;
 
 class ProductController extends Controller
 {
-    public function details()
+    public function details(Product $product)
     {
-        return view('product.single_product');
+
+        $reviews = Review::where('product_id', $product->id)->get();
+
+        $avg_rating = 0;
+        $count = 0;
+        foreach ($reviews as $review) {
+            $count++;
+            $avg_rating = ($avg_rating + $review->rating) / $count;
+        }
+
+        // dd($avg_rating);
+
+        return view('product.single_product', compact('product', 'reviews', 'avg_rating', 'count'));
     }
 
     # For multiple products

@@ -97,7 +97,7 @@
                 <div class="col-lg-3 col-sm-6">
 					<div class="product-item">
 						<div class="pi-pic">
-							<img src="{{asset('/storage/products/'.$product->cover_img)}}" alt="">
+                            <a href="{{route('product.details',$product->id)}}"><img src="{{asset('/storage/products/'.$product->cover_img)}}" alt=""></a>
 							<div class="pi-links">
                                 <a type="button" class="btn btn-success btn-sm cart_item_count" id="addCart<?= $countP;?>"><i class="flaticon-bag"></i>Add to Cart</a>
                                 <div id="successMSG<?= $countP;?>" class="alert alert-success"></div>
@@ -107,9 +107,9 @@
 						</div>
 						<div class="pi-text">
                             <h6>${{ $product->price }}</h6>
-							<p>{{ $product->name }} </p>
+							<a href="{{route('product.details',$product->id)}}"><p>{{ $product->name }} </p></a>
                         </div>
-					</div>
+                    </div>
                 </div>
                 @php
                     $countP++;

@@ -47,4 +47,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->withTimestamps();
     }
+
+    //for review table
+    public function product()
+    {
+        return $this->belongsToMany(Product::class, 'reviews', 'user_id', 'product_id');
+    }
 }

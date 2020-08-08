@@ -51,6 +51,7 @@ class CartController extends Controller
 
         return Redirect()->back()->with('message', 'Item added to cart');
     }
+
     public function index()
     {
         $cartItemsQuery = DB::table('users')->where('id', auth()->id())->value('cartitems');    //query to take cart item colum

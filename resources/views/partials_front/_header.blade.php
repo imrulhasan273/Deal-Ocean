@@ -63,7 +63,7 @@
                 <li><a href="{{ route('home') }}">Home</a></li>
                 <li><a href="#">Pages</a>
                     <ul class="sub-menu">
-                        <li><a href="{{ route('product.details') }}">Product Page</a></li>
+                        {{-- <li><a href="{{ route('product.details') }}">Product Page</a></li> --}}
                         {{-- <li><a href="{{ route('product.products',1) }}">Category Page</a></li> --}}
                         <li><a href="{{ route('cart.index')}}">Cart Page</a></li>
                         <li><a href="{{route('contact')}}">Contact Page</a></li>

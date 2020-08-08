@@ -92,7 +92,7 @@ Route::get('/admin/countries/{country}/destroy', 'CountryController@destroy')->n
 
 # Start Product Controller
 Route::get('/products/search', 'ProductController@search')->name('products.search');
-Route::get('/details', 'ProductController@details')->name('product.details');
+Route::get('/details/{product}', 'ProductController@details')->name('product.details');
 Route::get('/products/{product}', 'ProductController@products')->name('product.products');
 // -- -- -- -- -- -- -- -- Below five routes in Dashboard
 Route::get('/admin/products/add', 'ProductController@add')->name('products.add')->middleware('auth')->middleware(['roleChecker:super_admin,admin,seller']);  //admin
@@ -108,7 +108,7 @@ Route::get('/admin/products/{product}/destroy', 'ProductController@destroy')->na
 # Ajax
 Route::get('/cart/add', 'CartController@ajaxAddCart')->name('ajaxcart.add')->middleware('auth');
 # Normal
-// Route::get('/add-to-cart/{product}', 'CartController@add')->name('cart.add')->middleware('auth');
+Route::get('/add-to-cart/{product}', 'CartController@add')->name('cart.add')->middleware('auth');
 Route::get('/cart', 'CartController@index')->name('cart.index')->middleware('auth');
 Route::get('/cart/update{itemId}{itemOccur}', 'CartController@update')->name('cart.update')->middleware('auth');
 Route::get('/cart/destroy{itemId}', 'CartController@destroy')->name('cart.destroy')->middleware('auth');

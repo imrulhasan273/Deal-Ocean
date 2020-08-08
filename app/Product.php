@@ -22,4 +22,10 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+
+    //for review table
+    public function user()
+    {
+        return $this->belongsToMany(User::class, 'reviews', 'product_id', 'user_id');
+    }
 }

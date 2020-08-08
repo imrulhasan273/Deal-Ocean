@@ -4454,3 +4454,7 @@ Route::get('/cart/add', 'CartController@ajaxAddCart')->name('ajaxcart.add')->mid
 ```
 
 ---
+
+# **Single Prouduct View**
+
+---

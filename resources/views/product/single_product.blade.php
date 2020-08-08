@@ -21,21 +21,44 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="product-pic-zoom">
-                    <img class="product-big-img" src="{{asset('assets_front/img/single-product/1.jpg')}}" alt="">
+                    <img class="product-big-img" src="{{asset('/storage/products/'.$product->cover_img)}}" alt="">
                 </div>
                 <div class="product-thumbs" tabindex="1" style="overflow: hidden; outline: none;">
                     <div class="product-thumbs-track">
-                        <div class="pt active" data-imgbigurl="{{asset('assets_front/img/single-product/1.jpg')}}"><img src="{{asset('assets_front/img/single-product/thumb-1.jpg')}}" alt=""></div>
+                        <div class="pt active" data-imgbigurl="{{asset('/storage/products/'.$product->cover_img)}}"><img src="{{asset('/storage/products/'.$product->cover_img)}}" alt=""></div>
                         <div class="pt" data-imgbigurl="{{asset('assets_front/img/single-product/2.jpg')}}"><img src="{{asset('assets_front/img/single-product/thumb-2.jpg')}}" alt=""></div>
                         <div class="pt" data-imgbigurl="{{asset('assets_front/img/single-product/3.jpg')}}"><img src="{{asset('assets_front/img/single-product/thumb-3.jpg')}}" alt=""></div>
                         <div class="pt" data-imgbigurl="{{asset('assets_front/img/single-product/4.jpg')}}"><img src="{{asset('assets_front/img/single-product/thumb-4.jpg')}}" alt=""></div>
                     </div>
                 </div>
+
+                <div id="accordion" class="accordion-area">
+                <div class="panel">
+                    <div class="panel-header" id="headingOne">
+                        <button class="panel-link active" data-toggle="collapse" data-target="#collapseComment" aria-expanded="true" aria-controls="collapse1">Reviews</button>
+                    </div>
+                    <div id="collapseComment" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                        <!-- Comment Row -->
+                        @foreach ($reviews as $review)
+                        <div style="padding-bottom: 20px;" class="d-flex flex-row comment-row m-t-0">
+                            <div class="p-2"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1574583336/AAA/4.jpg" alt="user" width="50" class="rounded-circle"></div>
+                            <div class="comment-text w-100">
+                                <h6 class="font-medium">{{ $review->user->name }}</h6> <span class="m-b-15 d-block">{{$review->comment}} </span>
+                                <div class="comment-footer"> <span class="text-muted float-right">{{$review->created_at}}</span> <button type="button" class="btn btn-cyan btn-sm">Edit</button> <button type="button" class="btn btn-danger btn-sm">Delete</button> </div>
+                            </div>
+                        </div>
+                        @endforeach
+                        <!-- Comment Row -->
+
+                    </div>
+                </div>
+                </div>
             </div>
             <div class="col-lg-6 product-details">
-                <h2 class="p-title">White peplum top</h2>
-                <h3 class="p-price">$39.90</h3>
+                <h2 class="p-title">{{ $product->name }}</h2>
+                <h3 class="p-price">${{$product->price}}</h3>
                 <h4 class="p-stock">Available: <span>In Stock</span></h4>
+                <h4 class="p-stock">Rating: <span>{{ $avg_rating }}</span></h4>
                 <div class="p-rating">
                     <i class="fa fa-star-o"></i>
                     <i class="fa fa-star-o"></i>
@@ -44,7 +67,7 @@
                     <i class="fa fa-star-o fa-fade"></i>
                 </div>
                 <div class="p-review">
-                    <a href="">3 reviews</a>|<a href="">Add your review</a>
+                    <a href="">{{$count}} votes</a>|
                 </div>
                 <div class="fw-size-choose">
                     <p>Size</p>
@@ -77,7 +100,8 @@
                     <p>Quantity</p>
                     <div class="pro-qty"><input type="text" value="1"></div>
                 </div>
-                <a href="#" class="site-btn">SHOP NOW</a>
+                {{--  --}}
+                <a href="{{ route('cart.add', $product->id) }}" class="site-btn">Add to Cart</a>
                 <div id="accordion" class="accordion-area">
                     <div class="panel">
                         <div class="panel-header" id="headingOne">
@@ -128,6 +152,7 @@
     </div>
 </section>
 <!-- product section end -->
+
 
 
 <!-- RELATED PRODUCTS section -->
@@ -205,6 +230,7 @@
             </div>
         </div>
     </div>
+
 </section>
 <!-- RELATED PRODUCTS section end -->
 @endsection
