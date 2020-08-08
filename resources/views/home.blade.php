@@ -92,14 +92,16 @@
                 @endphp
                 @foreach ($products as $product)
 
-                <input type="text" id="pro_id<?php echo $countP;?>" value="{{$product->id}}" hidden> <!-- added -->
+                <input type="text" id="pro_id<?= $countP;?>" value="{{$product->id}}" hidden> <!-- added -->
 
                 <div class="col-lg-3 col-sm-6">
 					<div class="product-item">
 						<div class="pi-pic">
 							<img src="{{asset('/storage/products/'.$product->cover_img)}}" alt="">
 							<div class="pi-links">
-                                <a href="{{ route('cart.add', $product->id) }}" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
+                                <a type="button" class="btn btn-success btn-sm cart_item_count" id="addCart<?= $countP;?>"><i class="flaticon-bag"></i>Add to Cart</a>
+                                <div id="successMSG<?= $countP;?>" class="alert alert-success"></div>
+                                {{-- <a href="{{ route('cart.add', $product->id) }}" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a> --}}
 								<a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
 							</div>
 						</div>
@@ -107,9 +109,6 @@
                             <h6>${{ $product->price }}</h6>
 							<p>{{ $product->name }} </p>
                         </div>
-                        {{--  --}}
-                        <button class="add-card cart_item_count" id="addCart<?php echo $countP;?>">Add</button>
-                        {{--  --}}
 					</div>
                 </div>
                 @php
@@ -128,5 +127,8 @@
     @include('partials_front._banner')
 
 @endsection
+
+
+
 
 

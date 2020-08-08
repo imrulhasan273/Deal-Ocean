@@ -111,25 +111,26 @@
         let x;
         <?php
 
-             if (empty($products)) {
-                $AJAXproducts = [];
-             }
-             else {
-                $AJAXproducts = $products;
-             }
+             $AJAXproducts = $products ?? [];
 
              $maxP = count($AJAXproducts);
              for($i = 0;$i<$maxP;$i++)
              { ?>
-                $('#addCart<?php echo $i; ?>').click(function() {
-                    x = pro_id<?php echo $i;?> = $('#pro_id<?php echo $i;?>').val();
+
+                $('#successMSG<?= $i; ?>').hide();   //
+
+                $('#addCart<?= $i; ?>').click(function() {
+                    x = pro_id<?= $i;?> = $('#pro_id<?= $i;?>').val();
                     var ID = x;
                     $.ajax({
                         type:'get',
                         data:{'id':ID},
-                        url:"{{ route('ajaxcart') }}",
+                        url:"{{ route('ajaxcart.add') }}",
                         success:function(data){
                             $('.itemCountAjax').text(data);
+                            $('#addCart<?= $i; ?>').hide();
+                            $('#successMSG<?= $i; ?>').show();
+                            $('#successMSG<?= $i; ?>').append('Added to Cart!');
                         },
                         error:function(){
                         }
@@ -138,7 +139,6 @@
        <?php } ?>
         });
     </script>
-
     <!---- ==== End Dynamic Cart Item Count =======----->
 
 

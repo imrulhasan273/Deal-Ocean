@@ -4346,14 +4346,16 @@ public function githubRedirect()
     @endphp
     @foreach ($products as $product)
 
-    <input type="text" id="pro_id<?php echo $countP;?>" value="{{$product->id}}" hidden> <!-- added -->
+    <input type="text" id="pro_id<?= $countP;?>" value="{{$product->id}}" hidden> <!-- added -->
 
     <div class="col-lg-3 col-sm-6">
         <div class="product-item">
             <div class="pi-pic">
                 <img src="{{asset('/storage/products/'.$product->cover_img)}}" alt="">
                 <div class="pi-links">
-                    <a href="{{ route('cart.add', $product->id) }}" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a>
+                    <a type="button" class="btn btn-success btn-sm cart_item_count" id="addCart<?= $countP;?>"><i class="flaticon-bag"></i>Add to Cart</a>
+                    <div id="successMSG<?= $countP;?>" class="alert alert-success"></div>
+                    {{-- <a href="{{ route('cart.add', $product->id) }}" class="add-card"><i class="flaticon-bag"></i><span>ADD TO CART</span></a> --}}
                     <a href="#" class="wishlist-btn"><i class="flaticon-heart"></i></a>
                 </div>
             </div>
@@ -4361,9 +4363,6 @@ public function githubRedirect()
                 <h6>${{ $product->price }}</h6>
                 <p>{{ $product->name }} </p>
             </div>
-            {{--  --}}
-            <button class="add-card cart_item_count" id="addCart<?php echo $countP;?>">Add</button>
-            {{--  --}}
         </div>
     </div>
     @php
@@ -4374,7 +4373,8 @@ public function githubRedirect()
 ```
 
 ```php
-<button class="add-card cart_item_count" id="addCart<?php echo $countP;?>">Add</button>
+<a type="button" class="btn btn-success btn-sm cart_item_count" id="addCart<?= $countP;?>"><i class="flaticon-bag"></i>Add to Cart</a>
+<div id="successMSG<?= $countP;?>" class="alert alert-success"></div>
 ```
 
 `frontend.blade.php`
@@ -4386,25 +4386,27 @@ public function githubRedirect()
         $(document).ready(function(){
         let x;
         <?php
-             if (empty($products)) {
-                $AJAXproducts = [];
-             }
-             else {
-                $AJAXproducts = $products;
-             }
+
+             $AJAXproducts = $products ?? [];
 
              $maxP = count($AJAXproducts);
              for($i = 0;$i<$maxP;$i++)
              { ?>
-                $('#addCart<?php echo $i; ?>').click(function() {
-                    x = pro_id<?php echo $i;?> = $('#pro_id<?php echo $i;?>').val();
+
+                $('#successMSG<?= $i; ?>').hide();   //
+
+                $('#addCart<?= $i; ?>').click(function() {
+                    x = pro_id<?= $i;?> = $('#pro_id<?= $i;?>').val();
                     var ID = x;
                     $.ajax({
                         type:'get',
                         data:{'id':ID},
-                        url:"{{ route('ajaxcart') }}",
+                        url:"{{ route('ajaxcart.add') }}",
                         success:function(data){
                             $('.itemCountAjax').text(data);
+                            $('#addCart<?= $i; ?>').hide();
+                            $('#successMSG<?= $i; ?>').show();
+                            $('#successMSG<?= $i; ?>').append('Added to Cart!');
                         },
                         error:function(){
                         }
@@ -4418,7 +4420,7 @@ public function githubRedirect()
 `web.php`
 
 ```php
-Route::get('/cart/add', 'CartController@ajaxAddCart')->name('ajaxcart')->middleware('auth');
+Route::get('/cart/add', 'CartController@ajaxAddCart')->name('ajaxcart.add')->middleware('auth');
 ```
 
 `CartController.php`
