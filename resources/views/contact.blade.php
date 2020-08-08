@@ -1,3 +1,6 @@
+@php
+    // $products=[];
+@endphp
 @extends('layouts.frontend')
 @section('content')
 	<!-- Page info -->

@@ -1,6 +1,7 @@
 @php
 $subTotalPrice = 0;
 $totalPrice = 0;
+// $products=[];
 @endphp
 @extends('layouts.frontend')
 @section('content')

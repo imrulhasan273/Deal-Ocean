@@ -177,12 +177,13 @@
                     @endphp
                     @endforeach
 
-                    <div>
-                        {{ $products->appends(['query'=>request('query')])->render() }}
-                    </div>
+
                     {{-- <div class="text-center w-100 pt-3">
                         <button class="site-btn sb-line sb-dark">LOAD MORE</button>
                     </div> --}}
+                </div>
+                <div style="padding-top: 20px;">
+                    {{ $products->appends(['query'=>request('query')])->render() }}
                 </div>
 
 

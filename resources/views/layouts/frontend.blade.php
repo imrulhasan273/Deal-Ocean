@@ -110,7 +110,15 @@
         $(document).ready(function(){
         let x;
         <?php
-             $maxP = count($products);
+
+             if (empty($products)) {
+                $AJAXproducts = [];
+             }
+             else {
+                $AJAXproducts = $products;
+             }
+
+             $maxP = count($AJAXproducts);
              for($i = 0;$i<$maxP;$i++)
              { ?>
                 $('#addCart<?php echo $i; ?>').click(function() {
