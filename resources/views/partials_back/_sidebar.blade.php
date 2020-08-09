@@ -52,6 +52,19 @@
         @endif
 
         @if ($role == 'admin' || $role == 'super_admin')
+            @if($active=='reviews')
+            <li class="active ">
+            @else
+            <li>
+            @endif
+            <a class="nav-link" href="{{route('dashboard.reviews')}}">
+                <i class="material-icons">people</i>
+                <p>Reviews</p>
+            </a>
+            </li>
+        @endif
+
+        @if ($role == 'admin' || $role == 'super_admin')
             @if($active=='categories')
             <li class="active ">
             @else

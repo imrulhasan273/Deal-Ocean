@@ -29,7 +29,16 @@ class ProductController extends Controller
 
         // dd($avg_rating);
 
-        return view('product.single_product', compact('product', 'reviews', 'avg_rating', 'count'));
+        # User Rating
+        $rating = DB::table('reviews')->where([
+            ['product_id', '=', $product->id],
+            ['user_id', '=', auth()->id()],
+        ])->select('rating')->get();
+        $rating = $rating[0]->rating;
+
+        # Rating
+
+        return view('product.single_product', compact('product', 'reviews', 'rating', 'avg_rating', 'count'));
     }
 
     # For multiple products

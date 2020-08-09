@@ -32,6 +32,10 @@
                     </div>
                 </div>
 
+                <div style="padding-bottom: 30px;">
+
+                </div>
+
                 <div id="accordion" class="accordion-area">
                 <div class="panel">
                     <div class="panel-header" id="headingOne">
@@ -58,16 +62,29 @@
                 <h2 class="p-title">{{ $product->name }}</h2>
                 <h3 class="p-price">${{$product->price}}</h3>
                 <h4 class="p-stock">Available: <span>In Stock</span></h4>
-                <h4 class="p-stock">Rating: <span>{{ $avg_rating }}</span></h4>
+                <h4 class="p-stock">User Rated: <span class="COUNTajax">{{ $count }} users</span></h4>
+                <h5 class="p-stock">Average Rating: <span class="RATINGajax">{{ $avg_rating }}</span></h5>
+
+
+                <h4 class="p-stock">Your Rating: <span class="userRATINGajax">{{ $rating }}</span></h4>
+                @php
+                    $flag = $rating;
+                @endphp
                 <div class="p-rating">
-                    <i class="fa fa-star-o"></i>
-                    <i class="fa fa-star-o"></i>
-                    <i class="fa fa-star-o"></i>
-                    <i class="fa fa-star-o"></i>
-                    <i class="fa fa-star-o fa-fade"></i>
+                    @for ($i = 1 ; $i <= 5 ; $i++)
+                        @php
+                            if($flag>0){$tail='';} else{$tail='fa-fade';}
+                        @endphp
+                        <a id = "AJAXStar" data-value="{{$product->id}} {{$i}}" class="btn"><i class="fa fa-star-o {{ $tail }}"></i></a>
+                        @php
+                            $flag--;
+                        @endphp
+                    @endfor
+
                 </div>
+
                 <div class="p-review">
-                    <a href="">{{$count}} votes</a>|
+                    <a href=""> votes</a>|
                 </div>
                 <div class="fw-size-choose">
                     <p>Size</p>
@@ -102,6 +119,7 @@
                 </div>
                 {{--  --}}
                 <a href="{{ route('cart.add', $product->id) }}" class="site-btn">Add to Cart</a>
+
                 <div id="accordion" class="accordion-area">
                     <div class="panel">
                         <div class="panel-header" id="headingOne">

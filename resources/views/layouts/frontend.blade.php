@@ -72,74 +72,103 @@
 
 
 
-    <!--==== Start For Dynamic Dependent Dropdown ====-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $(document).on('change','.RegionAjax',function(){
-                var region_id=$(this).val();
+<!--==== Start For Dynamic Dependent Dropdown ====-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(document).on('change','.RegionAjax',function(){
+            var region_id=$(this).val();
 
-                var div=$(this).parent();
+            var div=$(this).parent();
 
-                var op=" ";
+            var op=" ";
+            $.ajax({
+                type:'get',
+                url:"{{ route('countryListRoute') }}",
+                data:{'id':region_id},
+                success:function(data){
+                    op+='<option value="0" selected disabled>Choose Country</option>';
+                    for(var i=0;i<data.length;i++){
+                        op+='<option value="'+data[i].id+'">'+data[i].name+'</option>';
+                    }
+
+                    div.find('.CountryAjax').html(" ");
+                   div.find('.CountryAjax').append(op);
+                },
+                error:function(){
+                }
+            });
+        });
+    });
+</script>
+<!--==== End For Dynamic Dependent Dropdown ====-->
+
+
+<!--==== Start Rating in Product ====-->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(document).on("click", ".p-rating a", function(e) {
+            e.preventDefault();
+            var el = $(this);
+            var value = el.data("value");
+            $.ajax({
+                type: "get",
+                url: "{{ route('ajaxReview.rating') }}",
+                data: { id: value },
+                success: function(data) {
+                    console.log(data);
+                    $(".userRATINGajax").text(data[0]);
+                    $(".RATINGajax").text(data[2]);
+                    $count = $(".COUNTajax").text();
+                    $sum = parseInt($count[0]) + parseInt(data[1]);
+                    console.log($sum);
+                    $(".COUNTajax").html(" ");
+                    $(".COUNTajax").text(" ");
+                    $(".COUNTajax").text($sum+" users");
+                },
+                error: function() {}
+            });
+        });
+    });
+</script>
+<!--==== End Rating in Product ====-->
+
+
+<!---- ==== Start Dynamic Cart Item Count =======----->
+<script type="text/javascript">
+    $(document).ready(function(){
+    let x;
+    <?php
+
+         $AJAXproducts = $products ?? [];
+
+         $maxP = count($AJAXproducts);
+         for($i = 0;$i<$maxP;$i++)
+         { ?>
+
+            $('#successMSG<?= $i; ?>').hide();   //
+
+            $('#addCart<?= $i; ?>').click(function() {
+                x = pro_id<?= $i;?> = $('#pro_id<?= $i;?>').val();
+                var ID = x;
                 $.ajax({
                     type:'get',
-                    url:"{{ route('countryListRoute') }}",
-                    data:{'id':region_id},
+                    data:{'id':ID},
+                    url:"{{ route('ajaxcart.add') }}",
                     success:function(data){
-                        op+='<option value="0" selected disabled>Choose Country</option>';
-                        for(var i=0;i<data.length;i++){
-                        op+='<option value="'+data[i].id+'">'+data[i].name+'</option>';
-                       }
-
-                       div.find('.CountryAjax').html(" ");
-                       div.find('.CountryAjax').append(op);
+                        $('.itemCountAjax').text(data);
+                        $('#addCart<?= $i; ?>').hide();
+                        $('#successMSG<?= $i; ?>').show();
+                        $('#successMSG<?= $i; ?>').append('Added to Cart!');
                     },
                     error:function(){
                     }
                 });
             });
-        });
-    </script>
-    <!--==== End For Dynamic Dependent Dropdown ====-->
+    <?php } ?>
+    });
+</script>
+<!---- ==== End Dynamic Cart Item Count =======----->
 
-
-    <!---- ==== Start Dynamic Cart Item Count =======----->
-
-    <script type="text/javascript">
-        $(document).ready(function(){
-        let x;
-        <?php
-
-             $AJAXproducts = $products ?? [];
-
-             $maxP = count($AJAXproducts);
-             for($i = 0;$i<$maxP;$i++)
-             { ?>
-
-                $('#successMSG<?= $i; ?>').hide();   //
-
-                $('#addCart<?= $i; ?>').click(function() {
-                    x = pro_id<?= $i;?> = $('#pro_id<?= $i;?>').val();
-                    var ID = x;
-                    $.ajax({
-                        type:'get',
-                        data:{'id':ID},
-                        url:"{{ route('ajaxcart.add') }}",
-                        success:function(data){
-                            $('.itemCountAjax').text(data);
-                            $('#addCart<?= $i; ?>').hide();
-                            $('#successMSG<?= $i; ?>').show();
-                            $('#successMSG<?= $i; ?>').append('Added to Cart!');
-                        },
-                        error:function(){
-                        }
-                    });
-                });
-       <?php } ?>
-        });
-    </script>
-    <!---- ==== End Dynamic Cart Item Count =======----->
-
-	</body>
+</body>
 </html>

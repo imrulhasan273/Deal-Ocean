@@ -16,6 +16,7 @@ use App\Location;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use App\Http\Middleware\Admin;
+use App\Review;
 use Illuminate\Support\Facades\DB;
 use League\CommonMark\Extension\Table\Table;
 
@@ -83,6 +84,13 @@ class DashboardController extends Controller
     {
         $products = Product::all();
         return view('dashboard.products', compact('products'));
+    }
+
+    public function reviews()
+    {
+        // $reviews = Review::all();
+        $reviews = Review::get()->sortBy('product_id');
+        return view('dashboard.reviews', compact('reviews'));
     }
 
     public function coupons()

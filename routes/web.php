@@ -24,6 +24,8 @@ Route::get('admin/sliders', 'DashboardController@sliders')->name('dashboard.slid
 Route::get('admin/countries', 'DashboardController@countries')->name('dashboard.countries')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/shops', 'DashboardController@shops')->name('dashboard.shops')->middleware(['roleChecker:super_admin,admin,seller']);
 Route::get('admin/products', 'DashboardController@products')->name('dashboard.products')->middleware(['roleChecker:super_admin,admin,seller']);
+Route::get('admin/reviews', 'DashboardController@reviews')->name('dashboard.reviews')->middleware(['roleChecker:super_admin,admin,null']);
+
 Route::get('admin/coupons', 'DashboardController@coupons')->name('dashboard.coupons')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/orders', 'DashboardController@orders')->name('dashboard.orders')->middleware(['roleChecker:super_admin,admin,null']);
 Route::get('admin/icons', 'DashboardController@icons')->name('dashboard.icons')->middleware(['roleChecker:super_admin,admin,seller']);
@@ -156,6 +158,14 @@ Route::get('/admin/coupons/{coupon}/edit', 'CouponController@edit')->name('coupo
 Route::post('/admin/coupons/update', 'CouponController@update')->name('coupons.update')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
 Route::get('/admin/coupons/{coupon}/destroy', 'CouponController@destroy')->name('coupons.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
 # End Coupon Controller
+
+
+# Start Review Controller
+//------Ajax functions
+Route::get('/rating/add', 'ReviewController@ajaxRating')->name('ajaxReview.rating')->middleware('auth');
+//----- Normal functions
+Route::get('/admin/reviews/{review}/destroy', 'ReviewController@destroy')->name('reviews.destroy')->middleware('auth')->middleware(['roleChecker:super_admin,admin,null']);  //admin
+# Start Review Controller
 
 
 # Start Ajax Request to find country for a selected region
