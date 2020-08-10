@@ -70,7 +70,7 @@
                 @php
                     $flag = $rating;
                 @endphp
-                <div class="p-rating">
+                <div id="HEZO" class="p-rating">
                     @for ($i = 1 ; $i <= 5 ; $i++)
                         @php
                             if($flag>0){$tail='';} else{$tail='fa-fade';}
@@ -80,7 +80,6 @@
                             $flag--;
                         @endphp
                     @endfor
-
                 </div>
 
                 <div class="p-review">

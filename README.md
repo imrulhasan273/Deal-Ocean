@@ -4458,3 +4458,135 @@ Route::get('/cart/add', 'CartController@ajaxAddCart')->name('ajaxcart.add')->mid
 # **Single Prouduct View**
 
 ---
+
+---
+
+# **Product Rating | Review | AJax-JQuery**
+
+---
+
+`single_product.blade.php`
+
+```php
+<h2 class="p-title">{{ $product->name }}</h2>
+<h3 class="p-price">${{$product->price}}</h3>
+<h4 class="p-stock">Available: <span>In Stock</span></h4>
+<h4 class="p-stock">User Rated: <span class="COUNTajax">{{ $count }} users</span></h4>
+<h5 class="p-stock">Average Rating: <span class="RATINGajax">{{ $avg_rating }}</span></h5>
+<h4 class="p-stock">Your Rating: <span class="userRATINGajax">{{ $rating }}</span></h4>
+@php
+    $flag = $rating;
+@endphp
+<div id="HEZO" class="p-rating">
+@for ($i = 1 ; $i <= 5 ; $i++)
+    @php
+        if($flag>0){$tail='';} else{$tail='fa-fade';}
+    @endphp
+    <a id = "AJAXStar" data-value="{{$product->id}} {{$i}}" class="btn"><i class="fa fa-star-o {{ $tail }}"></i></a>
+    @php
+        $flag--;
+    @endphp
+@endfor
+</div>
+```
+
+> `<a></a>` tag will loop 5 times. These tags represents star.
+
+> Here `$flag=$rating=auth user rating`. So when `$flag` will decrement wrt every loop untill it becomes 0. Ultil 0 it will make red start for `<a>` tag. When `$flag` is less than `1`. then it will prints `blue` star which represent non fading star.
+
+`frontend.blade.php`
+
+```php
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+```
+
+```php
+<!--==== Start Rating in Product ====-->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(document).on("click", ".p-rating a", function(e) {
+            e.preventDefault();
+            var el = $(this);
+            var value = el.data("value");
+            $.ajax({
+                type: "get",
+                url: "{{ route('ajaxReview.rating') }}",
+                data: { id: value },
+                success: function(data) {
+                    console.log(data);
+                    $(".userRATINGajax").text(data[0]);
+                    $(".RATINGajax").text(data[2]);
+                    $count = $(".COUNTajax").text();
+                    $sum = parseInt($count[0]) + parseInt(data[1]);
+                    console.log($sum);
+                    $(".COUNTajax").html(" ");
+                    $(".COUNTajax").text(" ");
+                    $(".COUNTajax").text($sum+" users");
+                },
+                error: function() {}
+            });
+        });
+    });
+</script>
+<!--==== End Rating in Product ====-->
+```
+
+`web.php`
+
+```php
+Route::get('/rating/add', 'ReviewController@ajaxRating')->name('ajaxReview.rating')->middleware('auth');
+```
+
+`ReviewController.php`
+
+```php
+    public function ajaxRating(Request $request)
+    {
+        $ProdRating = $request->id;
+        $res = explode(' ', $ProdRating);
+        $prod_id = $res[0];
+        $UserRating = $res[1];
+
+        $reviews = DB::table('reviews')->where([
+            ['product_id', '=', $prod_id],
+            ['user_id', '=', auth()->id()],
+        ])->get();
+
+        if (empty($reviews->toarray())) {
+            $count = 1;
+            # Insert new record
+            $insertReview = Review::create([
+                'user_id' => auth()->id(),
+                'product_id' => $prod_id,
+                'rating' => $UserRating,
+                'comment' => ''
+            ]);
+        } else {
+            $count = 0;
+            # Update existing record
+            $update_review = DB::table('reviews')
+                ->where([
+                    ['product_id', '=', $prod_id],
+                    ['user_id', '=', auth()->id()],
+                ])
+                ->update(['rating' => $UserRating]);
+        }
+
+        $reviews = Review::where('product_id', $prod_id)->get();
+
+
+        # Start Avg Rating
+        $avg_rating = 0;
+        $c = 0;
+        foreach ($reviews as $review) {
+            $c++;
+            $avg_rating = ($avg_rating + $review->rating) / $c;
+        }
+        # End Avg Rating
+
+        $data = [$UserRating, $count, $avg_rating];
+        return response()->json($data);
+    }
+```
+
+---

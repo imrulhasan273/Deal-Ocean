@@ -17,10 +17,19 @@
   <link href="{{asset('assets/css/material-dashboard.css?v=2.1.0')}}" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="{{asset('assets/demo/demo.css')}}" rel="stylesheet" />
+
+  <link rel="stylesheet" type="text/css" href="assets/loader/loader.css">
+
 </head>
 
 <body class="dark-edition">
     <div class="wrapper ">
+        <!-- Start Page Preloder -->
+        <div id="preloder">
+            <div class="loader"></div>
+        </div>
+        <!-- End Page Preloder -->
+
         <!-- Start Sadebar Section -->
         @include('partials_back._sidebar')
         <!-- End Sidebar Section -->
@@ -56,6 +65,8 @@
 </body>
 
 <!--   Core JS Files   -->
+
+
 <script src="{{asset('assets/js/core/jquery.min.js')}}"></script>
 <script src="{{asset('assets/js/core/popper.min.js')}}"></script>
 <script src="{{asset('assets/js/core/bootstrap-material-design.min.js')}}"></script>
@@ -271,4 +282,7 @@
 </script>
 <!--==== End For Dynamic Dependent Dropdown ====-->
 
+<script src="assets/loader/loader.js"></script>
+
 </html>
+
